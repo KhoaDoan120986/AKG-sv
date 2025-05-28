@@ -490,7 +490,9 @@ class VCModel(nn.Module):
             self.motion_src_embed = FeatEmbedding(d_feat[1], C_tran.d_model, C_tran.dropout)
             self.object_src_embed = FeatEmbedding(d_feat[2], C_tran.d_model, C_tran.dropout)
             self.rel_src_embed = FeatEmbedding(d_feat[3], C_tran.d_model, C_tran.dropout)
-            self.encoder_big = Encoder(C_tran.n_layers, EncoderLayer(C_tran.d_model, c(C_tran.n_heads_big), c(feed_forward), C_tran.dropout))
+            
+            attn_big = MultiHeadAttention(C_tran.n_heads_big, C_tran.d_model, C_tran.dropout)
+            self.encoder_big = Encoder(C_tran.n_layers, EncoderLayer(C_tran.d_model, c(attn_big), c(feed_forward), C_tran.dropout))
 
             
         self.trg_embed = TextEmbedding(vocab.n_vocabs, C_tran.d_model)
@@ -498,7 +500,6 @@ class VCModel(nn.Module):
         self.encoder = Encoder(C_tran.n_layers, EncoderLayer(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
         self.encoder_no_attention = Encoder(C_tran.n_layers, EncoderLayerNoAttention(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
 
-        
         self.r2l_decoder = R2L_Decoder(C_tran.n_layers, DecoderLayer(C_tran.d_model, c(attn), c(feed_forward), sublayer_num=3, dropout=C_tran.dropout))
         self.l2r_decoder = L2R_Decoder(C_tran.n_layers, DecoderLayer(C_tran.d_model, c(attn), c(feed_forward), sublayer_num=4, dropout=C_tran.dropout))
         self.generator = Generator(C_tran.d_model, vocab.n_vocabs)
@@ -513,10 +514,11 @@ class VCModel(nn.Module):
                 x2 = self.pos_embed(x2)
                 x2 = self.encoder_big(x2, src_mask[1])
                 return x1 + x2
-            batch = src_mask[0].shape[0]
-            n_nodes = src[0].x.shape[0] // batch
-            x1 = self.stg_encoder_big(src[0], src_mask[0], batch, n_nodes)
-            return x1
+            else:
+                batch = src_mask[0].shape[0]
+                n_nodes = src[0].x.shape[0] // batch
+                x1 = self.stg_encoder_big(src[0], src_mask[0], batch, n_nodes)
+                return x1
         if self.feature_mode in ['grid-rel', 'object-rel']:
             batch = src_mask[0].shape[0]
             n_nodes = src[0].x.shape[0] // batch
