@@ -190,7 +190,7 @@ def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradie
             feats = (data_geo_graph_batch, object_feats)
             mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, video_mask)
         else:
-            mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx)
+            mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, None)
 
         optimizer.zero_grad()
         
@@ -300,7 +300,7 @@ def test(model, val_iter, graph_data, vocab, reg_lambda, feature_mode):
                 feats = (data_geo_graph_batch, object_feats)
                 mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, video_mask)
             else:
-                mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx)
+                mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, None)
 
             r2l_pred, l2r_pred = model(feats, r2l_trg, l2r_trg, mask)
 

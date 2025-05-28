@@ -32,6 +32,30 @@ def clones(module, n):
     return nn.ModuleList([copy.deepcopy(module) for _ in range(n)])
 
 def pad_mask(src, r2l_trg, trg, pad_idx, video_mask):
+    if video_mask is None:
+        src_image_mask = (src[0][:, :, 0] != pad_idx).unsqueeze(1)
+        src_motion_mask = (src[1][:, :, 0] != pad_idx).unsqueeze(1)
+        src_object_mask = (src[2][:, :, 0] != pad_idx).unsqueeze(1)
+        src_rel_mask = (src[3][:, :, 0] != pad_idx).unsqueeze(1)
+        enc_src_mask = (src_image_mask, src_motion_mask, src_object_mask, src_rel_mask)
+        dec_src_mask = src_image_mask & src_motion_mask
+        src_mask = (enc_src_mask, dec_src_mask)
+        
+        if trg is not None:
+            if isinstance(src_mask, tuple):
+                trg_mask = (trg != pad_idx).unsqueeze(1) & subsequent_mask(trg.size(1)).type_as(src_image_mask.data)
+                r2l_pad_mask = (r2l_trg != pad_idx).unsqueeze(1).type_as(src_image_mask.data)
+                r2l_trg_mask = r2l_pad_mask & subsequent_mask(r2l_trg.size(1)).type_as(src_image_mask.data)
+                return src_mask, r2l_pad_mask, r2l_trg_mask, trg_mask
+            else:
+                trg_mask = (trg != pad_idx).unsqueeze(1) & subsequent_mask(trg.size(1)).type_as(src_mask.data)
+                r2l_pad_mask = (r2l_trg != pad_idx).unsqueeze(1).type_as(src_mask.data)
+                r2l_trg_mask = r2l_pad_mask & subsequent_mask(r2l_trg.size(1)).type_as(src_mask.data)
+                return src_mask, r2l_pad_mask, r2l_trg_mask, trg_mask  # src_mask[batch, 1, lens]  trg_mask[batch, 1, lens]
+
+        else:
+            return src_mask
+        
     if len(src) == 3:
         src_vid_mask = (video_mask != pad_idx).unsqueeze(1)
         src_object_mask = (src[1][:, :, 0] != pad_idx).unsqueeze(1)
