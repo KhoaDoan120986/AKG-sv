@@ -223,10 +223,8 @@ def test(model, val_iter, graph_data, vocab, reg_lambda, feature_mode):
     loss_checker = LossChecker(3)
     pad_idx = vocab.word2idx['<PAD>']
     criterion = LabelSmoothing(vocab.n_vocabs, pad_idx, C.label_smoothing)
-    t = tqdm(val_iter)
-    t.set_description('Test')
     with torch.no_grad():
-        for batch in t:
+        for batch in tqdm(val_iter, desc='Test'):
             _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
             
             r2l_trg = r2l_captions[:, :-1]
@@ -318,11 +316,9 @@ def test(model, val_iter, graph_data, vocab, reg_lambda, feature_mode):
 def get_predicted_captions(data_iter, graph_data, model, beam_size, max_len, feature_mode):
     def build_onlyonce_iter(data_iter):
         onlyonce_dataset = {}
-        t = tqdm(iter(data_iter))
-        t.set_description('build onlyonce_iter: ')
-        for batch in t:
+        for batch in tqdm(iter(data_iter), desc='build onlyonce_iter'):
             vids, feats, _, _ = parse_batch(batch, feature_mode, graph_data)
-            if feature_mode == 'four':
+            if feature_mode == 'btkg':
                 for vid, image_feat, motion_feat, object_feat, rel_feat in zip(vids, feats[0], feats[1], feats[2],
                                                                                 feats[3]):
                     if vid not in onlyonce_dataset:
@@ -347,7 +343,7 @@ def get_predicted_captions(data_iter, graph_data, model, beam_size, max_len, fea
         time.sleep(5)
         batch_size = 1
         while len(vids) > 0:
-            if feature_mode == 'four':
+            if feature_mode == 'btkg':
                 image_feats = []
                 motion_feats = []
                 object_feats = []
@@ -430,9 +426,7 @@ def get_groundtruth_captions(data_iter, graph_data, vocab, feature_mode):
     r2l_vid2GTs = {}
     l2r_vid2GTs = {}
     S_idx = vocab.word2idx['<S>']
-    t = tqdm(iter(data_iter))
-    t.set_description('get_groundtruth_captions: ')
-    for batch in t:
+    for batch in tqdm(iter(data_iter), desc='get_groundtruth_captions'):
 
         vids, _, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
 
