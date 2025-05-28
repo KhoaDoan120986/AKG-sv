@@ -119,10 +119,7 @@ def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradie
     criterion = LabelSmoothing(vocab.n_vocabs, pad_idx, C.label_smoothing)
     t = tqdm(train_iter)
     for batch in t:
-        if graph_data is None:
-            _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
-        else: 
-            _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
+        _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
 
         r2l_trg = r2l_captions[:, :-1]
         r2l_trg_y = r2l_captions[:, 1:]
@@ -230,10 +227,8 @@ def test(model, val_iter, graph_data, vocab, reg_lambda, feature_mode):
     t.set_description('Test')
     with torch.no_grad():
         for batch in t:
-            if graph_data is None:
-                _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
-            else: 
-                _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
+            _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
+            
             r2l_trg = r2l_captions[:, :-1]
             r2l_trg_y = r2l_captions[:, 1:]
             r2l_norm = (r2l_trg_y != pad_idx).data.sum()
