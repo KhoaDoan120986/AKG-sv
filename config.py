@@ -94,7 +94,7 @@ class MSRVTTLoaderConfig(object):
 class TransformerConfig(object):
     d_model = 640
     n_heads = 10
-    n_heads_small = 10
+    n_heads_small = 10 #
     
     d_ff = 2048
     n_layers = 4
