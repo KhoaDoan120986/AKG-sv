@@ -66,8 +66,7 @@ class MSVDLoaderConfig(object):
 
     frame_sampling_method = 'uniform'
     assert frame_sampling_method in ['uniform', 'random']
-    frame_sample_len = 50
-
+    frame_sample_len = 30
     num_workers = 4
 
 
@@ -95,28 +94,21 @@ class MSRVTTLoaderConfig(object):
 class TransformerConfig(object):
     d_model = 640
     n_heads = 10
-    n_heads_small = 12
-    
-    # d_model = 768
-    # n_heads = 12
-    # n_heads_small = 12
-    
-    # d_model = 640
-    # n_heads = 16
-    # n_heads_small = 16
+    n_heads_small = 10
     
     d_ff = 2048
     n_layers = 4
     dropout = 0.1
     n_heads_big = 128
 
-    max_frames = 50
+    max_frames = 30
     num_object = 9
     visual_num_hidden_layers = 4
     d_graph = 1024
     node_feat_dim = 512
     video_dim = 1024
     edge_dim = 1024
+    hidden_size = 640
     visual_model = "visual-base"
     init_model = "./model/weight/univl.pretrained.bin"
     gnn_model_type = "transformer"
