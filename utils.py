@@ -413,7 +413,7 @@ def get_predicted_captions(data_iter, graph_data, model, beam_size, max_len, fea
                 feats = (data_geo_graph, object_feat)
                 r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask)
             else: 
-                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len)
+                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, None)
             # r2l_captions = [idxs_to_sentence(caption, vocab.idx2word, BOS_idx) for caption in r2l_captions]
             l2r_captions = [" ".join(caption[0].value) for caption in l2r_captions]
             r2l_captions = [" ".join(caption[0].value) for caption in r2l_captions]
