@@ -22,16 +22,17 @@ def build_loader(ckpt_fpath, graph_data):
     else:
         raise "无该数据集"
 
-    test_graph_data, train_iter, val_iter, test_iter, vocab = corpus.graph_data, \
+    graph_data, train_iter, val_iter, test_iter, vocab = corpus.graph_data, \
         corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
-    r2l_test_vid2GTs, l2r_test_vid2GTs = get_groundtruth_captions(test_iter, graph_data, vocab, config.feat.feature_mode)
+    r2l_test_vid2GTs, l2r_test_vid2GTs = get_groundtruth_captions(test_iter, graph_data['test'], vocab, config.feat.feature_mode)
     
     logger.info('#vocabs: {} ({}), #words: {} ({}). Trim words which appear less than {} times.'.format(
         vocab.n_vocabs, vocab.n_vocabs_untrimmed, vocab.n_words, vocab.n_words_untrimmed, config.loader.min_count))
     
     del train_iter, val_iter, r2l_test_vid2GTs
+    corpus.clear()
     gc.collect()
-    return test_graph_data, test_iter, vocab, l2r_test_vid2GTs
+    return graph_data['test'], test_iter, vocab, l2r_test_vid2GTs
 
 
 def run(ckpt_fpath, test_iter, graph_data, vocab, ckpt, l2r_test_vid2GTs, f, captioning_fpath):
