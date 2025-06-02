@@ -17,6 +17,7 @@ import psutil
 from tensorboardX import SummaryWriter
 import pickle
 import logging
+import argparse
 
 global logger
 def get_logger(filename=None):
@@ -109,8 +110,31 @@ def get_parameter_number(net):
     return {'Total': total_num, 'Trainable': trainable_num}
 
 def main():
+    parser = argparse.ArgumentParser()
+    # Loader settings
+    parser.add_argument('--max_caption_len', type=int, default=10)
+    parser.add_argument('--frame_sample_len', type=int, default=50)
+
+    # Transformer settings
+    parser.add_argument('--n_heads_small', type=int, default=12)
+    parser.add_argument('--n_heads_big', type=int, default=128)
+    parser.add_argument('--d_model', type=int, default=640)
+    parser.add_argument('--hidden_size', type=int, default=768)
+    
+    # Training settings
+    parser.add_argument('--epochs', type=int, default=10)
+    args = parser.parse_args()
+    
+    C.loader.max_caption_len = args.max_caption_len
+    C.loader.frame_sample_len = args.frame_sample_len 
+    C.transformer.n_heads_small = args.n_heads_small
+    C.transformer.n_heads_big = args.n_heads_big
+    C.transformer.d_model = args.d_model
+    C.transformer.hidden_size = args.hidden_size
+    C.epochs = args.epochs
+
     global logger
-    logger = get_logger()
+    logger = get_logger(filename="log.txt")
     logger.info("MODEL ID: {}".format(C.model_id))
     summary_writer = SummaryWriter(C.log_dpath)
     # seed = 2
@@ -129,10 +153,12 @@ def main():
     torch.backends.cudnn.benchmark = False
 
     logger.info("Max caption length: {}".format(C.loader.max_caption_len))
+    logger.info("Max frame: {}".format(C.loader.frame_sample_len))
     logger.info("Heads: {}".format(C.transformer.n_heads))
     logger.info("Small Heads: {}".format(C.transformer.n_heads_small))
     logger.info("Big Heads: {}".format(C.transformer.n_heads_big))
     logger.info("Model Dim: {}".format(C.transformer.d_model))
+    logger.info("Hidden Size: {}".format(C.transformer.hidden_size))
     logger.info("Feature Mode: {}".format(C.feat.feature_mode))
     graph_data, train_iter, val_iter, test_iter, vocab = build_loaders()
     
