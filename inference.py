@@ -74,6 +74,8 @@ def main():
     args = parser.parse_args()
     
     global logger
+    logger = get_logger(filename="log.txt")
+    
     C.loader.max_caption_len = args.max_caption_len
     C.loader.frame_sample_len = args.frame_sample_len 
     C.transformer.n_heads_small = args.n_heads_small
