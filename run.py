@@ -22,7 +22,7 @@ def build_loader(ckpt_fpath, graph_data):
     else:
         raise "无该数据集"
 
-    train_iter, val_iter, test_iter, vocab = \
+    test_graph_data, train_iter, val_iter, test_iter, vocab = corpus.graph_data, \
         corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
     r2l_test_vid2GTs, l2r_test_vid2GTs = get_groundtruth_captions(test_iter, graph_data, vocab, config.feat.feature_mode)
     
@@ -31,7 +31,7 @@ def build_loader(ckpt_fpath, graph_data):
     
     del train_iter, val_iter, r2l_test_vid2GTs
     gc.collect()
-    return test_iter, vocab, l2r_test_vid2GTs
+    return test_graph_data, test_iter, vocab, l2r_test_vid2GTs
 
 
 def run(ckpt_fpath, test_iter, graph_data, vocab, ckpt, l2r_test_vid2GTs, f, captioning_fpath):

@@ -300,7 +300,7 @@ def main():
     if graph_data is None:
         test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], None)
     else:
-        test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], graph_data['test'])
+        test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], None)
         
     for i in range(len(ckpt_list) - 1):  # because have a best.ckpt
         if i + 1 <= 3:

@@ -82,27 +82,7 @@ def main():
     C.transformer.n_heads_big = args.n_heads_big
     C.transformer.d_model = args.d_model
     C.transformer.hidden_size = args.hidden_size
-    C.epochs = args.epochs
-
-    model_id = "MSVD_GBased+OFeat+rel+videomask | 2025-05-31 11:59:21"
-    
-    graph_data, train_iter, val_iter, test_iter, vocab = build_loaders()
-    
-    model = build_model(vocab)
-    optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay, amsgrad=True)
-    lr_scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=C.lr_decay_gamma,
-                                    patience=C.lr_decay_patience, verbose=True)
-    
-    
-    best_ckpt_fpath = "/media02/lnthanh01/phatkhoa/ZZZ/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-05-31 11:59:21/best.ckpt"
-    best_model = load_checkpoint(model, best_ckpt_fpath)
-    if graph_data is None:
-        r2l_best_scores, l2r_best_scores = evaluate(test_iter, None, best_model, vocab, C.beam_size, C.loader.max_caption_len,
-                                                C.feat.feature_mode)
-    else:
-        r2l_best_scores, l2r_best_scores = evaluate(test_iter, graph_data['test'], best_model, vocab, C.beam_size, C.loader.max_caption_len,
-                                                    C.feat.feature_mode)
-        
+    C.epochs = args.epochs        
         
     folder_path = "./result"
     os.makedirs(folder_path, exist_ok=True)
@@ -118,11 +98,6 @@ def main():
     f.write("Hidden Size: {}\n".format(C.transformer.hidden_size))
     f.write("Feature Mode: {}\n".format(C.feat.feature_mode))
     f.write(os.linesep)
-    # f.write("\n[BEST: {} SEED:{}]".format(best_epoch, seed) + os.linesep)
-    f.write("r2l scores: {}".format(r2l_best_scores))
-    f.write(os.linesep)
-    f.write("l2r scores: {}".format(l2r_best_scores))
-    f.write(os.linesep)
     
     gc.collect()
     torch.cuda.empty_cache()
@@ -130,10 +105,7 @@ def main():
     file = "/media02/lnthanh01/phatkhoa/ZZZ/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-05-31 11:59:21"
     ckpt_list = os.listdir(file)
 
-    if graph_data is None:
-        test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], None)
-    else:
-        test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], graph_data['test'])
+    test_graph_data, test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], None)
         
     for i in range(len(ckpt_list) - 1):  # because have a best.ckpt
         if i + 1 <= 3:
@@ -142,10 +114,10 @@ def main():
         logger.info("Now is test in the " + ckpt_fpath)
         captioning_fpath = C.captioning_fpath_tpl.format(str(i + 1))
         
-        if graph_data is None:
+        if test_graph_data is None:
             run(ckpt_fpath, test_iter, None, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
         else: 
-            run(ckpt_fpath, test_iter, graph_data['test'], vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
+            run(ckpt_fpath, test_iter, test_graph_data, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
    
     f.close()
     
