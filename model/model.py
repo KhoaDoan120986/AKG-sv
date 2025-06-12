@@ -485,6 +485,12 @@ class VCModel(nn.Module):
             self.stg_encoder_big = GraphTransformer(head_type='n_heads_big', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
             # ORE
             self.stg_encoder = GraphTransformer(head_type='n_heads_small', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
+        elif self.feature_mode in ['grid-rel-no_obj']:
+            self.rel_src_embed = FeatEmbedding(d_feat[0], C_tran.d_model, C_tran.dropout)
+            # STE
+            self.stg_encoder_big = GraphTransformer(head_type='n_heads_big', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
+            # ORE
+            self.stg_encoder = GraphTransformer(head_type='n_heads_small', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
         elif feature_mode == 'btkg':
             self.image_src_embed = FeatEmbedding(d_feat[0], C_tran.d_model, C_tran.dropout)
             self.motion_src_embed = FeatEmbedding(d_feat[1], C_tran.d_model, C_tran.dropout)
@@ -536,6 +542,14 @@ class VCModel(nn.Module):
             x1 = self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
             
             x2 = self.object_src_embed(src[1])
+            x2 = self.encoder(x2, src_mask[1])
+            return x1 + x2
+        elif self.feature_mode in ['grid-rel-no_obj']:
+            batch = src_mask[0].shape[0]
+            n_nodes = src[0].x.shape[0] // batch
+            x1 = self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
+            
+            x2 = self.rel_src_embed(src[1])
             x2 = self.encoder(x2, src_mask[1])
             return x1 + x2
         elif self.feature_mode == 'btkg':

@@ -44,7 +44,7 @@ def build_loaders():
     logger.info('#vocabs: {} ({}), #words: {} ({}). Trim words which appear less than {} times.'.format(
         corpus.vocab.n_vocabs, corpus.vocab.n_vocabs_untrimmed, corpus.vocab.n_words,
         corpus.vocab.n_words_untrimmed, C.loader.min_count))
-    if C.feat.feature_mode in ['grid-rel', 'object-rel', 'grid', 'object']:
+    if C.feat.feature_mode in ['grid-rel', 'object-rel', 'grid', 'object', 'grid-rel-no_obj']:
         return corpus.graph_data, corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
     return None, corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
 

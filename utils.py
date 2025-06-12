@@ -110,6 +110,34 @@ def parse_batch(batch, feature_mode, graph_data):
         l2r_captions = l2r_captions.long().cuda()
 
         return vids, feats, r2l_captions, l2r_captions
+    elif feature_mode in ['grid-rel-no_obj']:
+        vids, video_masks, rel_feats, r2l_captions, l2r_captions = batch
+        geo_x_feats = []
+        geo_edge_index_feats = []
+        geo_edge_attr_feats = []
+        for video_id in vids:
+            stgraph =  graph_data[video_id]
+            zero_arr  = torch.zeros([9 * C.loader.frame_sample_len - stgraph['x'].shape[0], stgraph['x'].shape[1]], dtype=torch.float32)
+            geo_x_feats.append(torch.cat([stgraph['x'], zero_arr], dim=0).cuda())
+            geo_edge_index_feats.append(stgraph['edge_index'].cuda())
+            geo_edge_attr_feats.append(torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32).cuda())
+            
+        rel_feats = [feat.cuda() for feat in rel_feats]
+        video_mask_feats = [feat.cuda() for feat in video_masks]
+
+        geo_x_feats = torch.stack(geo_x_feats, dim=0)
+        geo_edge_index_feats = torch.stack(geo_edge_index_feats, dim=0)
+        geo_edge_attr_feats = torch.stack(geo_edge_attr_feats, dim=0)
+        rel_feats = torch.cat(rel_feats, dim=2)
+        video_mask_feats = torch.cat(video_mask_feats, dim=1)
+
+        feats = (geo_x_feats, geo_edge_index_feats, geo_edge_attr_feats, rel_feats, video_mask_feats)
+
+        # Chuyển `r2l_captions` và `l2r_captions` sang GPU
+        r2l_captions = r2l_captions.long().cuda()
+        l2r_captions = l2r_captions.long().cuda()
+
+        return vids, feats, r2l_captions, l2r_captions
 
 
 def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradient_clip, feature_mode):
@@ -185,6 +213,35 @@ def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradie
             # Tạo đối tượng Data của PyG (Geometric) với x, edge_index và edge_attr
             data_geo_graph_batch = Data(x=x_batch, edge_index=edge_index_batch, edge_attr=edge_attr_batch)
             feats = (data_geo_graph_batch, object_feats)
+            mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, video_mask)
+        elif feature_mode in ['grid-rel-no_obj']: 
+            geo_x, geo_edge_index, geo_edge_attr, rel_feats, video_mask = feats
+            batch_sz = geo_x.shape[0]
+            # Chuyển đổi geo_x thành batch format: flatten 2 chiều đầu (batch_sz, n_node) -> (batch_sz*n_node, dim)
+            x_batch = geo_x.reshape(geo_x.shape[0] * geo_x.shape[1], geo_x.shape[2])
+
+            # Tính toán offset cho geo_edge_index
+            offset = []
+            # Duyệt qua từng mẫu trong batch
+            for i in range(batch_sz):
+                n_edges = geo_edge_index[0].shape[1]
+                offset_val = int(np.sqrt(n_edges)) * i
+                offset.append(torch.full(geo_edge_index[0].shape, offset_val))
+            offset = torch.stack(offset).cuda()
+            # Cộng offset vào geo_edge_index để tạo batch offset
+            geo_graph_batch_offset = geo_edge_index + offset
+
+            # Tính new_dim và reshape để có edge_index_batch với shape (2, new_dim)
+            new_dim = geo_graph_batch_offset.shape[0] * geo_graph_batch_offset.shape[2]
+            edge_index_batch = geo_graph_batch_offset.permute(1, 0, 2).reshape(2, new_dim)
+
+            # Reshape geo_edge_attr theo định dạng của code bên dưới
+            edge_attr_batch = geo_edge_attr.reshape(geo_edge_attr.shape[0] * geo_edge_attr.shape[1],
+                                                    geo_edge_attr.shape[2]).float()
+
+            # Tạo đối tượng Data của PyG (Geometric) với x, edge_index và edge_attr
+            data_geo_graph_batch = Data(x=x_batch, edge_index=edge_index_batch, edge_attr=edge_attr_batch)
+            feats = (data_geo_graph_batch, rel_feats)
             mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, video_mask)
         else:
             mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, None)
@@ -292,6 +349,35 @@ def test(model, val_iter, graph_data, vocab, reg_lambda, feature_mode):
                 data_geo_graph_batch = Data(x=x_batch, edge_index=edge_index_batch, edge_attr=edge_attr_batch)
                 feats = (data_geo_graph_batch, object_feats)
                 mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, video_mask)
+            elif feature_mode in ['grid-rel-no_obj']: 
+                geo_x, geo_edge_index, geo_edge_attr, rel_feats, video_mask = feats
+                batch_sz = geo_x.shape[0]
+                # Chuyển đổi geo_x thành batch format: flatten 2 chiều đầu (batch_sz, n_node) -> (batch_sz*n_node, dim)
+                x_batch = geo_x.reshape(geo_x.shape[0] * geo_x.shape[1], geo_x.shape[2])
+
+                # Tính toán offset cho geo_edge_index
+                offset = []
+                # Duyệt qua từng mẫu trong batch
+                for i in range(batch_sz):
+                    n_edges = geo_edge_index[0].shape[1]
+                    offset_val = int(np.sqrt(n_edges)) * i
+                    offset.append(torch.full(geo_edge_index[0].shape, offset_val))
+                offset = torch.stack(offset).cuda()
+                # Cộng offset vào geo_edge_index để tạo batch offset
+                geo_graph_batch_offset = geo_edge_index + offset
+
+                # Tính new_dim và reshape để có edge_index_batch với shape (2, new_dim)
+                new_dim = geo_graph_batch_offset.shape[0] * geo_graph_batch_offset.shape[2]
+                edge_index_batch = geo_graph_batch_offset.permute(1, 0, 2).reshape(2, new_dim)
+
+                # Reshape geo_edge_attr theo định dạng của code bên dưới
+                edge_attr_batch = geo_edge_attr.reshape(geo_edge_attr.shape[0] * geo_edge_attr.shape[1],
+                                                        geo_edge_attr.shape[2]).float()
+
+                # Tạo đối tượng Data của PyG (Geometric) với x, edge_index và edge_attr
+                data_geo_graph_batch = Data(x=x_batch, edge_index=edge_index_batch, edge_attr=edge_attr_batch)
+                feats = (data_geo_graph_batch, rel_feats)
+                mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, video_mask)
             else:
                 mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, None)
 
@@ -328,6 +414,11 @@ def get_predicted_captions(data_iter, graph_data, model, beam_size, max_len, fea
                                                                                 feats[3], feats[4]):
                     if vid not in onlyonce_dataset:
                         onlyonce_dataset[vid] = (geo_x, geo_edge_indexs, geo_edge_attrs, object_feat, video_mask)
+            elif feature_mode in ['grid-rel-no_obj']:
+                for vid, geo_x, geo_edge_indexs, geo_edge_attrs, rel_feat, video_mask in zip(vids, feats[0], feats[1], feats[2],
+                                                                                feats[3], feats[4]):
+                    if vid not in onlyonce_dataset:
+                        onlyonce_dataset[vid] = (geo_x, geo_edge_indexs, geo_edge_attrs, rel_feat, video_mask)
             elif feature_mode in ['grid-rel','object-rel']:
                 for vid, geo_x, geo_edge_indexs, geo_edge_attrs, object_feat, rel_feat, video_mask in zip(vids, feats[0], feats[1], feats[2],
                                                                                 feats[3], feats[4], feats[5]):
@@ -371,6 +462,21 @@ def get_predicted_captions(data_iter, graph_data, model, beam_size, max_len, fea
                 onlyonce_iter.append((vids[:batch_size],
                                     (torch.stack(geo_x_feats), torch.stack(geo_edge_index_feats), torch.stack(geo_edge_attr_feats),
                                     torch.stack(object_feats), torch.stack(video_masks))))
+            elif feature_mode in ['grid-rel-no_obj']:
+                geo_x_feats = []
+                geo_edge_index_feats = []
+                geo_edge_attr_feats = []
+                rel_feats = []
+                video_masks = []
+                for geo_x_feat, geo_edge_index_feat, geo_edge_attr_feat, rel_feat, video_mask in feats[:batch_size]:
+                    geo_x_feats.append(geo_x_feat)
+                    geo_edge_index_feats.append(geo_edge_index_feat)
+                    geo_edge_attr_feats.append(geo_edge_attr_feat)
+                    rel_feats.append(rel_feat)
+                    video_masks.append(video_mask)
+                onlyonce_iter.append((vids[:batch_size],
+                                    (torch.stack(geo_x_feats), torch.stack(geo_edge_index_feats), torch.stack(geo_edge_attr_feats),
+                                    torch.stack(rel_feats), torch.stack(video_masks))))
             elif feature_mode in ['grid-rel','object-rel']:
                 geo_x_feats = []
                 geo_edge_index_feats = []
@@ -411,6 +517,11 @@ def get_predicted_captions(data_iter, graph_data, model, beam_size, max_len, fea
                 geo_x, geo_edge, geo_edge_attr, object_feat, video_mask = feats
                 data_geo_graph = Data(x=geo_x[0], edge_index=geo_edge[0], edge_attr=geo_edge_attr[0])
                 feats = (data_geo_graph, object_feat)
+                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask)
+            elif feature_mode in ['grid-rel-no_obj']:
+                geo_x, geo_edge, geo_edge_attr, rel_feat, video_mask = feats
+                data_geo_graph = Data(x=geo_x[0], edge_index=geo_edge[0], edge_attr=geo_edge_attr[0])
+                feats = (data_geo_graph, rel_feat)
                 r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask)
             else: 
                 r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, None)

@@ -3,11 +3,14 @@ import time
 
 
 class FeatureConfig(object):
-    model = "MSVD_InceptionResNetV2+I3D+OFeat+rel"
+    # model = "MSVD_InceptionResNetV2+I3D+OFeat+rel"
     # model = "MSR-VTT_InceptionResNetV2+I3D+OFeat+rel"
     
     # model = "MSVD_GBased+OFeat+rel+videomask"
     # model = "MSR-VTT_GBased+OFeat+rel+videomask"
+
+    model = "MSVD_GBased+rel+videomask"
+    # model = "MSR-VTT_GBased+rel+videomask"
     
     # model = "MSVD_GBased+OFeat+videomask"
     # model = "MSR-VTT_GBased+OFeat+videomask"
@@ -25,6 +28,9 @@ class FeatureConfig(object):
     if model == 'MSVD_InceptionResNetV2+I3D+OFeat+rel' or model == 'MSR-VTT_InceptionResNetV2+I3D+OFeat+rel':
         size = [1536, 1024, 1028, 300]
         feature_mode = 'btkg'
+    elif model == 'MSVD_GBased+rel+videomask' or model == 'MSR-VTT_GBased+rel+videomask':
+        size = [300]
+        feature_mode = 'grid-rel-no_obj'
     elif model == 'MSVD_GBased+OFeat+rel+videomask' or model == 'MSR-VTT_GBased+OFeat+rel+videomask':
         size = [1028, 300]
         feature_mode = 'grid-rel'

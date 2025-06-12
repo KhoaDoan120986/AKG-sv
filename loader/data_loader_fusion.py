@@ -83,6 +83,9 @@ class CustomDataset(Dataset):
             self.object_video_feats = defaultdict(lambda: [])
             self.rel_feats = defaultdict(lambda: [])
             self.video_mask = defaultdict(lambda: [])
+        elif self.feature_mode in ['grid-rel-no_obj']:
+            self.rel_feats = defaultdict(lambda: [])
+            self.video_mask = defaultdict(lambda: [])
 
         self.r2l_captions = defaultdict(lambda: [])
         self.l2r_captions = defaultdict(lambda: [])
@@ -102,7 +105,9 @@ class CustomDataset(Dataset):
             self.video_mask.clear()
             self.object_video_feats.clear()
             self.rel_feats.clear()
-
+        elif self.feature_mode in ['grid-rel-no_obj']:
+            self.video_mask.clear()
+            self.rel_feats.clear()
         self.r2l_captions.clear()
         self.l2r_captions.clear()
         gc.collect()
@@ -144,6 +149,14 @@ class CustomDataset(Dataset):
                 r2l_caption = self.transform_caption(r2l_caption)
                 l2r_caption = self.transform_caption(l2r_caption)
             return vid, video_mask, object_video_feats, rel_feats, r2l_caption, l2r_caption
+        elif self.feature_mode in ['grid-rel-no_obj']:
+            vid, video_mask, rel_feats, r2l_caption, l2r_caption = self.data[idx]
+            if self.transform_frame:
+                rel_feats = [self.transform_frame(feat) for feat in rel_feats]
+            if self.transform_caption:
+                r2l_caption = self.transform_caption(r2l_caption)
+                l2r_caption = self.transform_caption(l2r_caption)
+            return vid, video_mask, rel_feats, r2l_caption, l2r_caption
         
         else:
             raise NotImplementedError("Unknown feature mode: {}".format(self.feature_mode))
@@ -268,6 +281,46 @@ class CustomDataset(Dataset):
                         zero_arr = torch.zeros([frames - feats.shape[1]], dtype=torch.float32)
                         self.video_mask[vid].append(torch.cat([torch.tensor(feats[0]), zero_arr], dim = 0))
 
+    def load_noobj_video_feats(self):
+        models = self.C.feat.model.split('_')[1].split('+')
+        print('\nEnter the load4 method. data_loader_fusion.py--row279')
+
+        for i, model in enumerate(models):
+            frames = self.C.loader.frame_sample_len
+
+            if i == 0:
+                continue
+            elif i == 1:
+                frames = self.C.feat.three_turple
+
+            fpath = self.C.loader.phase_video_feat_fpath_tpl.format(self.C.corpus,
+                                                                    f"{self.C.corpus}_{model}",
+                                                                    self.phase, 'hdf5')
+            fpath_b = self.C.loader.phase_video_feat_fpath_tpl.format(self.C.corpus,
+                                                                    f"{self.C.corpus}_BFeat",
+                                                                    self.phase, 'hdf5')
+
+            with (h5py.File(fpath, 'r')) as fin, \
+                (h5py.File(fpath_b, 'r')) as fin_b:
+
+                data = fin
+                vids = list(data.keys())
+                for vid in tqdm(vids, desc=f'Load feature: {model}'):
+                    feats = data[vid]
+                    if i == 0:
+                        continue
+                    # Xử lý i == 1 (rel_feats)
+                    elif i == 1:
+                        if feats.size == 0 or len(feats) < frames:
+                            num_paddings = frames - len(feats)
+                            feats = np.zeros((frames, 1024)) if feats.size == 0 else np.vstack([feats] + [np.zeros_like(feats[0])] * num_paddings)
+
+                        sampled_idxs = np.linspace(0, len(feats) - 1, frames, dtype=int)
+                        self.rel_feats[vid].append(feats[sampled_idxs])
+                    elif i == 2:
+                        zero_arr = torch.zeros([frames - feats.shape[1]], dtype=torch.float32)
+                        self.video_mask[vid].append(torch.cat([torch.tensor(feats[0]), zero_arr], dim = 0))
+
     def load_video_feats(self):
         models = self.C.feat.model.split('_')[1].split('+')
         print('\nEnter the load4 method. data_loader_fusion.py--row279')
@@ -364,7 +417,16 @@ class CustomDataset(Dataset):
                     rel_feats = list(np.zeros((1, self.C.feat.num_boxes, self.C.rel_dim)))
                 for r2l_caption, l2r_caption in zip(self.r2l_captions[vid], self.l2r_captions[vid]):
                     self.data.append((vid, video_mask, object_video_feats, rel_feats, r2l_caption, l2r_caption))
-            
+        elif self.feature_mode in ['grid-rel-no_obj']:
+            self.load_noobj_video_feats()
+            for vid in self.rel_feats.keys():
+                video_mask = self.video_mask[vid]
+                if self.rel_feats[vid]:
+                    rel_feats = self.rel_feats[vid]
+                else:
+                    rel_feats = list(np.zeros((1, self.C.feat.num_boxes, self.C.rel_dim)))
+                for r2l_caption, l2r_caption in zip(self.r2l_captions[vid], self.l2r_captions[vid]):
+                    self.data.append((vid, video_mask, rel_feats, r2l_caption, l2r_caption))    
         else:
             raise NotImplementedError("Unknown feature mode: {}".format(self.feature_mode))
 
@@ -398,7 +460,7 @@ class Corpus(object):
         self.build()
         
     def load_graph_data(self):
-        if self.feature_mode in ['grid', 'object', 'grid-rel', 'object-rel']:
+        if self.feature_mode in ['grid', 'object', 'grid-rel', 'object-rel', 'grid-rel-no_obj']:
             model = self.C.feat.model.split('_')[1].split('+')[0]
             phase_list = ['train', 'val', 'test']
             for phase in phase_list: 
@@ -470,6 +532,8 @@ class Corpus(object):
             collate_fn = self.norel_feature_collate_fn
         elif self.feature_mode in ['grid-rel','object-rel']:
             collate_fn = self.feature_collate_fn
+        elif self.feature_mode in ['grid-rel-no_obj']:
+            collate_fn = self.noobj_feature_collate_fn
         else:
             raise NotImplementedError("Unknown feature mode: {}".format(self.feature_mode))
         if phase == 'test':
@@ -603,6 +667,35 @@ class Corpus(object):
 
         return vids, video_mask_list, object_video_feats_list, rel_feats_list, r2l_captions, l2r_captions
 
+    def noobj_feature_collate_fn(self, batch):
+        vids, video_masks, rel_feats, r2l_captions, l2r_captions = zip(*batch)
+
+        video_mask_list = [torch.stack(video_feats) for video_feats in zip(*video_masks)]
+        video_mask_list = [video_feats.float() for video_feats in video_mask_list]
+
+        # Xử lý `object_video_feats` và `rel_feats`
+        rel_feats_list = [torch.stack(video_feats) for video_feats in zip(*rel_feats)]
+        rel_feats_list = [video_feats.float() for video_feats in rel_feats_list]
+
+        if self.C.corpus == 'MSR-VTT':
+            cate_vector = []
+            for vid in vids:
+                # get category
+                cate_index = self.video_category[vid]
+                # get category glove vector
+                cate_vector.append(self.category_vectors[cate_index])
+            cate_vector = torch.stack(cate_vector).unsqueeze_(dim=1).repeat(1, self.C.loader.frame_sample_len, 1)
+
+            # cate_vector = [torch.stack(vector) for vector in cate_vector]
+            rel_feats_list = [torch.cat((video_feats, cate_vector), dim=2)
+                              for video_feats in rel_feats_list]
+
+
+        # Xử lý caption
+        r2l_captions = torch.stack(r2l_captions).float()
+        l2r_captions = torch.stack(l2r_captions).float()
+
+        return vids, video_mask_list, rel_feats_list, r2l_captions, l2r_captions
     def get_category(self):
         import json
         with open('./data/MSR-VTT/metadata/category.json') as f:
