@@ -30,7 +30,7 @@ def build_loader(ckpt_fpath, graph_data):
         vocab.n_vocabs, vocab.n_vocabs_untrimmed, vocab.n_words, vocab.n_words_untrimmed, config.loader.min_count))
     
     del train_iter, val_iter, r2l_test_vid2GTs
-    corpus.clear()
+    # corpus.clear()
     gc.collect()
     return graph_data['test'], test_iter, vocab, l2r_test_vid2GTs
 
