@@ -203,8 +203,8 @@ def main():
                             C.reg_lambda, C.gradient_clip, C.feat.feature_mode, lr_scheduler)
         else:
             train_loss = train(e, model, optimizer, train_iter, graph_data['train'], vocab, 
-                                C.reg_lambda, C.gradient_clip, C.feat.feature_mode)
-        log_train(summary_writer, e, train_loss, get_lr(optimizer), C.reg_lambda, lr_scheduler)
+                                C.reg_lambda, C.gradient_clip, C.feat.feature_mode, lr_scheduler)
+        log_train(summary_writer, e, train_loss, get_lr(optimizer), C.reg_lambda)
 
         vram_u.append(round(torch.cuda.memory_allocated() / 1024**2))
         vram_r.append(round(torch.cuda.memory_reserved() / 1024**2))
