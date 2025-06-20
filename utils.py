@@ -141,6 +141,7 @@ def parse_batch(batch, feature_mode, graph_data):
 
 
 def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradient_clip, feature_mode, lr_scheduler):
+    gradient_accumulation_steps = 2
     model.train()
     loss_checker = LossChecker(3)
     pad_idx = vocab.word2idx['<PAD>']
@@ -256,18 +257,19 @@ def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradie
                              l2r_trg_y.contiguous().view(-1)) / l2r_norm
 
         loss = reg_lambda * l2r_loss + (1 - reg_lambda) * r2l_loss
+        loss = loss / gradient_accumulation_steps
         loss.backward()
-        if gradient_clip is not None:
-            torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip)
-        optimizer.step()
-        # if (step + 1) % args.gradient_accumulation_steps == 0:
-            # if gradient_clip is not None:
-            #     torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip)
-        #     if lr_scheduler is not None:
-        #         lr_scheduler.step()  # Update learning rate schedule
+        # if gradient_clip is not None:
+        #     torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip)
+        # optimizer.step()
+        if (step + 1) % gradient_accumulation_steps == 0:
+            if gradient_clip is not None:
+                torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip)
+            if lr_scheduler is not None:
+                lr_scheduler.step()  # Update learning rate schedule
 
-        #     optimizer.step()
-        #     optimizer.zero_grad()
+            optimizer.step()
+            optimizer.zero_grad()
 
         loss_checker.update(loss.item(), r2l_loss.item(), l2r_loss.item())
         t.set_description("[Epoch #{0}] loss: {3:.3f} = (reg: {1:.3f} * r2l_loss: {4:.3f} + "

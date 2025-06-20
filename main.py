@@ -12,6 +12,7 @@ from model.model import VCModel
 from model.modules.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from utils import evaluate, get_lr, load_checkpoint, save_checkpoint, test, train
+from transformers import get_linear_schedule_with_warmup
 from run import build_loader, run
 import psutil
 from tensorboardX import SummaryWriter
@@ -173,19 +174,16 @@ def main():
     print("  RAM used      : {} MB".format(tmp))
 
     model = build_model(vocab)
-    optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay, amsgrad=True)
-    lr_scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=C.lr_decay_gamma,
-                                    patience=C.lr_decay_patience, verbose=True)
+    # optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay, amsgrad=True)
+    # lr_scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=C.lr_decay_gamma,
+    #                                 patience=C.lr_decay_patience, verbose=True)
     
-    # from transformers import get_linear_schedule_with_warmup
+    gradient_accumulation_steps = 2
+    optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
+    num_training_steps = int(len(train_iter) / gradient_accumulation_steps) * C.epochs
+    num_warmup_steps = int(0.1 * num_training_steps)
+    lr_scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps)
 
-    # gradient_accumulation_steps = 2
-    # coer_lf = 0.1
-    # optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
-    # num_training_steps = int(len(train_dataloader) / gradient_accumulation_steps) * C.epochs
-    # num_warmup_steps = int(0.1 * num_training_steps)
-
-    # scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps)
     best_val_CIDEr = -1
     best_epoch = None
     best_ckpt_fpath = None
