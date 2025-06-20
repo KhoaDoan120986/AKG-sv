@@ -174,16 +174,21 @@ def main():
     print("  RAM used      : {} MB".format(tmp))
 
     model = build_model(vocab)
+    # C.lr_decay_start_from = 8 # ban đầu là 12
+    # C.lr_decay_patience = 3 # ban đầu là 5
     # optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay, amsgrad=True)
-    # lr_scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=C.lr_decay_gamma,
-    #                                 patience=C.lr_decay_patience, verbose=True)
-    
+    # # lr_scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=C.lr_decay_gamma,
+    # #                                 patience=C.lr_decay_patience, verbose=True) # monitor theo loss
+
+    # lr_scheduler = ReduceLROnPlateau(optimizer, mode='max', factor=C.lr_decay_gamma,
+    #                                 patience=C.lr_decay_patience, verbose=True) # monitor theo metric
+
     gradient_accumulation_steps = 2
     optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
     num_training_steps = int(len(train_iter) / gradient_accumulation_steps) * C.epochs
     num_warmup_steps = int(0.1 * num_training_steps)
     lr_scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps)
-
+    
     best_val_CIDEr = -1
     best_epoch = None
     best_ckpt_fpath = None
@@ -233,8 +238,9 @@ def main():
             logger.info("Saving checkpoint at epoch={} to {}".format(e, ckpt_fpath))
             save_checkpoint(e, model, ckpt_fpath, C)
 
-        if e >= C.lr_decay_start_from:
-            lr_scheduler.step(val_loss['total'])
+        # if e >= C.lr_decay_start_from:
+        #     # lr_scheduler.step(val_loss['total'])
+        #     lr_scheduler.step(l2r_val_scores['CIDEr'])
         if l2r_val_scores['CIDEr'] > best_val_CIDEr:
             best_epoch = e
             best_val_CIDEr = l2r_val_scores['CIDEr']

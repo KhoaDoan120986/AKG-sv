@@ -247,7 +247,7 @@ def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradie
         else:
             mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, None)
 
-        # optimizer.zero_grad()
+        # optimizer.zero_grad() #1
         
         r2l_pred, l2r_pred = model(feats, r2l_trg, l2r_trg, mask)
 
@@ -260,9 +260,9 @@ def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradie
         l2r_loss = l2r_loss/gradient_accumulation_steps
         loss = reg_lambda * l2r_loss + (1 - reg_lambda) * r2l_loss
         loss.backward()
-        # if gradient_clip is not None:
-        #     torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip)
-        # optimizer.step()
+        # if gradient_clip is not None: #1
+        #     torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip) #1
+        # optimizer.step() #1
         if (step + 1) % gradient_accumulation_steps == 0:
             if gradient_clip is not None:
                 torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip)
