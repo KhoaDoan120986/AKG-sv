@@ -140,13 +140,13 @@ def parse_batch(batch, feature_mode, graph_data):
         return vids, feats, r2l_captions, l2r_captions
 
 
-def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradient_clip, feature_mode):
+def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradient_clip, feature_mode, lr_scheduler):
     model.train()
     loss_checker = LossChecker(3)
     pad_idx = vocab.word2idx['<PAD>']
     criterion = LabelSmoothing(vocab.n_vocabs, pad_idx, C.label_smoothing)
     t = tqdm(train_iter)
-    for batch in t:
+    for step, batch in enumerate(t):
         _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
 
         r2l_trg = r2l_captions[:, :-1]
@@ -260,6 +260,14 @@ def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradie
         if gradient_clip is not None:
             torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip)
         optimizer.step()
+        # if (step + 1) % args.gradient_accumulation_steps == 0:
+            # if gradient_clip is not None:
+            #     torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip)
+        #     if lr_scheduler is not None:
+        #         lr_scheduler.step()  # Update learning rate schedule
+
+        #     optimizer.step()
+        #     optimizer.zero_grad()
 
         loss_checker.update(loss.item(), r2l_loss.item(), l2r_loss.item())
         t.set_description("[Epoch #{0}] loss: {3:.3f} = (reg: {1:.3f} * r2l_loss: {4:.3f} + "
