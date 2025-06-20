@@ -266,10 +266,10 @@ def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradie
         if (step + 1) % gradient_accumulation_steps == 0:
             if gradient_clip is not None:
                 torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip)
-            if lr_scheduler is not None:
-                lr_scheduler.step() 
 
             optimizer.step()
+            if lr_scheduler is not None:
+                lr_scheduler.step() 
             optimizer.zero_grad()
 
         loss_checker.update(loss.item(), r2l_loss.item(), l2r_loss.item())
