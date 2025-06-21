@@ -114,7 +114,7 @@ class TransformerConfig(object):
     node_feat_dim = 512
     video_dim = 1024
     edge_dim = 1024
-    hidden_size = 640
+    hidden_size = 768
     visual_model = "visual-base"
     init_model = "./model/weight/univl.pretrained.bin"
     gnn_model_type = "transformer"
