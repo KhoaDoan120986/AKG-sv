@@ -5,5 +5,5 @@ logs/
 result/
 
 # File log
-./log.txt
-./log1.txt
+log.txt
+log1.txt
