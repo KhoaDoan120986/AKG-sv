@@ -205,10 +205,10 @@ def main():
         """ Train """
         if graph_data is None:
             train_loss = train(e, model, optimizer, train_iter, None, vocab, 
-                            C.reg_lambda, C.gradient_clip, C.feat.feature_mode, lr_scheduler)
+                            C.reg_lambda, C.gradient_clip, C.feat.feature_mode, lr_scheduler, gradient_accumulation_steps)
         else:
             train_loss = train(e, model, optimizer, train_iter, graph_data['train'], vocab, 
-                                C.reg_lambda, C.gradient_clip, C.feat.feature_mode, lr_scheduler)
+                                C.reg_lambda, C.gradient_clip, C.feat.feature_mode, lr_scheduler, gradient_accumulation_steps)
         log_train(summary_writer, e, train_loss, get_lr(optimizer), C.reg_lambda)
 
         vram_u.append(round(torch.cuda.memory_allocated() / 1024**2))

@@ -140,8 +140,7 @@ def parse_batch(batch, feature_mode, graph_data):
         return vids, feats, r2l_captions, l2r_captions
 
 
-def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradient_clip, feature_mode, lr_scheduler):
-    gradient_accumulation_steps = 2
+def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradient_clip, feature_mode, lr_scheduler, gradient_accumulation_steps):
     model.train()
     loss_checker = LossChecker(3)
     pad_idx = vocab.word2idx['<PAD>']
