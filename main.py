@@ -184,7 +184,7 @@ def main():
     #                                 patience=C.lr_decay_patience, verbose=True) # monitor theo metric
 
     gradient_accumulation_steps = 2
-    C.weight_decay = 1e-4 # ban đầu là 5e-5
+    C.weight_decay = 1e-4 # ban đầu là 0.5e-5
     optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
     num_training_steps = int(len(train_iter) / gradient_accumulation_steps) * C.epochs
     num_warmup_steps = int(0.1 * num_training_steps)
