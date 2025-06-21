@@ -311,10 +311,7 @@ def main():
     logger.info(ckpt_list)
     logger.info('Build data_loader according to ' + ckpt_list[0])
     
-    if graph_data is None:
-        test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], None)
-    else:
-        test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], None)
+    test_graph_data, test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], None)
         
     for i in range(len(ckpt_list) - 1):  # because have a best.ckpt
         if i + 1 <= 3:
@@ -323,10 +320,10 @@ def main():
         logger.info("Now is test in the " + ckpt_fpath)
         captioning_fpath = C.captioning_fpath_tpl.format(str(i + 1))
         
-        if graph_data is None:
+        if test_graph_data is None:
             run(ckpt_fpath, test_iter, None, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
         else: 
-            run(ckpt_fpath, test_iter, graph_data['test'], vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
+            run(ckpt_fpath, test_iter, test_graph_data, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
    
     f.close()
     
