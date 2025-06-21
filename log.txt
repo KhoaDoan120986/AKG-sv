@@ -1,0 +1,1108 @@
+2025-06-21 07:58:35,301:INFO: #vocabs: 3891 (9158), #words: 323223 (329680). Trim words which appear less than 3 times.
+2025-06-21 07:58:35,502:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/4.ckpt
+2025-06-21 07:58:36,267:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 07:58:36,268:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 07:58:36,268:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 07:58:36,268:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 07:58:36,268:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 07:58:36,268:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 07:58:36,864:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 07:58:36,865:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 07:58:36,865:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 07:58:36,865:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 07:58:36,865:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 07:58:36,865:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 07:58:37,514:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 08:09:46,173:INFO: [TEST L2R] in 4.ckpt is {'Bleu_1': 0.8497902097899721, 'Bleu_2': 0.7606693842977464, 'Bleu_3': 0.6757668248026415, 'Bleu_4': 0.5785037106035603, 'METEOR': 0.3975966788781852, 'ROUGE_L': 0.7598286811496773, 'CIDEr': 1.0252035151038295}
+2025-06-21 08:09:46,184:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/5.ckpt
+2025-06-21 08:09:46,941:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 08:09:46,941:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 08:09:46,941:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 08:09:46,941:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 08:09:46,941:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 08:09:46,941:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 08:09:47,484:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 08:09:47,484:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 08:09:47,484:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 08:09:47,484:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 08:09:47,484:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 08:09:47,484:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 08:09:48,155:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 08:20:46,179:INFO: [TEST L2R] in 5.ckpt is {'Bleu_1': 0.8542953396963198, 'Bleu_2': 0.7684423144339989, 'Bleu_3': 0.683966753167484, 'Bleu_4': 0.5898109618923195, 'METEOR': 0.40037488214863154, 'ROUGE_L': 0.7682323478149851, 'CIDEr': 1.0838174109431677}
+2025-06-21 08:20:46,190:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/6.ckpt
+2025-06-21 08:20:46,927:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 08:20:46,927:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 08:20:46,927:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 08:20:46,928:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 08:20:46,928:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 08:20:46,928:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 08:20:47,470:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 08:20:47,470:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 08:20:47,470:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 08:20:47,470:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 08:20:47,470:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 08:20:47,470:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 08:20:48,114:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 08:31:59,284:INFO: [TEST L2R] in 6.ckpt is {'Bleu_1': 0.8540165161456336, 'Bleu_2': 0.7638328945747874, 'Bleu_3': 0.668625205350526, 'Bleu_4': 0.5664295998042514, 'METEOR': 0.4040343095201828, 'ROUGE_L': 0.7663808719509961, 'CIDEr': 1.090273891142377}
+2025-06-21 08:31:59,297:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/7.ckpt
+2025-06-21 08:32:00,041:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 08:32:00,041:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 08:32:00,041:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 08:32:00,041:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 08:32:00,041:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 08:32:00,041:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 08:32:00,586:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 08:32:00,587:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 08:32:00,587:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 08:32:00,587:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 08:32:00,587:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 08:32:00,587:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 08:32:01,240:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 08:43:10,539:INFO: [TEST L2R] in 7.ckpt is {'Bleu_1': 0.8547671511918159, 'Bleu_2': 0.7704187090096464, 'Bleu_3': 0.6863035182269249, 'Bleu_4': 0.5934661567182453, 'METEOR': 0.40439409091045164, 'ROUGE_L': 0.7626196857537115, 'CIDEr': 1.1321381589719304}
+2025-06-21 08:43:10,555:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/8.ckpt
+2025-06-21 08:43:11,298:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 08:43:11,298:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 08:43:11,298:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 08:43:11,298:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 08:43:11,298:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 08:43:11,298:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 08:43:11,855:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 08:43:11,856:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 08:43:11,856:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 08:43:11,856:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 08:43:11,856:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 08:43:11,856:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 08:43:12,594:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 08:54:04,400:INFO: [TEST L2R] in 8.ckpt is {'Bleu_1': 0.8604004116576535, 'Bleu_2': 0.7728263632948931, 'Bleu_3': 0.6835148239872761, 'Bleu_4': 0.5856344919231098, 'METEOR': 0.4075194217247272, 'ROUGE_L': 0.7717298149599244, 'CIDEr': 1.144717364504394}
+2025-06-21 08:54:04,416:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/9.ckpt
+2025-06-21 08:54:05,224:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 08:54:05,224:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 08:54:05,224:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 08:54:05,224:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 08:54:05,224:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 08:54:05,225:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 08:54:05,802:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 08:54:05,802:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 08:54:05,802:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 08:54:05,802:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 08:54:05,802:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 08:54:05,802:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 08:54:06,702:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 09:05:02,132:INFO: [TEST L2R] in 9.ckpt is {'Bleu_1': 0.8576454668468586, 'Bleu_2': 0.7697759737880041, 'Bleu_3': 0.6843880325437396, 'Bleu_4': 0.5948169039514953, 'METEOR': 0.4130703978866313, 'ROUGE_L': 0.7738978691652786, 'CIDEr': 1.1558261698892764}
+2025-06-21 09:05:02,145:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/10.ckpt
+2025-06-21 09:05:02,901:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:05:02,901:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:05:02,901:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:05:02,901:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:05:02,901:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 09:05:02,901:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:05:03,443:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:05:03,444:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:05:03,444:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:05:03,444:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:05:03,444:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 09:05:03,444:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:05:04,095:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 09:15:56,405:INFO: [TEST L2R] in 10.ckpt is {'Bleu_1': 0.8752101819313218, 'Bleu_2': 0.7911796548600359, 'Bleu_3': 0.7093781102567386, 'Bleu_4': 0.6174269516705932, 'METEOR': 0.41274998114376266, 'ROUGE_L': 0.7830531518657581, 'CIDEr': 1.1563401790239585}
+2025-06-21 09:15:56,418:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/11.ckpt
+2025-06-21 09:15:57,158:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:15:57,158:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:15:57,158:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:15:57,158:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:15:57,158:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 09:15:57,158:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:15:57,703:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:15:57,704:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:15:57,704:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:15:57,704:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:15:57,704:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 09:15:57,704:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:15:58,349:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 09:27:03,025:INFO: [TEST L2R] in 11.ckpt is {'Bleu_1': 0.8602960657254074, 'Bleu_2': 0.769002570166869, 'Bleu_3': 0.6806082562439638, 'Bleu_4': 0.587029647618515, 'METEOR': 0.4118267109509856, 'ROUGE_L': 0.7744897904418759, 'CIDEr': 1.132391986081561}
+2025-06-21 09:27:03,038:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/12.ckpt
+2025-06-21 09:27:03,778:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:27:03,779:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:27:03,779:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:27:03,779:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:27:03,779:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 09:27:03,779:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:27:04,321:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:27:04,322:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:27:04,322:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:27:04,322:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:27:04,322:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 09:27:04,322:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:27:04,978:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 09:37:54,505:INFO: [TEST L2R] in 12.ckpt is {'Bleu_1': 0.8676712884609019, 'Bleu_2': 0.7869126482904195, 'Bleu_3': 0.7068848255719736, 'Bleu_4': 0.6194090627887692, 'METEOR': 0.41474773199342124, 'ROUGE_L': 0.7795840577290803, 'CIDEr': 1.1754964895252717}
+2025-06-21 09:37:54,518:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/13.ckpt
+2025-06-21 09:37:55,253:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:37:55,254:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:37:55,254:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:37:55,254:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:37:55,254:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 09:37:55,254:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:37:55,794:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:37:55,795:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:37:55,795:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:37:55,795:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:37:55,795:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 09:37:55,795:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:37:56,441:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 09:48:47,079:INFO: [TEST L2R] in 13.ckpt is {'Bleu_1': 0.8687095867299023, 'Bleu_2': 0.7903647993958578, 'Bleu_3': 0.7114430045497173, 'Bleu_4': 0.626537405019849, 'METEOR': 0.4174952874172996, 'ROUGE_L': 0.777411991343158, 'CIDEr': 1.1704708707962712}
+2025-06-21 09:48:47,093:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/14.ckpt
+2025-06-21 09:48:47,825:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:48:47,825:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:48:47,826:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:48:47,826:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:48:47,826:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 09:48:47,826:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:48:48,369:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:48:48,370:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:48:48,370:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:48:48,370:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:48:48,370:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 09:48:48,370:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:48:49,020:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 09:59:43,575:INFO: [TEST L2R] in 14.ckpt is {'Bleu_1': 0.8659674811391106, 'Bleu_2': 0.781450841831889, 'Bleu_3': 0.6963118822164575, 'Bleu_4': 0.6077200846403069, 'METEOR': 0.4183342152150701, 'ROUGE_L': 0.7779110118673699, 'CIDEr': 1.1442779519965793}
+2025-06-21 09:59:43,588:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/15.ckpt
+2025-06-21 09:59:44,339:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:59:44,340:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:59:44,340:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:59:44,340:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:59:44,340:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 09:59:44,340:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:59:44,884:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 09:59:44,884:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 09:59:44,885:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 09:59:44,885:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 09:59:44,885:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 09:59:44,885:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 09:59:45,538:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 10:10:38,859:INFO: [TEST L2R] in 15.ckpt is {'Bleu_1': 0.8680608611783733, 'Bleu_2': 0.7871372113219103, 'Bleu_3': 0.7069998051973745, 'Bleu_4': 0.6208433458403219, 'METEOR': 0.42230879600731963, 'ROUGE_L': 0.7802877385416239, 'CIDEr': 1.2011226169740221}
+2025-06-21 10:10:38,872:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/16.ckpt
+2025-06-21 10:10:39,604:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 10:10:39,604:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 10:10:39,604:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 10:10:39,604:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 10:10:39,604:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 10:10:39,604:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 10:10:40,144:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 10:10:40,144:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 10:10:40,144:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 10:10:40,144:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 10:10:40,144:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 10:10:40,144:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 10:10:40,798:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 10:21:34,397:INFO: [TEST L2R] in 16.ckpt is {'Bleu_1': 0.877352787398024, 'Bleu_2': 0.800512145477347, 'Bleu_3': 0.7234235582981147, 'Bleu_4': 0.6421214538194887, 'METEOR': 0.41973627031494376, 'ROUGE_L': 0.7837651219873468, 'CIDEr': 1.2206411775175852}
+2025-06-21 10:21:34,409:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/17.ckpt
+2025-06-21 10:21:35,016:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 10:21:35,016:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 10:21:35,016:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 10:21:35,016:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 10:21:35,016:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 10:21:35,016:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 10:21:35,560:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 10:21:35,561:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 10:21:35,561:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 10:21:35,561:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 10:21:35,561:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 10:21:35,561:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 10:21:36,211:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 10:32:29,134:INFO: [TEST L2R] in 17.ckpt is {'Bleu_1': 0.8721976291264011, 'Bleu_2': 0.795755201336108, 'Bleu_3': 0.7195750952807576, 'Bleu_4': 0.6366501882088283, 'METEOR': 0.41888647467494183, 'ROUGE_L': 0.7823335423156049, 'CIDEr': 1.177611787500091}
+2025-06-21 10:32:29,147:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/18.ckpt
+2025-06-21 10:32:29,569:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 10:32:29,570:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 10:32:29,570:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 10:32:29,570:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 10:32:29,570:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 10:32:29,570:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 10:32:30,106:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 10:32:30,106:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 10:32:30,106:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 10:32:30,106:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 10:32:30,106:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 10:32:30,106:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 10:32:30,722:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 10:43:51,661:INFO: [TEST L2R] in 18.ckpt is {'Bleu_1': 0.8668911858333721, 'Bleu_2': 0.7852321102516875, 'Bleu_3': 0.7033669191895361, 'Bleu_4': 0.6158245856305049, 'METEOR': 0.4125775739054525, 'ROUGE_L': 0.774760921087924, 'CIDEr': 1.165970639154107}
+2025-06-21 10:43:51,674:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/19.ckpt
+2025-06-21 10:43:52,091:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 10:43:52,091:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 10:43:52,091:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 10:43:52,091:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 10:43:52,092:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 10:43:52,092:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 10:43:52,635:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 10:43:52,635:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 10:43:52,635:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 10:43:52,635:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 10:43:52,635:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 10:43:52,635:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 10:43:53,261:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 10:54:47,724:INFO: [TEST L2R] in 19.ckpt is {'Bleu_1': 0.8692243069165866, 'Bleu_2': 0.7877385807294678, 'Bleu_3': 0.70615405276055, 'Bleu_4': 0.6199892955048123, 'METEOR': 0.42044155878287026, 'ROUGE_L': 0.7760431277121137, 'CIDEr': 1.1485283563396387}
+2025-06-21 10:54:47,737:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/20.ckpt
+2025-06-21 10:54:48,150:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 10:54:48,150:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 10:54:48,150:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 10:54:48,151:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 10:54:48,151:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 10:54:48,151:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 10:54:48,699:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 10:54:48,699:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 10:54:48,699:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 10:54:48,699:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 10:54:48,699:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 10:54:48,699:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 10:54:49,343:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 11:05:53,258:INFO: [TEST L2R] in 20.ckpt is {'Bleu_1': 0.8604383962447099, 'Bleu_2': 0.7775685646943273, 'Bleu_3': 0.6962324203221587, 'Bleu_4': 0.6125138431272988, 'METEOR': 0.4143812475250402, 'ROUGE_L': 0.7733574579298939, 'CIDEr': 1.1666099969076775}
+2025-06-21 11:05:53,270:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/21.ckpt
+2025-06-21 11:05:53,692:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 11:05:53,693:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 11:05:53,693:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 11:05:53,693:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 11:05:53,693:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 11:05:53,693:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 11:05:54,234:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 11:05:54,235:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 11:05:54,235:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 11:05:54,235:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 11:05:54,235:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 11:05:54,235:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 11:05:54,882:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 11:17:39,924:INFO: [TEST L2R] in 21.ckpt is {'Bleu_1': 0.8610162431603848, 'Bleu_2': 0.7783879643328907, 'Bleu_3': 0.6990131778159905, 'Bleu_4': 0.6150780780924332, 'METEOR': 0.4147789019050438, 'ROUGE_L': 0.7724114537754592, 'CIDEr': 1.1637625541451682}
+2025-06-21 11:17:39,939:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/22.ckpt
+2025-06-21 11:17:40,364:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 11:17:40,364:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 11:17:40,364:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 11:17:40,364:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 11:17:40,364:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 11:17:40,364:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 11:17:40,910:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 11:17:40,911:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 11:17:40,911:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 11:17:40,911:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 11:17:40,911:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 11:17:40,911:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 11:17:41,755:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 11:29:24,975:INFO: [TEST L2R] in 22.ckpt is {'Bleu_1': 0.8647824550138096, 'Bleu_2': 0.785536862063883, 'Bleu_3': 0.7073195661106724, 'Bleu_4': 0.6272010281634784, 'METEOR': 0.4208440041793197, 'ROUGE_L': 0.7755417970454368, 'CIDEr': 1.1880766833531615}
+2025-06-21 11:29:24,989:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/23.ckpt
+2025-06-21 11:29:25,412:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 11:29:25,412:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 11:29:25,412:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 11:29:25,412:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 11:29:25,412:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 11:29:25,412:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 11:29:25,950:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 11:29:25,951:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 11:29:25,951:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 11:29:25,951:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 11:29:25,951:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 11:29:25,951:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 11:29:26,610:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 11:41:09,548:INFO: [TEST L2R] in 23.ckpt is {'Bleu_1': 0.8704949427015481, 'Bleu_2': 0.7885252517027245, 'Bleu_3': 0.7082424557241033, 'Bleu_4': 0.6244480764535324, 'METEOR': 0.41934745090299047, 'ROUGE_L': 0.7746229161024496, 'CIDEr': 1.1671883467358581}
+2025-06-21 11:41:09,561:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/24.ckpt
+2025-06-21 11:41:09,984:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 11:41:09,984:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 11:41:09,984:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 11:41:09,985:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 11:41:09,985:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 11:41:09,985:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 11:41:10,526:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 11:41:10,526:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 11:41:10,526:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 11:41:10,526:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 11:41:10,526:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 11:41:10,526:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 11:41:11,178:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 11:52:19,829:INFO: [TEST L2R] in 24.ckpt is {'Bleu_1': 0.8724532174724946, 'Bleu_2': 0.7917706179624978, 'Bleu_3': 0.7117768744663051, 'Bleu_4': 0.6277137271934532, 'METEOR': 0.41847091274711534, 'ROUGE_L': 0.7815012493243028, 'CIDEr': 1.189965486323233}
+2025-06-21 11:52:19,841:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/25.ckpt
+2025-06-21 11:52:20,269:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 11:52:20,270:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 11:52:20,270:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 11:52:20,270:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 11:52:20,270:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 11:52:20,270:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 11:52:20,815:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 11:52:20,815:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 11:52:20,815:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 11:52:20,815:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 11:52:20,816:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 11:52:20,816:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 11:52:21,440:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 12:03:30,642:INFO: [TEST L2R] in 25.ckpt is {'Bleu_1': 0.8748930528841716, 'Bleu_2': 0.7959804945680841, 'Bleu_3': 0.7160039940088715, 'Bleu_4': 0.6340385743851561, 'METEOR': 0.420308731047521, 'ROUGE_L': 0.7770708807965926, 'CIDEr': 1.1935423534612963}
+2025-06-21 12:03:30,655:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/26.ckpt
+2025-06-21 12:03:31,082:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 12:03:31,083:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 12:03:31,083:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 12:03:31,083:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 12:03:31,083:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 12:03:31,083:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 12:03:31,626:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 12:03:31,626:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 12:03:31,626:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 12:03:31,626:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 12:03:31,626:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 12:03:31,626:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 12:03:32,283:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 12:14:27,928:INFO: [TEST L2R] in 26.ckpt is {'Bleu_1': 0.8720795486669581, 'Bleu_2': 0.7902930209479566, 'Bleu_3': 0.709823175998978, 'Bleu_4': 0.6257596404735237, 'METEOR': 0.419461907630964, 'ROUGE_L': 0.7783800232220197, 'CIDEr': 1.1958569368964749}
+2025-06-21 12:14:27,941:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/27.ckpt
+2025-06-21 12:14:28,364:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 12:14:28,364:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 12:14:28,364:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 12:14:28,365:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 12:14:28,365:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 12:14:28,365:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 12:14:28,912:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 12:14:28,914:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 12:14:28,914:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 12:14:28,914:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 12:14:28,914:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 12:14:28,914:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 12:14:29,562:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 12:25:28,201:INFO: [TEST L2R] in 27.ckpt is {'Bleu_1': 0.8699388566683263, 'Bleu_2': 0.7873623549022755, 'Bleu_3': 0.7040130067111782, 'Bleu_4': 0.6180656955084014, 'METEOR': 0.41951098409495086, 'ROUGE_L': 0.7791413255515726, 'CIDEr': 1.1888413823373605}
+2025-06-21 12:25:28,214:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/28.ckpt
+2025-06-21 12:25:28,650:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 12:25:28,650:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 12:25:28,650:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 12:25:28,650:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 12:25:28,650:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 12:25:28,650:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 12:25:29,192:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 12:25:29,193:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 12:25:29,193:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 12:25:29,193:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 12:25:29,193:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 12:25:29,193:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 12:25:29,868:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 12:36:45,770:INFO: [TEST L2R] in 28.ckpt is {'Bleu_1': 0.8699038578552744, 'Bleu_2': 0.7895518118485981, 'Bleu_3': 0.709830471053097, 'Bleu_4': 0.6297934529614597, 'METEOR': 0.42296836411949185, 'ROUGE_L': 0.7770998609284914, 'CIDEr': 1.1856177874985805}
+2025-06-21 12:36:45,782:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/29.ckpt
+2025-06-21 12:36:46,210:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 12:36:46,210:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 12:36:46,210:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 12:36:46,210:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 12:36:46,210:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 12:36:46,210:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 12:36:46,753:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 12:36:46,753:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 12:36:46,753:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 12:36:46,753:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 12:36:46,753:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 12:36:46,754:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 12:36:47,401:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 12:47:43,087:INFO: [TEST L2R] in 29.ckpt is {'Bleu_1': 0.8714443707782221, 'Bleu_2': 0.7896070855773607, 'Bleu_3': 0.7102024941957833, 'Bleu_4': 0.6285008999011316, 'METEOR': 0.42040659549079434, 'ROUGE_L': 0.7771192788590244, 'CIDEr': 1.1849285319894265}
+2025-06-21 12:47:43,100:INFO: Now is test in the /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/30.ckpt
+2025-06-21 12:47:43,529:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 12:47:43,530:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 12:47:43,530:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 12:47:43,530:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 12:47:43,530:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-21 12:47:43,530:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 12:47:44,072:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-21 12:47:44,072:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-21 12:47:44,072:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-21 12:47:44,072:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-21 12:47:44,072:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-21 12:47:44,072:WARNING: Set visual_config.hidden_size: 768.
+2025-06-21 12:47:44,719:INFO: Finish the model load in CUDA. Try to enter Test Set.
+2025-06-21 12:58:52,612:INFO: [TEST L2R] in 30.ckpt is {'Bleu_1': 0.8712476976030833, 'Bleu_2': 0.7895741258555525, 'Bleu_3': 0.7097191701849656, 'Bleu_4': 0.626932268971947, 'METEOR': 0.4184580426315312, 'ROUGE_L': 0.7742333787982697, 'CIDEr': 1.1723959895718916}

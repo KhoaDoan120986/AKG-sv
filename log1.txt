@@ -1,0 +1,555 @@
+2025-06-20 14:35:25,822:INFO: MODEL ID: MSVD_GBased+OFeat+rel+videomask | 2025-06-20 14:35:25
+2025-06-20 14:35:25,825:INFO: Max caption length: 10
+2025-06-20 14:35:25,825:INFO: Max frame: 50
+2025-06-20 14:35:25,825:INFO: Heads: 10
+2025-06-20 14:35:25,825:INFO: Small Heads: 12
+2025-06-20 14:35:25,825:INFO: Big Heads: 128
+2025-06-20 14:35:25,825:INFO: Model Dim: 640
+2025-06-20 14:35:25,825:INFO: Hidden Size: 768
+2025-06-20 14:35:25,825:INFO: Feature Mode: grid-rel
+2025-06-20 14:36:05,202:INFO: #vocabs: 3891 (9158), #words: 323223 (329680). Trim words which appear less than 3 times.
+2025-06-20 14:36:05,437:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-20 14:36:05,438:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-20 14:36:05,438:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-20 14:36:05,438:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-20 14:36:05,438:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-20 14:36:05,438:WARNING: Set visual_config.hidden_size: 768.
+2025-06-20 14:36:06,020:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-20 14:36:06,020:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-20 14:36:06,020:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-20 14:36:06,020:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-20 14:36:06,020:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-20 14:36:06,020:WARNING: Set visual_config.hidden_size: 768.
+2025-06-20 14:36:06,837:INFO: {'Total': 167943827, 'Trainable': 167943827}
+2025-06-20 15:01:01,532:INFO: Train loss: 2.0741363858394934 = (1 - reg): 0.4 * r2l_loss: 2.1222092686324823 + (reg):0.6 * l2r_loss: 2.042087689305915 
+2025-06-20 15:05:19,733:INFO: Validation loss: 3.093043800636574 = (1 - reg): 0.4 * r2l_loss: 3.1676678993083813 + (reg):0.6 * l2r_loss: 3.0432942143192996 
+2025-06-20 15:05:19,734:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 15:05:19,734:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 15:05:19,734:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 15:05:19,734:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 15:05:19,735:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 15:05:19,735:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 15:05:19,736:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 15:05:19,736:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 15:05:19,737:INFO: r2l_scores: {'Bleu_1': 0.8018729292452663, 'Bleu_2': 0.7106439085286628, 'Bleu_3': 0.6033168632269507, 'Bleu_4': 0.48257719483107464, 'METEOR': 0.2900908646703893, 'ROUGE_L': 0.68150236444944, 'CIDEr': 0.5030335599071178}
+2025-06-20 15:05:19,737:INFO: l2r_scores: {'Bleu_1': 0.8180023434654855, 'Bleu_2': 0.7125734829554894, 'Bleu_3': 0.6072798573867013, 'Bleu_4': 0.4978690766087414, 'METEOR': 0.33050132256684495, 'ROUGE_L': 0.7175342913750091, 'CIDEr': 0.6440239580179713}
+2025-06-20 15:05:19,747:INFO: Saving checkpoint at epoch=1 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 14:35:25/1.ckpt
+2025-06-20 15:29:39,651:INFO: Train loss: 1.3516265291464133 = (1 - reg): 0.4 * r2l_loss: 1.384247229568294 + (reg):0.6 * l2r_loss: 1.3298793208012816 
+2025-06-20 15:33:58,785:INFO: Validation loss: 2.629580043863367 = (1 - reg): 0.4 * r2l_loss: 2.6766404770038745 + (reg):0.6 * l2r_loss: 2.5982062781298603 
+2025-06-20 15:33:58,787:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 15:33:58,787:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 15:33:58,787:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 15:33:58,787:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 15:33:58,787:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 15:33:58,788:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 15:33:58,789:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 15:33:58,789:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 15:33:58,790:INFO: r2l_scores: {'Bleu_1': 0.7764298093574066, 'Bleu_2': 0.6775111783033975, 'Bleu_3': 0.5635549968627818, 'Bleu_4': 0.44556877174629234, 'METEOR': 0.34813250240113547, 'ROUGE_L': 0.7250886259166456, 'CIDEr': 0.9481016160613772}
+2025-06-20 15:33:58,790:INFO: l2r_scores: {'Bleu_1': 0.856858846915082, 'Bleu_2': 0.7825252561117158, 'Bleu_3': 0.6990049763940198, 'Bleu_4': 0.6057015541069575, 'METEOR': 0.37962864776597727, 'ROUGE_L': 0.7617815045898071, 'CIDEr': 1.0704501785479341}
+2025-06-20 15:33:58,791:INFO: Saving checkpoint at epoch=2 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 14:35:25/2.ckpt
+2025-06-20 15:59:41,347:INFO: Train loss: 1.1262487259067473 = (1 - reg): 0.4 * r2l_loss: 1.1457855373914125 + (reg):0.6 * l2r_loss: 1.113224129989499 
+2025-06-20 16:04:23,175:INFO: Validation loss: 2.5054046154022216 = (1 - reg): 0.4 * r2l_loss: 2.5483739305425575 + (reg):0.6 * l2r_loss: 2.476758285805031 
+2025-06-20 16:04:23,175:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 16:04:23,176:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 16:04:23,176:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 16:04:23,177:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 16:04:23,177:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 16:04:23,178:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 16:04:23,178:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 16:04:23,178:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 16:04:23,179:INFO: r2l_scores: {'Bleu_1': 0.8313253012033884, 'Bleu_2': 0.7176638870658978, 'Bleu_3': 0.5990155707855739, 'Bleu_4': 0.4793075570405108, 'METEOR': 0.3672602654119814, 'ROUGE_L': 0.7573889304644418, 'CIDEr': 1.0015332165984565}
+2025-06-20 16:04:23,179:INFO: l2r_scores: {'Bleu_1': 0.8597194388760326, 'Bleu_2': 0.7863807500837384, 'Bleu_3': 0.7140069005133639, 'Bleu_4': 0.6279401741536881, 'METEOR': 0.3836488293664923, 'ROUGE_L': 0.7692470858538482, 'CIDEr': 1.0477421822474142}
+2025-06-20 16:04:23,179:INFO: Saving checkpoint at epoch=3 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 14:35:25/3.ckpt
+2025-06-20 16:30:10,244:INFO: Train loss: 1.0037958089640884 = (1 - reg): 0.4 * r2l_loss: 1.0166524546263649 + (reg):0.6 * l2r_loss: 0.9952246604981969 
+2025-06-20 16:34:33,703:INFO: Validation loss: 2.4294629838731554 = (1 - reg): 0.4 * r2l_loss: 2.4649499743073076 + (reg):0.6 * l2r_loss: 2.4058048725128174 
+2025-06-20 16:34:33,704:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 16:34:33,705:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 16:34:33,705:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 16:34:33,705:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 16:34:33,705:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 16:34:33,706:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 16:34:33,706:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 16:34:33,707:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 16:34:33,707:INFO: r2l_scores: {'Bleu_1': 0.8223591525266722, 'Bleu_2': 0.7244052747462789, 'Bleu_3': 0.6278410700911039, 'Bleu_4': 0.5256090802598937, 'METEOR': 0.3787829036340111, 'ROUGE_L': 0.7483483046178319, 'CIDEr': 1.02943280311416}
+2025-06-20 16:34:33,707:INFO: l2r_scores: {'Bleu_1': 0.8579439252320412, 'Bleu_2': 0.7704918887058423, 'Bleu_3': 0.6870380787432118, 'Bleu_4': 0.5969192676407991, 'METEOR': 0.3928883914887133, 'ROUGE_L': 0.7872574200996396, 'CIDEr': 1.0936434507999284}
+2025-06-20 16:34:33,708:INFO: Saving checkpoint at epoch=4 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 14:35:25/4.ckpt
+2025-06-20 16:37:07,088:INFO: MODEL ID: MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07
+2025-06-20 16:37:07,091:INFO: Max caption length: 10
+2025-06-20 16:37:07,091:INFO: Max frame: 50
+2025-06-20 16:37:07,091:INFO: Heads: 10
+2025-06-20 16:37:07,091:INFO: Small Heads: 12
+2025-06-20 16:37:07,091:INFO: Big Heads: 128
+2025-06-20 16:37:07,091:INFO: Model Dim: 640
+2025-06-20 16:37:07,091:INFO: Hidden Size: 768
+2025-06-20 16:37:07,091:INFO: Feature Mode: grid-rel
+2025-06-20 16:37:36,484:INFO: #vocabs: 3891 (9158), #words: 323223 (329680). Trim words which appear less than 3 times.
+2025-06-20 16:37:36,715:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-20 16:37:36,715:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-20 16:37:36,715:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-20 16:37:36,715:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-20 16:37:36,715:WARNING: Set visual_config.num_attention_heads: 128.
+2025-06-20 16:37:36,715:WARNING: Set visual_config.hidden_size: 768.
+2025-06-20 16:37:37,290:INFO: loading archive file /workspace/AKG-sv/model/modules/visual-base
+2025-06-20 16:37:37,290:INFO: Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 1,
+  "type_vocab_size": 2,
+  "vocab_size": 1024
+}
+
+2025-06-20 16:37:37,291:INFO: Weight doesn't exsits. /workspace/AKG-sv/model/modules/visual-base/visual_pytorch_model.bin
+2025-06-20 16:37:37,291:WARNING: Set visual_config.num_hidden_layers: 4.
+2025-06-20 16:37:37,291:WARNING: Set visual_config.num_attention_heads: 12.
+2025-06-20 16:37:37,291:WARNING: Set visual_config.hidden_size: 768.
+2025-06-20 16:37:38,117:INFO: {'Total': 167943827, 'Trainable': 167943827}
+2025-06-20 17:01:56,949:INFO: Train loss: 2.0713283069798205 = (1 - reg): 0.4 * r2l_loss: 2.119033239005042 + (reg):0.6 * l2r_loss: 2.0395249155701185 
+2025-06-20 17:06:19,689:INFO: Validation loss: 3.0795132336793123 = (1 - reg): 0.4 * r2l_loss: 3.15861764660588 + (reg):0.6 * l2r_loss: 3.026776804747405 
+2025-06-20 17:06:19,689:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 17:06:19,690:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 17:06:19,691:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 17:06:19,691:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 17:06:19,691:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 17:06:19,691:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 17:06:19,691:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 17:06:19,692:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 17:06:19,692:INFO: r2l_scores: {'Bleu_1': 0.7853446230560088, 'Bleu_2': 0.6854033454193668, 'Bleu_3': 0.5786373359038811, 'Bleu_4': 0.4653809247867926, 'METEOR': 0.2836356776209735, 'ROUGE_L': 0.6686973906573015, 'CIDEr': 0.46011136650713697}
+2025-06-20 17:06:19,693:INFO: l2r_scores: {'Bleu_1': 0.8343434343400633, 'Bleu_2': 0.7481640145422497, 'Bleu_3': 0.6503990113471809, 'Bleu_4': 0.5364557311686815, 'METEOR': 0.3373583980363068, 'ROUGE_L': 0.7257471468004669, 'CIDEr': 0.6427493294583283}
+2025-06-20 17:06:19,704:INFO: Saving checkpoint at epoch=1 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/1.ckpt
+2025-06-20 17:30:34,946:INFO: Train loss: 1.3513829080394058 = (1 - reg): 0.4 * r2l_loss: 1.3838793231620163 + (reg):0.6 * l2r_loss: 1.329718559687255 
+2025-06-20 17:35:09,841:INFO: Validation loss: 2.6225568771362306 = (1 - reg): 0.4 * r2l_loss: 2.6763106955422296 + (reg):0.6 * l2r_loss: 2.586720853381687 
+2025-06-20 17:35:09,842:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 17:35:09,842:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 17:35:09,843:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 17:35:09,843:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 17:35:09,843:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 17:35:09,844:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 17:35:09,844:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 17:35:09,844:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 17:35:09,845:INFO: r2l_scores: {'Bleu_1': 0.7892918825547681, 'Bleu_2': 0.6960248199906686, 'Bleu_3': 0.5829714867452843, 'Bleu_4': 0.4687719995655152, 'METEOR': 0.3551030075526446, 'ROUGE_L': 0.7380825293660008, 'CIDEr': 0.9638496488571243}
+2025-06-20 17:35:09,845:INFO: l2r_scores: {'Bleu_1': 0.8519982914440525, 'Bleu_2': 0.7793278192158937, 'Bleu_3': 0.6969555870708363, 'Bleu_4': 0.6108385527638628, 'METEOR': 0.3772032640013971, 'ROUGE_L': 0.7531211911105907, 'CIDEr': 1.0371716728576512}
+2025-06-20 17:35:09,845:INFO: Saving checkpoint at epoch=2 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/2.ckpt
+2025-06-20 18:00:24,096:INFO: Train loss: 1.1260464764032208 = (1 - reg): 0.4 * r2l_loss: 1.1451665896275005 + (reg):0.6 * l2r_loss: 1.1132996804987798 
+2025-06-20 18:04:46,312:INFO: Validation loss: 2.4889664702945287 = (1 - reg): 0.4 * r2l_loss: 2.525264029149656 + (reg):0.6 * l2r_loss: 2.4647679646809895 
+2025-06-20 18:04:46,313:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 18:04:46,313:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 18:04:46,314:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 18:04:46,314:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 18:04:46,314:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 18:04:46,315:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 18:04:46,315:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 18:04:46,315:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 18:04:46,316:INFO: r2l_scores: {'Bleu_1': 0.8395061728380255, 'Bleu_2': 0.7343686589879681, 'Bleu_3': 0.623565457409221, 'Bleu_4': 0.5125510407624825, 'METEOR': 0.3833131599032509, 'ROUGE_L': 0.7703094674530501, 'CIDEr': 1.120648504075859}
+2025-06-20 18:04:46,316:INFO: l2r_scores: {'Bleu_1': 0.8594704684300215, 'Bleu_2': 0.7901076572595073, 'Bleu_3': 0.7158552608648995, 'Bleu_4': 0.631873434581356, 'METEOR': 0.3851946358934231, 'ROUGE_L': 0.7734363659926725, 'CIDEr': 1.165183474580246}
+2025-06-20 18:04:46,317:INFO: Saving checkpoint at epoch=3 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/3.ckpt
+2025-06-20 18:28:57,604:INFO: Train loss: 1.0023783741231824 = (1 - reg): 0.4 * r2l_loss: 1.0151364961217662 + (reg):0.6 * l2r_loss: 0.9938729086860282 
+2025-06-20 18:33:19,706:INFO: Validation loss: 2.4318217948631005 = (1 - reg): 0.4 * r2l_loss: 2.466985798765112 + (reg):0.6 * l2r_loss: 2.408379003736708 
+2025-06-20 18:33:19,707:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 18:33:19,707:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 18:33:19,708:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 18:33:19,708:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 18:33:19,708:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 18:33:19,709:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 18:33:19,709:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 18:33:19,709:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 18:33:19,709:INFO: r2l_scores: {'Bleu_1': 0.8327068623463724, 'Bleu_2': 0.7409271456838725, 'Bleu_3': 0.6467401526773435, 'Bleu_4': 0.5414610720022985, 'METEOR': 0.39029356937026033, 'ROUGE_L': 0.7683187532084795, 'CIDEr': 1.1273616532969901}
+2025-06-20 18:33:19,710:INFO: l2r_scores: {'Bleu_1': 0.8568738229739042, 'Bleu_2': 0.7735761123883552, 'Bleu_3': 0.6903719937292575, 'Bleu_4': 0.6000255268082002, 'METEOR': 0.3961534303952317, 'ROUGE_L': 0.7841937124141662, 'CIDEr': 1.0923841820075992}
+2025-06-20 18:33:19,710:INFO: Saving checkpoint at epoch=4 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/4.ckpt
+2025-06-20 18:57:58,496:INFO: Train loss: 0.9297419530446412 = (1 - reg): 0.4 * r2l_loss: 0.9394338640228647 + (reg):0.6 * l2r_loss: 0.9232806294472491 
+2025-06-20 19:02:19,282:INFO: Validation loss: 2.363707274860806 = (1 - reg): 0.4 * r2l_loss: 2.4086330740540114 + (reg):0.6 * l2r_loss: 2.3337566296259564 
+2025-06-20 19:02:19,283:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 19:02:19,283:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 19:02:19,284:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 19:02:19,284:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 19:02:19,284:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 19:02:19,285:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 19:02:19,285:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 19:02:19,286:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 19:02:19,286:INFO: r2l_scores: {'Bleu_1': 0.8537477148064831, 'Bleu_2': 0.760733129243056, 'Bleu_3': 0.6556528647872167, 'Bleu_4': 0.5508252076807487, 'METEOR': 0.37830744334082556, 'ROUGE_L': 0.7578855976113469, 'CIDEr': 1.0441287899619203}
+2025-06-20 19:02:19,286:INFO: l2r_scores: {'Bleu_1': 0.8692449355416773, 'Bleu_2': 0.7911604393016358, 'Bleu_3': 0.7074225704083746, 'Bleu_4': 0.6147013040696537, 'METEOR': 0.39789068424360974, 'ROUGE_L': 0.7827433032472952, 'CIDEr': 1.1129934514489859}
+2025-06-20 19:02:19,287:INFO: Saving checkpoint at epoch=5 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/5.ckpt
+2025-06-20 19:26:28,536:INFO: Train loss: 0.8841633305784131 = (1 - reg): 0.4 * r2l_loss: 0.8919779389021827 + (reg):0.6 * l2r_loss: 0.8789535448199413 
+2025-06-20 19:30:52,223:INFO: Validation loss: 2.352838013790272 = (1 - reg): 0.4 * r2l_loss: 2.3794203934846103 + (reg):0.6 * l2r_loss: 2.3351163343146997 
+2025-06-20 19:30:52,224:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 19:30:52,224:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 19:30:52,224:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 19:30:52,224:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 19:30:52,224:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 19:30:52,224:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 19:30:52,224:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 19:30:52,225:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 19:30:52,225:INFO: r2l_scores: {'Bleu_1': 0.8489153446595195, 'Bleu_2': 0.7413637527478815, 'Bleu_3': 0.6419421587182493, 'Bleu_4': 0.5402023209198615, 'METEOR': 0.3784362345344844, 'ROUGE_L': 0.7551350657140038, 'CIDEr': 1.0531664207500193}
+2025-06-20 19:30:52,225:INFO: l2r_scores: {'Bleu_1': 0.8277087033733078, 'Bleu_2': 0.7286626183975555, 'Bleu_3': 0.6300584229706312, 'Bleu_4': 0.5251932987060637, 'METEOR': 0.3673951980822481, 'ROUGE_L': 0.7467206205193283, 'CIDEr': 0.9944106549783152}
+2025-06-20 19:30:52,225:INFO: Saving checkpoint at epoch=6 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/6.ckpt
+2025-06-20 19:55:06,757:INFO: Train loss: 0.8510483287592403 = (1 - reg): 0.4 * r2l_loss: 0.8571004793683037 + (reg):0.6 * l2r_loss: 0.8470135187711872 
+2025-06-20 19:59:27,734:INFO: Validation loss: 2.3185427665710447 = (1 - reg): 0.4 * r2l_loss: 2.348274192986665 + (reg):0.6 * l2r_loss: 2.298721714372988 
+2025-06-20 19:59:27,734:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 19:59:27,734:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 19:59:27,735:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 19:59:27,735:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 19:59:27,736:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 19:59:27,736:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 19:59:27,736:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 19:59:27,736:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 19:59:27,736:INFO: r2l_scores: {'Bleu_1': 0.859230736154219, 'Bleu_2': 0.7758217233872619, 'Bleu_3': 0.6885519888041639, 'Bleu_4': 0.5990282425992512, 'METEOR': 0.40975050289749787, 'ROUGE_L': 0.7893739067803115, 'CIDEr': 1.2296997974070776}
+2025-06-20 19:59:27,737:INFO: l2r_scores: {'Bleu_1': 0.8560747663535401, 'Bleu_2': 0.7772852155854125, 'Bleu_3': 0.6910705179297305, 'Bleu_4': 0.5929191492199393, 'METEOR': 0.391029117723711, 'ROUGE_L': 0.7648673461818839, 'CIDEr': 1.1084889432755878}
+2025-06-20 19:59:27,738:INFO: Saving checkpoint at epoch=7 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/7.ckpt
+2025-06-20 20:23:33,764:INFO: Train loss: 0.824815905680422 = (1 - reg): 0.4 * r2l_loss: 0.8304206458076102 + (reg):0.6 * l2r_loss: 0.8210793676141833 
+2025-06-20 20:28:01,273:INFO: Validation loss: 2.311156768269009 = (1 - reg): 0.4 * r2l_loss: 2.3527106744271737 + (reg):0.6 * l2r_loss: 2.2834540402447736 
+2025-06-20 20:28:01,273:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 20:28:01,274:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 20:28:01,274:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 20:28:01,274:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 20:28:01,274:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 20:28:01,275:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 20:28:01,275:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 20:28:01,275:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 20:28:01,276:INFO: r2l_scores: {'Bleu_1': 0.852732994447934, 'Bleu_2': 0.7707189585505659, 'Bleu_3': 0.6760255879986282, 'Bleu_4': 0.5754644343735151, 'METEOR': 0.390570920610767, 'ROUGE_L': 0.7574263875889562, 'CIDEr': 1.1066111610442448}
+2025-06-20 20:28:01,276:INFO: l2r_scores: {'Bleu_1': 0.8775510204065352, 'Bleu_2': 0.7909992950107871, 'Bleu_3': 0.6951437582383875, 'Bleu_4': 0.5930306822012014, 'METEOR': 0.3999788413570268, 'ROUGE_L': 0.7902195593007155, 'CIDEr': 1.1895502590461369}
+2025-06-20 20:28:01,277:INFO: Saving checkpoint at epoch=8 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/8.ckpt
+2025-06-20 20:53:12,594:INFO: Train loss: 0.8029851247443528 = (1 - reg): 0.4 * r2l_loss: 0.8078657591929201 + (reg):0.6 * l2r_loss: 0.7997313257905303 
+2025-06-20 20:57:35,013:INFO: Validation loss: 2.304083415314003 = (1 - reg): 0.4 * r2l_loss: 2.334087077776591 + (reg):0.6 * l2r_loss: 2.284080883308693 
+2025-06-20 20:57:35,014:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 20:57:35,014:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 20:57:35,015:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 20:57:35,015:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 20:57:35,016:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 20:57:35,016:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 20:57:35,016:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 20:57:35,017:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 20:57:35,017:INFO: r2l_scores: {'Bleu_1': 0.8736462093847046, 'Bleu_2': 0.7944687037990822, 'Bleu_3': 0.7091314941316701, 'Bleu_4': 0.6093879856592225, 'METEOR': 0.40321510005972344, 'ROUGE_L': 0.7797457347436608, 'CIDEr': 1.2057302553160083}
+2025-06-20 20:57:35,017:INFO: l2r_scores: {'Bleu_1': 0.8550458715580641, 'Bleu_2': 0.7692899519691233, 'Bleu_3': 0.6808628148693786, 'Bleu_4': 0.5769362185471012, 'METEOR': 0.38998471616813285, 'ROUGE_L': 0.7620613371215786, 'CIDEr': 1.0851413405353747}
+2025-06-20 20:57:35,018:INFO: Saving checkpoint at epoch=9 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/9.ckpt
+2025-06-20 21:21:38,432:INFO: Train loss: 0.784863169623203 = (1 - reg): 0.4 * r2l_loss: 0.7891108494508462 + (reg):0.6 * l2r_loss: 0.7820313401300399 
+2025-06-20 21:26:00,370:INFO: Validation loss: 2.304578181549355 = (1 - reg): 0.4 * r2l_loss: 2.3166802070758963 + (reg):0.6 * l2r_loss: 2.2965100632773505 
+2025-06-20 21:26:00,371:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 21:26:00,371:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 21:26:00,371:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 21:26:00,371:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 21:26:00,372:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 21:26:00,372:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 21:26:00,373:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 21:26:00,373:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 21:26:00,373:INFO: r2l_scores: {'Bleu_1': 0.8434622467756105, 'Bleu_2': 0.7532499181141488, 'Bleu_3': 0.6577146331778296, 'Bleu_4': 0.5509186118462508, 'METEOR': 0.3924884505481436, 'ROUGE_L': 0.7684066036591319, 'CIDEr': 1.054017763709514}
+2025-06-20 21:26:00,374:INFO: l2r_scores: {'Bleu_1': 0.8712121212104712, 'Bleu_2': 0.7917998740185491, 'Bleu_3': 0.7096859485487894, 'Bleu_4': 0.6212220242760638, 'METEOR': 0.40065236318869546, 'ROUGE_L': 0.7796745266608589, 'CIDEr': 1.1186613316624918}
+2025-06-20 21:26:00,374:INFO: Saving checkpoint at epoch=10 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/10.ckpt
+2025-06-20 21:50:05,160:INFO: Train loss: 0.7690124104452914 = (1 - reg): 0.4 * r2l_loss: 0.7733565771384318 + (reg):0.6 * l2r_loss: 0.7661162569874623 
+2025-06-20 21:54:48,079:INFO: Validation loss: 2.2849370188183253 = (1 - reg): 0.4 * r2l_loss: 2.325404884197094 + (reg):0.6 * l2r_loss: 2.2579583238672325 
+2025-06-20 21:54:48,080:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 21:54:48,080:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 21:54:48,080:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 21:54:48,081:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 21:54:48,081:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 21:54:48,081:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 21:54:48,082:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 21:54:48,082:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 21:54:48,083:INFO: r2l_scores: {'Bleu_1': 0.835185185182092, 'Bleu_2': 0.738084357315784, 'Bleu_3': 0.6392050977608857, 'Bleu_4': 0.539199601356741, 'METEOR': 0.39410792751578383, 'ROUGE_L': 0.7483821566740565, 'CIDEr': 1.0837535260426685}
+2025-06-20 21:54:48,083:INFO: l2r_scores: {'Bleu_1': 0.8449197860947506, 'Bleu_2': 0.7525520051108345, 'Bleu_3': 0.6679948965508942, 'Bleu_4': 0.5783972913285936, 'METEOR': 0.4082417602218416, 'ROUGE_L': 0.784300775709384, 'CIDEr': 1.1665409899610255}
+2025-06-20 21:54:48,083:INFO: Saving checkpoint at epoch=11 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/11.ckpt
+2025-06-20 22:19:49,833:INFO: Train loss: 0.7540918949002126 = (1 - reg): 0.4 * r2l_loss: 0.7578310439234874 + (reg):0.6 * l2r_loss: 0.751599087949659 
+2025-06-20 22:24:26,681:INFO: Validation loss: 2.2757280314410173 = (1 - reg): 0.4 * r2l_loss: 2.313916771500199 + (reg):0.6 * l2r_loss: 2.2502687736793803 
+2025-06-20 22:24:26,682:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 22:24:26,683:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 22:24:26,683:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 22:24:26,683:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 22:24:26,683:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 22:24:26,683:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 22:24:26,683:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 22:24:26,683:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 22:24:26,684:INFO: r2l_scores: {'Bleu_1': 0.8534798534782904, 'Bleu_2': 0.7664757081926564, 'Bleu_3': 0.673593259079504, 'Bleu_4': 0.5717275698881019, 'METEOR': 0.4010834758896948, 'ROUGE_L': 0.774922405989528, 'CIDEr': 1.2166695896125943}
+2025-06-20 22:24:26,684:INFO: l2r_scores: {'Bleu_1': 0.8614800758996936, 'Bleu_2': 0.7844379588950824, 'Bleu_3': 0.7022025853475442, 'Bleu_4': 0.6086967474745203, 'METEOR': 0.3994757941881062, 'ROUGE_L': 0.7734154446550804, 'CIDEr': 1.1695932329430985}
+2025-06-20 22:24:26,685:INFO: Saving checkpoint at epoch=12 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/12.ckpt
+2025-06-20 22:49:02,368:INFO: Train loss: 0.7407749577037623 = (1 - reg): 0.4 * r2l_loss: 0.7449014747338217 + (reg):0.6 * l2r_loss: 0.7380239068484697 
+2025-06-20 22:53:24,856:INFO: Validation loss: 2.28209083698414 = (1 - reg): 0.4 * r2l_loss: 2.314951778341223 + (reg):0.6 * l2r_loss: 2.2601834341331766 
+2025-06-20 22:53:24,857:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 22:53:24,857:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 22:53:24,857:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 22:53:24,858:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 22:53:24,858:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 22:53:24,859:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 22:53:24,859:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 22:53:24,859:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 22:53:24,860:INFO: r2l_scores: {'Bleu_1': 0.8652094717652729, 'Bleu_2': 0.7790991651539296, 'Bleu_3': 0.6985626702486869, 'Bleu_4': 0.605216434596065, 'METEOR': 0.40563732007512193, 'ROUGE_L': 0.7758976345643112, 'CIDEr': 1.2440799305849604}
+2025-06-20 22:53:24,860:INFO: l2r_scores: {'Bleu_1': 0.8737864077652936, 'Bleu_2': 0.8118032072497069, 'Bleu_3': 0.7441932604371777, 'Bleu_4': 0.6665979760131964, 'METEOR': 0.42472476624559014, 'ROUGE_L': 0.7953879909451245, 'CIDEr': 1.3482481016029308}
+2025-06-20 22:53:24,861:INFO: Saving checkpoint at epoch=13 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/13.ckpt
+2025-06-20 23:18:31,684:INFO: Train loss: 0.7298279281131557 = (1 - reg): 0.4 * r2l_loss: 0.7329419450877143 + (reg):0.6 * l2r_loss: 0.7277518774642319 
+2025-06-20 23:23:18,519:INFO: Validation loss: 2.2732387904767637 = (1 - reg): 0.4 * r2l_loss: 2.2968355823446203 + (reg):0.6 * l2r_loss: 2.2575075193687724 
+2025-06-20 23:23:18,520:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 23:23:18,520:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 23:23:18,521:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 23:23:18,521:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 23:23:18,522:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 23:23:18,522:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 23:23:18,522:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 23:23:18,522:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 23:23:18,523:INFO: r2l_scores: {'Bleu_1': 0.870036101081462, 'Bleu_2': 0.7818727042482064, 'Bleu_3': 0.6860727174595871, 'Bleu_4': 0.5848118171691394, 'METEOR': 0.39124411016092214, 'ROUGE_L': 0.7808476966516734, 'CIDEr': 1.210436495354042}
+2025-06-20 23:23:18,524:INFO: l2r_scores: {'Bleu_1': 0.8592870544073935, 'Bleu_2': 0.7779919548045022, 'Bleu_3': 0.6916065889418016, 'Bleu_4': 0.5995366120804755, 'METEOR': 0.4053055633326861, 'ROUGE_L': 0.773084144383533, 'CIDEr': 1.1093314281052202}
+2025-06-20 23:23:18,524:INFO: Saving checkpoint at epoch=14 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/14.ckpt
+2025-06-20 23:47:51,297:INFO: Train loss: 0.7192744720959272 = (1 - reg): 0.4 * r2l_loss: 0.7222770477122947 + (reg):0.6 * l2r_loss: 0.7172727165456678 
+2025-06-20 23:52:12,841:INFO: Validation loss: 2.2590286431489166 = (1 - reg): 0.4 * r2l_loss: 2.292893448582402 + (reg):0.6 * l2r_loss: 2.236452014357955 
+2025-06-20 23:52:12,842:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-20 23:52:12,842:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-20 23:52:12,842:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-20 23:52:12,843:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-20 23:52:12,844:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-20 23:52:12,844:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-20 23:52:12,844:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-20 23:52:12,845:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-20 23:52:12,845:INFO: r2l_scores: {'Bleu_1': 0.8706084905387211, 'Bleu_2': 0.7837240622556807, 'Bleu_3': 0.6972689856322928, 'Bleu_4': 0.6130214922160698, 'METEOR': 0.40473223361064925, 'ROUGE_L': 0.7800199075966019, 'CIDEr': 1.2454217510520909}
+2025-06-20 23:52:12,845:INFO: l2r_scores: {'Bleu_1': 0.8717948717932751, 'Bleu_2': 0.7958152016096307, 'Bleu_3': 0.7153624163069162, 'Bleu_4': 0.6241814471279107, 'METEOR': 0.40494702526560455, 'ROUGE_L': 0.7956263279924519, 'CIDEr': 1.272146890669776}
+2025-06-20 23:52:12,846:INFO: Saving checkpoint at epoch=15 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/15.ckpt
+2025-06-21 00:16:14,343:INFO: Train loss: 0.7081792498807438 = (1 - reg): 0.4 * r2l_loss: 0.7117155327562426 + (reg):0.6 * l2r_loss: 0.7058216899926545 
+2025-06-21 00:20:35,364:INFO: Validation loss: 2.2729641614136873 = (1 - reg): 0.4 * r2l_loss: 2.3063853246194346 + (reg):0.6 * l2r_loss: 2.2506832740924976 
+2025-06-21 00:20:35,365:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 00:20:35,366:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 00:20:35,366:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 00:20:35,366:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 00:20:35,366:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 00:20:35,367:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 00:20:35,367:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 00:20:35,368:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 00:20:35,368:INFO: r2l_scores: {'Bleu_1': 0.8579439252320412, 'Bleu_2': 0.7730474243749014, 'Bleu_3': 0.6809474190292386, 'Bleu_4': 0.5840997172511401, 'METEOR': 0.3934858740012896, 'ROUGE_L': 0.7592547455675465, 'CIDEr': 1.1721561587399556}
+2025-06-21 00:20:35,369:INFO: l2r_scores: {'Bleu_1': 0.8747663551385518, 'Bleu_2': 0.8046913684853745, 'Bleu_3': 0.7308951545227276, 'Bleu_4': 0.6400364237968993, 'METEOR': 0.41740444730866527, 'ROUGE_L': 0.7893986391032408, 'CIDEr': 1.2112774021146107}
+2025-06-21 00:20:35,369:INFO: Saving checkpoint at epoch=16 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/16.ckpt
+2025-06-21 00:44:41,463:INFO: Train loss: 0.6990511287235823 = (1 - reg): 0.4 * r2l_loss: 0.7028019188271194 + (reg):0.6 * l2r_loss: 0.6965505638083473 
+2025-06-21 00:49:03,629:INFO: Validation loss: 2.275633112589518 = (1 - reg): 0.4 * r2l_loss: 2.298781321666859 + (reg):0.6 * l2r_loss: 2.2602008589991818 
+2025-06-21 00:49:03,629:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 00:49:03,630:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 00:49:03,630:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 00:49:03,630:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 00:49:03,631:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 00:49:03,631:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 00:49:03,632:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 00:49:03,632:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 00:49:03,632:INFO: r2l_scores: {'Bleu_1': 0.8880733944937834, 'Bleu_2': 0.8090611473860781, 'Bleu_3': 0.7191175527463848, 'Bleu_4': 0.6194429714658738, 'METEOR': 0.41270502735690584, 'ROUGE_L': 0.795774301710858, 'CIDEr': 1.2274858476085533}
+2025-06-21 00:49:03,633:INFO: l2r_scores: {'Bleu_1': 0.865561694289382, 'Bleu_2': 0.7870037145416091, 'Bleu_3': 0.7025116936266049, 'Bleu_4': 0.6067635745471047, 'METEOR': 0.41398640718734336, 'ROUGE_L': 0.7840654787686303, 'CIDEr': 1.1863962663548282}
+2025-06-21 00:49:03,633:INFO: Saving checkpoint at epoch=17 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/17.ckpt
+2025-06-21 01:13:17,895:INFO: Train loss: 0.6906342407914459 = (1 - reg): 0.4 * r2l_loss: 0.6939929696770966 + (reg):0.6 * l2r_loss: 0.6883950509008814 
+2025-06-21 01:17:46,669:INFO: Validation loss: 2.2591570562786525 = (1 - reg): 0.4 * r2l_loss: 2.2860048020327532 + (reg):0.6 * l2r_loss: 2.2412584560888784 
+2025-06-21 01:17:46,670:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 01:17:46,670:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 01:17:46,671:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 01:17:46,671:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 01:17:46,671:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 01:17:46,672:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 01:17:46,672:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 01:17:46,672:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 01:17:46,673:INFO: r2l_scores: {'Bleu_1': 0.8812615955440397, 'Bleu_2': 0.803985280982472, 'Bleu_3': 0.712880441366787, 'Bleu_4': 0.6121113766985391, 'METEOR': 0.40366957613864873, 'ROUGE_L': 0.7748915140258176, 'CIDEr': 1.2412257901771273}
+2025-06-21 01:17:46,673:INFO: l2r_scores: {'Bleu_1': 0.8761552680205617, 'Bleu_2': 0.7948493136188349, 'Bleu_3': 0.7134394165087661, 'Bleu_4': 0.6230366062805152, 'METEOR': 0.408257020943131, 'ROUGE_L': 0.7721872469354695, 'CIDEr': 1.1366795326842236}
+2025-06-21 01:17:46,674:INFO: Saving checkpoint at epoch=18 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/18.ckpt
+2025-06-21 01:42:27,928:INFO: Train loss: 0.68234724646709 = (1 - reg): 0.4 * r2l_loss: 0.6853901920162263 + (reg):0.6 * l2r_loss: 0.6803185787943543 
+2025-06-21 01:46:48,755:INFO: Validation loss: 2.2593534187034323 = (1 - reg): 0.4 * r2l_loss: 2.2815354691611396 + (reg):0.6 * l2r_loss: 2.2445652820445874 
+2025-06-21 01:46:48,756:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 01:46:48,756:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 01:46:48,757:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 01:46:48,757:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 01:46:48,757:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 01:46:48,758:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 01:46:48,759:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 01:46:48,759:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 01:46:48,759:INFO: r2l_scores: {'Bleu_1': 0.8855534709160016, 'Bleu_2': 0.8051801833537529, 'Bleu_3': 0.708920721096837, 'Bleu_4': 0.6144170386015001, 'METEOR': 0.4046607505168843, 'ROUGE_L': 0.7768031814515698, 'CIDEr': 1.2203445470241194}
+2025-06-21 01:46:48,759:INFO: l2r_scores: {'Bleu_1': 0.8738404452673955, 'Bleu_2': 0.8005929228953469, 'Bleu_3': 0.7182791976445678, 'Bleu_4': 0.6259350773302658, 'METEOR': 0.4055137703286241, 'ROUGE_L': 0.7801695526100074, 'CIDEr': 1.1799162929981901}
+2025-06-21 01:46:48,760:INFO: Saving checkpoint at epoch=19 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/19.ckpt
+2025-06-21 02:10:44,322:INFO: Train loss: 0.6750658601229308 = (1 - reg): 0.4 * r2l_loss: 0.6783956156988613 + (reg):0.6 * l2r_loss: 0.6728459859285199 
+2025-06-21 02:15:03,715:INFO: Validation loss: 2.279878709051344 = (1 - reg): 0.4 * r2l_loss: 2.3081772292101825 + (reg):0.6 * l2r_loss: 2.2610129285741736 
+2025-06-21 02:15:03,716:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 02:15:03,716:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 02:15:03,716:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 02:15:03,717:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 02:15:03,717:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 02:15:03,718:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 02:15:03,718:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 02:15:03,718:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 02:15:03,719:INFO: r2l_scores: {'Bleu_1': 0.872727272725686, 'Bleu_2': 0.7939162615165932, 'Bleu_3': 0.7055134874974203, 'Bleu_4': 0.6137257309302665, 'METEOR': 0.41011118683736997, 'ROUGE_L': 0.7773609857849629, 'CIDEr': 1.2329806139584414}
+2025-06-21 02:15:03,719:INFO: l2r_scores: {'Bleu_1': 0.8749999999983173, 'Bleu_2': 0.7997395409322842, 'Bleu_3': 0.7228857348830849, 'Bleu_4': 0.6404763380995112, 'METEOR': 0.418981069439221, 'ROUGE_L': 0.7906071899465469, 'CIDEr': 1.2709317879587838}
+2025-06-21 02:15:03,720:INFO: Saving checkpoint at epoch=20 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/20.ckpt
+2025-06-21 02:39:31,490:INFO: Train loss: 0.6673592287008879 = (1 - reg): 0.4 * r2l_loss: 0.671237215780821 + (reg):0.6 * l2r_loss: 0.6647738691431577 
+2025-06-21 02:43:52,504:INFO: Validation loss: 2.268180243174235 = (1 - reg): 0.4 * r2l_loss: 2.3016439358393352 + (reg):0.6 * l2r_loss: 2.245871015831276 
+2025-06-21 02:43:52,504:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 02:43:52,505:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 02:43:52,505:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 02:43:52,505:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 02:43:52,505:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 02:43:52,505:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 02:43:52,505:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 02:43:52,505:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 02:43:52,505:INFO: r2l_scores: {'Bleu_1': 0.8832116788305051, 'Bleu_2': 0.8078065894260761, 'Bleu_3': 0.7223436602095421, 'Bleu_4': 0.6314011769512408, 'METEOR': 0.3995438992096306, 'ROUGE_L': 0.7722291036517458, 'CIDEr': 1.2997859276946488}
+2025-06-21 02:43:52,505:INFO: l2r_scores: {'Bleu_1': 0.8745318352043548, 'Bleu_2': 0.7903578914473492, 'Bleu_3': 0.7070568081814782, 'Bleu_4': 0.6186994080722742, 'METEOR': 0.40439318362088683, 'ROUGE_L': 0.7719821253651794, 'CIDEr': 1.179700586018427}
+2025-06-21 02:43:52,506:INFO: Saving checkpoint at epoch=21 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/21.ckpt
+2025-06-21 03:08:04,028:INFO: Train loss: 0.6606873848008328 = (1 - reg): 0.4 * r2l_loss: 0.6647235440817035 + (reg):0.6 * l2r_loss: 0.6579965752070067 
+2025-06-21 03:12:42,820:INFO: Validation loss: 2.2774415025004635 = (1 - reg): 0.4 * r2l_loss: 2.3052344710738573 + (reg):0.6 * l2r_loss: 2.2589127319830435 
+2025-06-21 03:12:42,821:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 03:12:42,821:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 03:12:42,821:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 03:12:42,821:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 03:12:42,822:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 03:12:42,822:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 03:12:42,822:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 03:12:42,823:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 03:12:42,823:INFO: r2l_scores: {'Bleu_1': 0.8691756272385858, 'Bleu_2': 0.7792844673408639, 'Bleu_3': 0.6939450461647326, 'Bleu_4': 0.5999138429903768, 'METEOR': 0.4119933257433756, 'ROUGE_L': 0.7739333839391621, 'CIDEr': 1.2495452243107124}
+2025-06-21 03:12:42,823:INFO: l2r_scores: {'Bleu_1': 0.8645276292319706, 'Bleu_2': 0.7782878257983644, 'Bleu_3': 0.6925952162369029, 'Bleu_4': 0.6002739983961762, 'METEOR': 0.419612809328766, 'ROUGE_L': 0.7842027916820641, 'CIDEr': 1.2001700870082077}
+2025-06-21 03:12:42,824:INFO: Saving checkpoint at epoch=22 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/22.ckpt
+2025-06-21 03:37:38,532:INFO: Train loss: 0.6547167003350179 = (1 - reg): 0.4 * r2l_loss: 0.6588324794808372 + (reg):0.6 * l2r_loss: 0.6519728144270475 
+2025-06-21 03:42:33,894:INFO: Validation loss: 2.2560661757433857 = (1 - reg): 0.4 * r2l_loss: 2.280236586817989 + (reg):0.6 * l2r_loss: 2.239952446796276 
+2025-06-21 03:42:33,894:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 03:42:33,894:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 03:42:33,895:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 03:42:33,895:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 03:42:33,895:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 03:42:33,896:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 03:42:33,896:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 03:42:33,896:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 03:42:33,897:INFO: r2l_scores: {'Bleu_1': 0.8689407540379372, 'Bleu_2': 0.772683800469732, 'Bleu_3': 0.6714360539375638, 'Bleu_4': 0.5641503024166268, 'METEOR': 0.3999848028784376, 'ROUGE_L': 0.7662226506717497, 'CIDEr': 1.1959909877451447}
+2025-06-21 03:42:33,897:INFO: l2r_scores: {'Bleu_1': 0.8766355140170531, 'Bleu_2': 0.8042987950515913, 'Bleu_3': 0.7196408028081454, 'Bleu_4': 0.621372218895621, 'METEOR': 0.41657070430687243, 'ROUGE_L': 0.7887780898474557, 'CIDEr': 1.2814559517852402}
+2025-06-21 03:42:33,898:INFO: Saving checkpoint at epoch=23 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/23.ckpt
+2025-06-21 04:06:59,052:INFO: Train loss: 0.6484987135597917 = (1 - reg): 0.4 * r2l_loss: 0.6527500927057422 + (reg):0.6 * l2r_loss: 0.645664425853823 
+2025-06-21 04:11:21,873:INFO: Validation loss: 2.276495701295358 = (1 - reg): 0.4 * r2l_loss: 2.3050767713122897 + (reg):0.6 * l2r_loss: 2.2574415639594747 
+2025-06-21 04:11:21,873:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 04:11:21,873:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 04:11:21,873:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 04:11:21,874:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 04:11:21,874:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 04:11:21,874:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 04:11:21,874:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 04:11:21,874:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 04:11:21,874:INFO: r2l_scores: {'Bleu_1': 0.8878676470571915, 'Bleu_2': 0.8074049925142401, 'Bleu_3': 0.7224800038999448, 'Bleu_4': 0.6263655341865868, 'METEOR': 0.40636480351793647, 'ROUGE_L': 0.7828638344567913, 'CIDEr': 1.249227210517208}
+2025-06-21 04:11:21,874:INFO: l2r_scores: {'Bleu_1': 0.8731617647042773, 'Bleu_2': 0.7932879529918665, 'Bleu_3': 0.7116336906620127, 'Bleu_4': 0.6183775545853987, 'METEOR': 0.41318927702806446, 'ROUGE_L': 0.7842048421468362, 'CIDEr': 1.2177576906076217}
+2025-06-21 04:11:21,874:INFO: Saving checkpoint at epoch=24 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/24.ckpt
+2025-06-21 04:35:44,348:INFO: Train loss: 0.6427129457817703 = (1 - reg): 0.4 * r2l_loss: 0.6473940940958555 + (reg):0.6 * l2r_loss: 0.6395921470884417 
+2025-06-21 04:40:07,487:INFO: Validation loss: 2.27586803789492 = (1 - reg): 0.4 * r2l_loss: 2.305695660025985 + (reg):0.6 * l2r_loss: 2.2559828484499898 
+2025-06-21 04:40:07,488:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 04:40:07,489:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 04:40:07,489:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 04:40:07,489:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 04:40:07,489:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 04:40:07,490:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 04:40:07,490:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 04:40:07,491:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 04:40:07,491:INFO: r2l_scores: {'Bleu_1': 0.8810393664575902, 'Bleu_2': 0.7911025091301952, 'Bleu_3': 0.7012075901207353, 'Bleu_4': 0.5999898768108451, 'METEOR': 0.40622387693741996, 'ROUGE_L': 0.7818728081199617, 'CIDEr': 1.243211567301034}
+2025-06-21 04:40:07,491:INFO: l2r_scores: {'Bleu_1': 0.874531835202717, 'Bleu_2': 0.7941729959557401, 'Bleu_3': 0.7142995194018542, 'Bleu_4': 0.6266356557591904, 'METEOR': 0.4074478903570338, 'ROUGE_L': 0.7832159616875436, 'CIDEr': 1.1988128215869662}
+2025-06-21 04:40:07,492:INFO: Saving checkpoint at epoch=25 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/25.ckpt
+2025-06-21 05:04:44,694:INFO: Train loss: 0.6374330190752373 = (1 - reg): 0.4 * r2l_loss: 0.6422927216428225 + (reg):0.6 * l2r_loss: 0.6341931848252406 
+2025-06-21 05:09:15,062:INFO: Validation loss: 2.2767835246192085 = (1 - reg): 0.4 * r2l_loss: 2.3010733357182254 + (reg):0.6 * l2r_loss: 2.2605902044861406 
+2025-06-21 05:09:15,063:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 05:09:15,063:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 05:09:15,063:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 05:09:15,064:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 05:09:15,064:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 05:09:15,065:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 05:09:15,065:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 05:09:15,065:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 05:09:15,066:INFO: r2l_scores: {'Bleu_1': 0.8820162546601844, 'Bleu_2': 0.802989209108877, 'Bleu_3': 0.7188693364284823, 'Bleu_4': 0.629959068598884, 'METEOR': 0.40084687944582087, 'ROUGE_L': 0.7715051348602741, 'CIDEr': 1.232022595692588}
+2025-06-21 05:09:15,066:INFO: l2r_scores: {'Bleu_1': 0.8702010968905481, 'Bleu_2': 0.7917425535720278, 'Bleu_3': 0.7086550866210581, 'Bleu_4': 0.6129971596322638, 'METEOR': 0.41869835030980684, 'ROUGE_L': 0.7882889512535882, 'CIDEr': 1.2222858664573968}
+2025-06-21 05:09:15,067:INFO: Saving checkpoint at epoch=26 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/26.ckpt
+2025-06-21 05:33:25,733:INFO: Train loss: 0.6319796726351878 = (1 - reg): 0.4 * r2l_loss: 0.6370075463271532 + (reg):0.6 * l2r_loss: 0.628627723025494 
+2025-06-21 05:37:50,391:INFO: Validation loss: 2.283767397315414 = (1 - reg): 0.4 * r2l_loss: 2.310398867395189 + (reg):0.6 * l2r_loss: 2.2660129803198354 
+2025-06-21 05:37:50,391:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 05:37:50,392:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 05:37:50,392:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 05:37:50,393:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 05:37:50,393:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 05:37:50,393:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 05:37:50,394:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 05:37:50,394:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 05:37:50,395:INFO: r2l_scores: {'Bleu_1': 0.8943474061937629, 'Bleu_2': 0.8049095641145727, 'Bleu_3': 0.7070391507746785, 'Bleu_4': 0.607985959233551, 'METEOR': 0.41044117538243463, 'ROUGE_L': 0.7745115734764777, 'CIDEr': 1.2724631220094293}
+2025-06-21 05:37:50,395:INFO: l2r_scores: {'Bleu_1': 0.8712686567147925, 'Bleu_2': 0.7959071971424817, 'Bleu_3': 0.7126816963426456, 'Bleu_4': 0.6145602127676782, 'METEOR': 0.4125976714746909, 'ROUGE_L': 0.7800515959446119, 'CIDEr': 1.22556995328306}
+2025-06-21 05:37:50,396:INFO: Saving checkpoint at epoch=27 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/27.ckpt
+2025-06-21 06:02:26,755:INFO: Train loss: 0.6282089400291443 = (1 - reg): 0.4 * r2l_loss: 0.6329463136977836 + (reg):0.6 * l2r_loss: 0.6250506594141976 
+2025-06-21 06:06:49,445:INFO: Validation loss: 2.2764488202554207 = (1 - reg): 0.4 * r2l_loss: 2.304286230934991 + (reg):0.6 * l2r_loss: 2.2578904381504765 
+2025-06-21 06:06:49,446:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 06:06:49,446:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 06:06:49,447:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 06:06:49,447:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 06:06:49,447:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 06:06:49,447:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 06:06:49,448:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 06:06:49,448:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 06:06:49,448:INFO: r2l_scores: {'Bleu_1': 0.8903092946959674, 'Bleu_2': 0.8010013621092055, 'Bleu_3': 0.7095517945268295, 'Bleu_4': 0.621848568482862, 'METEOR': 0.400820981290695, 'ROUGE_L': 0.7684523679389685, 'CIDEr': 1.242046250574613}
+2025-06-21 06:06:49,448:INFO: l2r_scores: {'Bleu_1': 0.8773584905643823, 'Bleu_2': 0.8055043198516023, 'Bleu_3': 0.7277115920583174, 'Bleu_4': 0.6299694283577594, 'METEOR': 0.41737227984842334, 'ROUGE_L': 0.789180507898362, 'CIDEr': 1.2114949953832654}
+2025-06-21 06:06:49,449:INFO: Saving checkpoint at epoch=28 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/28.ckpt
+2025-06-21 06:30:57,492:INFO: Train loss: 0.6237312226412727 = (1 - reg): 0.4 * r2l_loss: 0.6291357699769442 + (reg):0.6 * l2r_loss: 0.6201281587022249 
+2025-06-21 06:35:20,004:INFO: Validation loss: 2.2781476621274597 = (1 - reg): 0.4 * r2l_loss: 2.308597035761233 + (reg):0.6 * l2r_loss: 2.2578479563748397 
+2025-06-21 06:35:20,005:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 06:35:20,005:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 06:35:20,006:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 06:35:20,006:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 06:35:20,006:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 06:35:20,007:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 06:35:20,007:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 06:35:20,007:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 06:35:20,008:INFO: r2l_scores: {'Bleu_1': 0.8913383071510663, 'Bleu_2': 0.8077402672450107, 'Bleu_3': 0.7140670229651634, 'Bleu_4': 0.6209482320528578, 'METEOR': 0.40641840221703446, 'ROUGE_L': 0.7819189432462172, 'CIDEr': 1.2597384886343408}
+2025-06-21 06:35:20,008:INFO: l2r_scores: {'Bleu_1': 0.8764044943803813, 'Bleu_2': 0.8038637087308149, 'Bleu_3': 0.7213400340177923, 'Bleu_4': 0.6231362638187304, 'METEOR': 0.4140521706158749, 'ROUGE_L': 0.7838672288460742, 'CIDEr': 1.240925201384339}
+2025-06-21 06:35:20,009:INFO: Saving checkpoint at epoch=29 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/29.ckpt
+2025-06-21 06:59:51,777:INFO: Train loss: 0.6200562246705665 = (1 - reg): 0.4 * r2l_loss: 0.6258359722426681 + (reg):0.6 * l2r_loss: 0.6162030271037681 
+2025-06-21 07:04:15,107:INFO: Validation loss: 2.2820382056412876 = (1 - reg): 0.4 * r2l_loss: 2.3123689104009557 + (reg):0.6 * l2r_loss: 2.2618176054071495 
+2025-06-21 07:04:15,107:INFO: Summary name VAL R2L SCORE/Bleu_4 is illegal; using VAL_R2L_SCORE/Bleu_4 instead.
+2025-06-21 07:04:15,108:INFO: Summary name VAL R2L SCORE/CIDEr is illegal; using VAL_R2L_SCORE/CIDEr instead.
+2025-06-21 07:04:15,108:INFO: Summary name VAL R2L SCORE/METEOR is illegal; using VAL_R2L_SCORE/METEOR instead.
+2025-06-21 07:04:15,109:INFO: Summary name VAL R2L SCORE/ROUGE_L is illegal; using VAL_R2L_SCORE/ROUGE_L instead.
+2025-06-21 07:04:15,109:INFO: Summary name VAL L2R SCORE/Bleu_4 is illegal; using VAL_L2R_SCORE/Bleu_4 instead.
+2025-06-21 07:04:15,109:INFO: Summary name VAL L2R SCORE/CIDEr is illegal; using VAL_L2R_SCORE/CIDEr instead.
+2025-06-21 07:04:15,110:INFO: Summary name VAL L2R SCORE/METEOR is illegal; using VAL_L2R_SCORE/METEOR instead.
+2025-06-21 07:04:15,111:INFO: Summary name VAL L2R SCORE/ROUGE_L is illegal; using VAL_L2R_SCORE/ROUGE_L instead.
+2025-06-21 07:04:15,111:INFO: r2l_scores: {'Bleu_1': 0.8868553786014516, 'Bleu_2': 0.8036600159935369, 'Bleu_3': 0.7143503982946368, 'Bleu_4': 0.6225800962114547, 'METEOR': 0.40813257601022573, 'ROUGE_L': 0.7803849427178764, 'CIDEr': 1.2656731653137054}
+2025-06-21 07:04:15,111:INFO: l2r_scores: {'Bleu_1': 0.8821362799247107, 'Bleu_2': 0.8094013562616678, 'Bleu_3': 0.7255843557769563, 'Bleu_4': 0.6312402858693629, 'METEOR': 0.41909061270507497, 'ROUGE_L': 0.7869738150421604, 'CIDEr': 1.2321961508576051}
+2025-06-21 07:04:15,112:INFO: Saving checkpoint at epoch=30 to /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07/30.ckpt
+2025-06-21 07:04:16,129:INFO: [BEST: 13 SEED: 904666]
+2025-06-21 07:25:00,319:INFO: r2l scores: {'Bleu_1': 0.8665567682698081, 'Bleu_2': 0.7769011709014263, 'Bleu_3': 0.6877516675775676, 'Bleu_4': 0.5966263517148979, 'METEOR': 0.40698114939666163, 'ROUGE_L': 0.770129379239196, 'CIDEr': 1.144753239076872}
+2025-06-21 07:25:00,319:INFO: l2r scores: {'Bleu_1': 0.8687095867299023, 'Bleu_2': 0.7903647993958578, 'Bleu_3': 0.7114430045497173, 'Bleu_4': 0.626537405019849, 'METEOR': 0.4174952874172996, 'ROUGE_L': 0.777411991343158, 'CIDEr': 1.1704708707962712}
+2025-06-21 07:25:00,319:INFO: Summary name BEST R2L SCORE/Bleu_4 is illegal; using BEST_R2L_SCORE/Bleu_4 instead.
+2025-06-21 07:25:00,320:INFO: Summary name BEST R2L SCORE/CIDEr is illegal; using BEST_R2L_SCORE/CIDEr instead.
+2025-06-21 07:25:00,320:INFO: Summary name BEST R2L SCORE/METEOR is illegal; using BEST_R2L_SCORE/METEOR instead.
+2025-06-21 07:25:00,320:INFO: Summary name BEST R2L SCORE/ROUGE_L is illegal; using BEST_R2L_SCORE/ROUGE_L instead.
+2025-06-21 07:25:00,320:INFO: Summary name BEST L2R SCORE/Bleu_4 is illegal; using BEST_L2R_SCORE/Bleu_4 instead.
+2025-06-21 07:25:00,320:INFO: Summary name BEST L2R SCORE/CIDEr is illegal; using BEST_L2R_SCORE/CIDEr instead.
+2025-06-21 07:25:00,320:INFO: Summary name BEST L2R SCORE/METEOR is illegal; using BEST_L2R_SCORE/METEOR instead.
+2025-06-21 07:25:00,321:INFO: Summary name BEST L2R SCORE/ROUGE_L is illegal; using BEST_L2R_SCORE/ROUGE_L instead.
+2025-06-21 07:25:01,635:INFO: /workspace/AKG-sv/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-06-20 16:37:07
+2025-06-21 07:25:01,635:INFO: ['1.ckpt', '2.ckpt', '3.ckpt', '4.ckpt', '5.ckpt', '6.ckpt', '7.ckpt', '8.ckpt', '9.ckpt', '10.ckpt', '11.ckpt', '12.ckpt', '13.ckpt', '14.ckpt', '15.ckpt', '16.ckpt', '17.ckpt', '18.ckpt', '19.ckpt', '20.ckpt', '21.ckpt', '22.ckpt', '23.ckpt', '24.ckpt', '25.ckpt', '26.ckpt', '27.ckpt', '28.ckpt', '29.ckpt', '30.ckpt', 'best.ckpt']
+2025-06-21 07:25:01,635:INFO: Build data_loader according to 1.ckpt
+2025-06-21 07:34:53,247:INFO: #vocabs: 3891 (9158), #words: 323223 (329680). Trim words which appear less than 3 times.

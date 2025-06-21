@@ -1,24 +1,9 @@
-/AI Challenge
-/AKG
-/BTKG
-/BTKG.pdf
-/BookHouse
-/CLIP4Clip
-/CLIP4clip.pdf
-/DataScience
-/Dataset
-/Faster-R-CNN-Visual-Genome
-/IPM-D-25-01038_reviewer.pdf
-/KEANet.pdf
-/KGVideo.pdf
-/KnowledgeGraphsMeetMulti-ModalLearning.pdf
-/RC_Reasoning.pdf
-/STGraph
-/Spatio-TemporalGraph.pdf
-/SurveyVC.pdf
-/SwinBERT.pdf
-/TIVA-KG.pdf
-/TextKG
-/TextKG.pdf
-/V2T
-/V2T.pdf
+# Thư mục
+captioning/
+checkpoints/
+logs/
+result/
+
+# File log
+./log.txt
+./log1.txt
