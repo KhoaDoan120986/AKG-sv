@@ -32,58 +32,42 @@ def clones(module, n):
     return nn.ModuleList([copy.deepcopy(module) for _ in range(n)])
 
 def pad_mask(src, r2l_trg, trg, pad_idx, video_mask):
-    if video_mask is None:
-        src_image_mask = (src[0][:, :, 0] != pad_idx).unsqueeze(1)
-        src_motion_mask = (src[1][:, :, 0] != pad_idx).unsqueeze(1)
-        src_object_mask = (src[2][:, :, 0] != pad_idx).unsqueeze(1)
-        src_rel_mask = (src[3][:, :, 0] != pad_idx).unsqueeze(1)
-        enc_src_mask = (src_image_mask, src_motion_mask, src_object_mask, src_rel_mask)
-        dec_src_mask = src_image_mask & src_motion_mask
+    if isinstance(src, tuple): 
+        src_vid_mask = (video_mask != pad_idx).unsqueeze(1)
+        enc_src_mask = src_vid_mask
+        dec_src_mask = src_vid_mask
+        src_mask = (enc_src_mask, dec_src_mask)  
+    elif len(src) == 3:
+        src_vid_mask = (video_mask != pad_idx).unsqueeze(1)
+        src_object_mask = (src[1][:, :, 0] != pad_idx).unsqueeze(1)
+        src_rel_mask = (src[2][:, :, 0] != pad_idx).unsqueeze(1)
+
+        enc_src_mask = (src_vid_mask, src_object_mask, src_rel_mask)
+        dec_src_mask = src_vid_mask
         src_mask = (enc_src_mask, dec_src_mask)
-        
-        if trg is not None:
-            if isinstance(src_mask, tuple):
-                trg_mask = (trg != pad_idx).unsqueeze(1) & subsequent_mask(trg.size(1)).type_as(src_image_mask.data)
-                r2l_pad_mask = (r2l_trg != pad_idx).unsqueeze(1).type_as(src_image_mask.data)
-                r2l_trg_mask = r2l_pad_mask & subsequent_mask(r2l_trg.size(1)).type_as(src_image_mask.data)
-                return src_mask, r2l_pad_mask, r2l_trg_mask, trg_mask
-            else:
-                trg_mask = (trg != pad_idx).unsqueeze(1) & subsequent_mask(trg.size(1)).type_as(src_mask.data)
-                r2l_pad_mask = (r2l_trg != pad_idx).unsqueeze(1).type_as(src_mask.data)
-                r2l_trg_mask = r2l_pad_mask & subsequent_mask(r2l_trg.size(1)).type_as(src_mask.data)
-                return src_mask, r2l_pad_mask, r2l_trg_mask, trg_mask  # src_mask[batch, 1, lens]  trg_mask[batch, 1, lens]
+    elif len(src) == 2:
+        src_vid_mask = (video_mask != pad_idx).unsqueeze(1)
+        src_rel_mask = (src[2][:, :, 0] != pad_idx).unsqueeze(1)
 
+        enc_src_mask = (src_vid_mask, src_rel_mask)
+        dec_src_mask = src_vid_mask
+        src_mask = (enc_src_mask, dec_src_mask)        
+
+
+    if trg is not None:
+        if isinstance(src_mask, tuple):
+            trg_mask = (trg != pad_idx).unsqueeze(1) & subsequent_mask(trg.size(1)).type_as(src_vid_mask.data)
+            r2l_pad_mask = (r2l_trg != pad_idx).unsqueeze(1).type_as(src_vid_mask.data)
+            r2l_trg_mask = r2l_pad_mask & subsequent_mask(r2l_trg.size(1)).type_as(src_vid_mask.data)
+            return src_mask, r2l_pad_mask, r2l_trg_mask, trg_mask
         else:
-            return src_mask
-    else:    
-        if len(src) == 3:
-            src_vid_mask = (video_mask != pad_idx).unsqueeze(1)
-            src_object_mask = (src[1][:, :, 0] != pad_idx).unsqueeze(1)
-            src_rel_mask = (src[2][:, :, 0] != pad_idx).unsqueeze(1)
-            enc_src_mask = (src_vid_mask, src_object_mask, src_rel_mask)
-            dec_src_mask = src_vid_mask
-            src_mask = (enc_src_mask, dec_src_mask)
-        elif len(src) == 2:
-            src_vid_mask = (video_mask != pad_idx).unsqueeze(1)
-            src_object_mask = (src[1][:, :, 0] != pad_idx).unsqueeze(1)
-            enc_src_mask = (src_vid_mask, src_object_mask)
-            dec_src_mask = src_vid_mask
-            src_mask = (enc_src_mask, dec_src_mask)
+            trg_mask = (trg != pad_idx).unsqueeze(1) & subsequent_mask(trg.size(1)).type_as(src_mask.data)
+            r2l_pad_mask = (r2l_trg != pad_idx).unsqueeze(1).type_as(src_mask.data)
+            r2l_trg_mask = r2l_pad_mask & subsequent_mask(r2l_trg.size(1)).type_as(src_mask.data)
+            return src_mask, r2l_pad_mask, r2l_trg_mask, trg_mask
 
-        if trg is not None:
-            if isinstance(src_mask, tuple):
-                trg_mask = (trg != pad_idx).unsqueeze(1) & subsequent_mask(trg.size(1)).type_as(src_vid_mask.data)
-                r2l_pad_mask = (r2l_trg != pad_idx).unsqueeze(1).type_as(src_vid_mask.data)
-                r2l_trg_mask = r2l_pad_mask & subsequent_mask(r2l_trg.size(1)).type_as(src_vid_mask.data)
-                return src_mask, r2l_pad_mask, r2l_trg_mask, trg_mask
-            else:
-                trg_mask = (trg != pad_idx).unsqueeze(1) & subsequent_mask(trg.size(1)).type_as(src_mask.data)
-                r2l_pad_mask = (r2l_trg != pad_idx).unsqueeze(1).type_as(src_mask.data)
-                r2l_trg_mask = r2l_pad_mask & subsequent_mask(r2l_trg.size(1)).type_as(src_mask.data)
-                return src_mask, r2l_pad_mask, r2l_trg_mask, trg_mask  # src_mask[batch, 1, lens]  trg_mask[batch, 1, lens]
-
-        else:
-            return src_mask
+    else:
+        return src_mask
 
 def subsequent_mask(size):
     attn_shape = (1, size, size)
@@ -468,39 +452,17 @@ class VCModel(nn.Module):
         attn = MultiHeadAttention(C_tran.n_heads, C_tran.d_model, C_tran.dropout)
         feed_forward = PositionWiseFeedForward(C_tran.d_model, C_tran.d_ff)
 
-        if self.feature_mode in ['object-rel', 'object']:
-            C_tran.node_feat_dim = 2 * C_tran.node_feat_dim
-            
-        if self.feature_mode in ['grid-rel', 'object-rel']:
+        if self.feature_mode == 'grid-obj-rel':
             self.object_src_embed = FeatEmbedding(d_feat[0], C_tran.d_model, C_tran.dropout)
             self.rel_src_embed = FeatEmbedding(d_feat[1], C_tran.d_model, C_tran.dropout)
-            # STE
-            self.stg_encoder_big = GraphTransformer(head_type='n_heads_big', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
-            # ORE
-            self.stg_encoder = GraphTransformer(head_type='n_heads_small', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
-            
-        elif self.feature_mode in ['grid', 'object']:
-            self.object_src_embed = FeatEmbedding(d_feat[0], C_tran.d_model, C_tran.dropout)
-            # STE
-            self.stg_encoder_big = GraphTransformer(head_type='n_heads_big', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
-            # ORE
-            self.stg_encoder = GraphTransformer(head_type='n_heads_small', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
-        elif self.feature_mode in ['grid-rel-no_obj']:
+        elif self.feature_mode == 'grid-rel':
             self.rel_src_embed = FeatEmbedding(d_feat[0], C_tran.d_model, C_tran.dropout)
-            # STE
-            self.stg_encoder_big = GraphTransformer(head_type='n_heads_big', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
-            # ORE
-            self.stg_encoder = GraphTransformer(head_type='n_heads_small', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
-        elif feature_mode == 'btkg':
-            self.image_src_embed = FeatEmbedding(d_feat[0], C_tran.d_model, C_tran.dropout)
-            self.motion_src_embed = FeatEmbedding(d_feat[1], C_tran.d_model, C_tran.dropout)
-            self.object_src_embed = FeatEmbedding(d_feat[2], C_tran.d_model, C_tran.dropout)
-            self.rel_src_embed = FeatEmbedding(d_feat[3], C_tran.d_model, C_tran.dropout)
-            
-            attn_big = MultiHeadAttention(C_tran.n_heads_big, C_tran.d_model, C_tran.dropout)
-            self.encoder_big = Encoder(C_tran.n_layers, EncoderLayer(C_tran.d_model, c(attn_big), c(feed_forward), C_tran.dropout))
-
-            
+        elif self.feature_mode == 'grid-rel':
+            pass
+        # STE
+        self.stg_encoder_big = GraphTransformer(head_type='n_heads_big', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
+        # ORE
+        self.stg_encoder = GraphTransformer(head_type='n_heads_small', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)    
         self.trg_embed = TextEmbedding(vocab.n_vocabs, C_tran.d_model)
         self.pos_embed = PositionalEncoding(C_tran.d_model, C_tran.dropout) 
         self.encoder = Encoder(C_tran.n_layers, EncoderLayer(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
@@ -511,23 +473,11 @@ class VCModel(nn.Module):
         self.generator = Generator(C_tran.d_model, vocab.n_vocabs)
         
     def encode(self, src, src_mask, feature_mode_two=False):
+        batch = src_mask[0].shape[0]
+        n_nodes = src[0].x.shape[0] // batch
         if feature_mode_two:
-            if self.feature_mode == 'btkg':
-                x1 = self.image_src_embed(src[0])
-                x1 = self.pos_embed(x1)
-                x1 = self.encoder_big(x1, src_mask[0])
-                x2 = self.motion_src_embed(src[1])
-                x2 = self.pos_embed(x2)
-                x2 = self.encoder_big(x2, src_mask[1])
-                return x1 + x2
-            else:
-                batch = src_mask[0].shape[0]
-                n_nodes = src[0].x.shape[0] // batch
-                x1 = self.stg_encoder_big(src[0], src_mask[0], batch, n_nodes)
-                return x1
-        if self.feature_mode in ['grid-rel', 'object-rel']:
-            batch = src_mask[0].shape[0]
-            n_nodes = src[0].x.shape[0] // batch
+            return self.stg_encoder_big(src[0], src_mask[0], batch, n_nodes)
+        if self.feature_mode == 'grid-obj-rel':
             x1 = self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
             
             x2 = self.object_src_embed(src[1])
@@ -536,43 +486,14 @@ class VCModel(nn.Module):
             x3 = self.rel_src_embed(src[2])
             x3 = self.encoder_no_attention(x3, src_mask[2])
             return x1 + x2 + x3
-        elif self.feature_mode in ['grid', 'object']:
-            batch = src_mask[0].shape[0]
-            n_nodes = src[0].x.shape[0] // batch
-            x1 = self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
-            
-            x2 = self.object_src_embed(src[1])
-            x2 = self.encoder(x2, src_mask[1])
-            return x1 + x2
-        elif self.feature_mode in ['grid-rel-no_obj']:
-            batch = src_mask[0].shape[0]
-            n_nodes = src[0].x.shape[0] // batch
+        elif self.feature_mode == 'grid-rel':
             x1 = self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
             
             x2 = self.rel_src_embed(src[1])
             x2 = self.encoder(x2, src_mask[1])
             return x1 + x2
-        elif self.feature_mode == 'btkg':
-            x1 = self.image_src_embed(src[0])
-            x1 = self.pos_embed(x1)
-            x1 = self.encoder(x1, src_mask[0])
-
-            x2 = self.motion_src_embed(src[1])
-            x2 = self.pos_embed(x2)
-            x2 = self.encoder(x2, src_mask[1])
-
-            x3 = self.object_src_embed(src[2])
-            # x3 = self.pos_embed(x3)
-            x3 = self.encoder(x3, src_mask[2])
-            # x3 = self.encoder_no_attention(x3, src_mask[2])
-
-            x4 = self.rel_src_embed(src[3])
-            # x4 = self.pos_embed(x4)
-            # x4 = self.encoder_no_
-            # heads(x4, src_mask[3])
-            x4 = self.encoder_no_attention(x4, src_mask[3])
-            # x4 = self.encoder(x4, src_mask[3])
-            return x1 + x2 + x3 + x4
+        elif self.feature_mode == 'grid':
+            return self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
     
     def r2l_decode(self, r2l_trg, memory, src_mask, r2l_trg_mask):
         x = self.trg_embed(r2l_trg)

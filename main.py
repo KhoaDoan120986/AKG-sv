@@ -45,9 +45,8 @@ def build_loaders():
     logger.info('#vocabs: {} ({}), #words: {} ({}). Trim words which appear less than {} times.'.format(
         corpus.vocab.n_vocabs, corpus.vocab.n_vocabs_untrimmed, corpus.vocab.n_words,
         corpus.vocab.n_words_untrimmed, C.loader.min_count))
-    if C.feat.feature_mode in ['grid-rel', 'object-rel', 'grid', 'object', 'grid-rel-no_obj']:
-        return corpus.graph_data, corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
-    return None, corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
+    
+    return corpus.graph_data, corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
 
 def build_model(vocab):
     # model_state_dict = torch.load(C.transformer.init_model, map_location='cpu')
@@ -138,15 +137,8 @@ def main():
     logger = get_logger(filename="log.txt")
     logger.info("MODEL ID: {}".format(C.model_id))
     summary_writer = SummaryWriter(C.log_dpath)
-    # seed = 2
-    # seed = 16
-    # seed = 8
-    # seed = 10
-    # seed = 100
-    # seed = 44
-    # seed = 444  # for ResNet152 seems good
+
     seed = 904666
-    # seed = 7242
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -263,24 +255,6 @@ def main():
     torch.cuda.empty_cache()
 
     logger.info("[BEST: {} SEED: {}]".format(best_epoch, seed))
-    best_model = load_checkpoint(model, best_ckpt_fpath)
-
-    if graph_data is None:
-        r2l_best_scores, l2r_best_scores = evaluate(test_iter, None, best_model, vocab, C.beam_size, C.loader.max_caption_len,
-                                                C.feat.feature_mode)
-    else:
-        r2l_best_scores, l2r_best_scores = evaluate(test_iter, graph_data['test'], best_model, vocab, C.beam_size, C.loader.max_caption_len,
-                                                    C.feat.feature_mode)
-    
-    logger.info("r2l scores: {}".format(r2l_best_scores))
-    logger.info("l2r scores: {}".format(l2r_best_scores))
-
-    for metric in C.metrics:
-        summary_writer.add_scalar("BEST R2L SCORE/{}".format(metric), r2l_best_scores[metric], best_epoch)
-    for metric in C.metrics:
-        summary_writer.add_scalar("BEST L2R SCORE/{}".format(metric), l2r_best_scores[metric], best_epoch)
-        
-    save_checkpoint(best_epoch, best_model, C.ckpt_fpath_tpl.format("best"), C)
     
     
     folder_path = "./result"
@@ -295,13 +269,9 @@ def main():
     f.write("Model Dim: {}\n".format(C.transformer.d_model))
     f.write(os.linesep)
     f.write("\n[BEST: {} SEED:{}]".format(best_epoch, seed) + os.linesep)
-    f.write("r2l scores: {}".format(r2l_best_scores))
-    f.write(os.linesep)
-    f.write("l2r scores: {}".format(l2r_best_scores))
-    f.write(os.linesep)
         
     summary_writer.close()
-    del train_iter, val_iter, test_iter, vocab, best_model, model, optimizer, lr_scheduler
+    del train_iter, val_iter, test_iter, vocab, model, optimizer, lr_scheduler
     del train_loss
     gc.collect()
     torch.cuda.empty_cache()
@@ -320,11 +290,7 @@ def main():
         ckpt_fpath = file + '/' + str(i + 1) + '.ckpt'
         logger.info("Now is test in the " + ckpt_fpath)
         captioning_fpath = C.captioning_fpath_tpl.format(str(i + 1))
-        
-        if test_graph_data is None:
-            run(ckpt_fpath, test_iter, None, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
-        else: 
-            run(ckpt_fpath, test_iter, test_graph_data, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
+        run(ckpt_fpath, test_iter, test_graph_data, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
    
     f.close()
     

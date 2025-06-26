@@ -3,46 +3,27 @@ import time
 
 
 class FeatureConfig(object):
-    # model = "MSVD_InceptionResNetV2+I3D+OFeat+rel"
-    # model = "MSR-VTT_InceptionResNetV2+I3D+OFeat+rel"
-    
     # model = "MSVD_GBased+OFeat+rel+videomask"
     # model = "MSR-VTT_GBased+OFeat+rel+videomask"
 
     model = "MSVD_GBased+rel+videomask"
     # model = "MSR-VTT_GBased+rel+videomask"
     
-    # model = "MSVD_GBased+OFeat+videomask"
-    # model = "MSR-VTT_GBased+OFeat+videomask"
-    
-    # model = "MSVD_OBased+OFeat+rel+videomask"
-    # model = "MSR-VTT_OBased+OFeat+rel+videomask"
-    
-    # model = "MSVD_OBased+OFeat+videomask"
-    # model = "MSR-VTT_OBased+OFeat+videomask"
+    # model = "MSVD_GBased"
+    # model = "MSR-VTT_GBased
 
     size = None
     feature_mode = None
     num_boxes = 60
     three_turple = 60
-    if model == 'MSVD_InceptionResNetV2+I3D+OFeat+rel' or model == 'MSR-VTT_InceptionResNetV2+I3D+OFeat+rel':
-        size = [1536, 1024, 1028, 300]
-        feature_mode = 'btkg'
-    elif model == 'MSVD_GBased+rel+videomask' or model == 'MSR-VTT_GBased+rel+videomask':
+    if model == 'MSVD_GBased+OFeat+rel+videomask' or model == 'MSR-VTT_GBased+OFeat+rel+videomask':
+        size = [1028, 300]
+        feature_mode = 'grid-obj-rel'
+    if model == 'MSVD_GBased+rel+videomask' or model == 'MSR-VTT_GBased+rel+videomask':
         size = [300]
-        feature_mode = 'grid-rel-no_obj'
-    elif model == 'MSVD_GBased+OFeat+rel+videomask' or model == 'MSR-VTT_GBased+OFeat+rel+videomask':
-        size = [1028, 300]
         feature_mode = 'grid-rel'
-    elif model == 'MSVD_OBased+OFeat+rel+videomask' or model == 'MSR-VTT_OBased+OFeat+rel+videomask':
-        size = [1028, 300]
-        feature_mode = 'object-rel'
-    elif model == 'MSVD_GBased+OFeat+videomask' or model == 'MSR-VTT_GBased+OFeat+videomask':  
-        size = [1028]
-        feature_mode = 'grid'  
-    elif model == 'MSVD_OBased+OFeat+videomask' or model == 'MSR-VTT_OBased+OFeat+videomask':  
-        size = [1028]
-        feature_mode = 'object'  
+    elif model == 'MSVD_GBased+videomask' or model == 'MSR-VTT_GBased+videomask':
+        feature_mode = 'grid'   
     else:
         raise NotImplementedError("Unknown model: {}".format(model))
 
@@ -72,7 +53,7 @@ class MSVDLoaderConfig(object):
 
     frame_sampling_method = 'uniform'
     assert frame_sampling_method in ['uniform', 'random']
-    frame_sample_len = 30
+    frame_sample_len = 50
     num_workers = 4
 
 
@@ -86,7 +67,7 @@ class MSRVTTLoaderConfig(object):
     val_caption_fpath = "/media02/lnthanh01/phatkhoa/ZZZ/data/MSR-VTT/metadata/val.json"
     test_caption_fpath = "/media02/lnthanh01/phatkhoa/ZZZ/data/MSR-VTT/metadata/test.json"
     min_count = 3
-    max_caption_len = 10
+    max_caption_len = 15
 
     total_video_feat_fpath_tpl = "/media02/lnthanh01/phatkhoa/ZZZ/data/{}/features/{}.{}"
     phase_video_feat_fpath_tpl = "/media02/lnthanh01/phatkhoa/ZZZ/data/{}/features/{}_{}.{}"
@@ -100,7 +81,7 @@ class MSRVTTLoaderConfig(object):
 class TransformerConfig(object):
     d_model = 640
     n_heads = 10
-    n_heads_small = 10 #
+    n_heads_small = 12
     
     d_ff = 2048
     n_layers = 4
@@ -128,13 +109,12 @@ class TransformerConfig(object):
     select_num = 0  # if sn==0, automatic select num
 
 class TrainConfig(object):
-    corpus = 'MSVD'
-    # corpus = 'MSR-VTT'
+    feat = FeatureConfig
     msrvtt_dim = 1028
     rel_dim = 300
 
-    feat = FeatureConfig
     vocab = VocabConfig
+    corpus = feat.model.split('_')[0]
     loader = {
         'MSVD': MSVDLoaderConfig,
         'MSR-VTT': MSRVTTLoaderConfig

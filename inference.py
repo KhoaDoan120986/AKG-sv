@@ -44,9 +44,7 @@ def build_loaders():
     logger.info('#vocabs: {} ({}), #words: {} ({}). Trim words which appear less than {} times.'.format(
         corpus.vocab.n_vocabs, corpus.vocab.n_vocabs_untrimmed, corpus.vocab.n_words,
         corpus.vocab.n_words_untrimmed, C.loader.min_count))
-    if C.feat.feature_mode in ['grid-rel', 'object-rel', 'grid', 'object']:
-        return corpus.graph_data, corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
-    return None, corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
+    return corpus.graph_data, corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
 
 def build_model(vocab):
     # model_state_dict = torch.load(C.transformer.init_model, map_location='cpu')
@@ -74,7 +72,7 @@ def main():
     args = parser.parse_args()
     
     global logger
-    logger = get_logger(filename="log.txt")
+    logger = get_logger(filename="/inference.txt")
     
     C.loader.max_caption_len = args.max_caption_len
     C.loader.frame_sample_len = args.frame_sample_len 
@@ -87,8 +85,6 @@ def main():
     folder_path = "./result"
     os.makedirs(folder_path, exist_ok=True)
     f = open(os.path.join(folder_path, "{}.txt".format(C.model_id)), 'w')
-    f.write('#vocabs: {} ({}), #words: {} ({}). Trim words which appear less than {} times.'.format(
-    vocab.n_vocabs, vocab.n_vocabs_untrimmed, vocab.n_words, vocab.n_words_untrimmed, C.loader.min_count))
     f.write("Max caption length: {}\n".format(C.loader.max_caption_len))
     f.write("Max frame: {}\n".format(C.loader.frame_sample_len))
     f.write("Heads: {}\n".format(C.transformer.n_heads))
@@ -113,11 +109,7 @@ def main():
         ckpt_fpath = file + '/' + str(i + 1) + '.ckpt'
         logger.info("Now is test in the " + ckpt_fpath)
         captioning_fpath = C.captioning_fpath_tpl.format(str(i + 1))
-        
-        if test_graph_data is None:
-            run(ckpt_fpath, test_iter, None, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
-        else: 
-            run(ckpt_fpath, test_iter, test_graph_data, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
+        run(ckpt_fpath, test_iter, test_graph_data, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
    
     f.close()
     
