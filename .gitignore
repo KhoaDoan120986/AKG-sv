@@ -1,9 +1,5 @@
-# Thư mục
 captioning/
 checkpoints/
 logs/
 result/
-
-# File log
-log.txt
-log1.txt
+__pycache__
