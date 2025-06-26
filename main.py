@@ -112,7 +112,7 @@ def get_parameter_number(net):
 def main():
     parser = argparse.ArgumentParser()
     # Loader settings
-    parser.add_argument('--max_caption_len', type=int, default=10)
+    parser.add_argument('--max_caption_len', type=int, default=15)
     parser.add_argument('--frame_sample_len', type=int, default=50)
 
     # Transformer settings

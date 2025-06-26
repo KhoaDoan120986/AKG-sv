@@ -367,14 +367,14 @@ def test(model, val_iter, graph_data, vocab, reg_lambda, feature_mode):
                 mask = pad_mask(feats, r2l_trg, l2r_trg, pad_idx, video_mask)
 
 
-                r2l_pred, l2r_pred = model(feats, r2l_trg, l2r_trg, mask)
+            r2l_pred, l2r_pred = model(feats, r2l_trg, l2r_trg, mask)
 
-                r2l_loss = criterion(r2l_pred.view(-1, vocab.n_vocabs),
-                                    r2l_trg_y.contiguous().view(-1)) / r2l_norm
-                l2r_loss = criterion(l2r_pred.view(-1, vocab.n_vocabs),
-                                    l2r_trg_y.contiguous().view(-1)) / l2r_norm
-                loss = reg_lambda * l2r_loss + (1 - reg_lambda) * r2l_loss
-                loss_checker.update(loss.item(), r2l_loss.item(), l2r_loss.item())
+            r2l_loss = criterion(r2l_pred.view(-1, vocab.n_vocabs),
+                                r2l_trg_y.contiguous().view(-1)) / r2l_norm
+            l2r_loss = criterion(l2r_pred.view(-1, vocab.n_vocabs),
+                                l2r_trg_y.contiguous().view(-1)) / l2r_norm
+            loss = reg_lambda * l2r_loss + (1 - reg_lambda) * r2l_loss
+            loss_checker.update(loss.item(), r2l_loss.item(), l2r_loss.item())
 
         total_loss, r2l_loss, l2r_loss = loss_checker.mean()
         loss = {
