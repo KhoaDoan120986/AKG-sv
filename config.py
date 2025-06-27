@@ -19,7 +19,7 @@ class FeatureConfig(object):
     if model == 'MSVD_GBased+OFeat+rel+videomask' or model == 'MSR-VTT_GBased+OFeat+rel+videomask':
         size = [1028, 300]
         feature_mode = 'grid-obj-rel'
-    if model == 'MSVD_GBased+rel+videomask' or model == 'MSR-VTT_GBased+rel+videomask':
+    elif model == 'MSVD_GBased+rel+videomask' or model == 'MSR-VTT_GBased+rel+videomask':
         size = [300]
         feature_mode = 'grid-rel'
     elif model == 'MSVD_GBased+videomask' or model == 'MSR-VTT_GBased+videomask':
@@ -127,7 +127,7 @@ class TrainConfig(object):
         'MSR-VTT': 18,
     }[corpus]
 
-    batch_size = 64
+    batch_size = 32
 
     optimizer = "Adam"
     gradient_clip = 5.0  # None if not used
