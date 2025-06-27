@@ -41,15 +41,15 @@ class MSVDLoaderConfig(object):
     n_val = 100
     n_test = 670
     
-    total_caption_fpath = "/media02/lnthanh01/phatkhoa/ZZZ/data/MSVD/metadata/MSR Video Description Corpus.csv"
-    train_caption_fpath = "/media02/lnthanh01/phatkhoa/ZZZ/data/MSVD/metadata/train.csv"
-    val_caption_fpath = "/media02/lnthanh01/phatkhoa/ZZZ/data/MSVD/metadata/val.csv"
-    test_caption_fpath = "/media02/lnthanh01/phatkhoa/ZZZ/data/MSVD/metadata/test.csv"
+    total_caption_fpath = "/workspace/AKG-sv/data/MSVD/metadata/MSR Video Description Corpus.csv"
+    train_caption_fpath = "/workspace/AKG-sv/data/MSVD/metadata/train.csv"
+    val_caption_fpath = "/workspace/AKG-sv/data/MSVD/metadata/val.csv"
+    test_caption_fpath = "/workspace/AKG-sv/data/MSVD/metadata/test.csv"
     min_count = 3
     max_caption_len = 15
 
-    total_video_feat_fpath_tpl = "/media02/lnthanh01/phatkhoa/ZZZ/data/{}/features/{}.{}"
-    phase_video_feat_fpath_tpl = "/media02/lnthanh01/phatkhoa/ZZZ/data/{}/features/{}_{}.{}"
+    total_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}.{}"
+    phase_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}_{}.{}"
 
     frame_sampling_method = 'uniform'
     assert frame_sampling_method in ['uniform', 'random']
@@ -62,15 +62,15 @@ class MSRVTTLoaderConfig(object):
     n_val = 497
     n_test = 2990
 
-    total_caption_fpath = "/media02/lnthanh01/phatkhoa/ZZZ/data/MSR-VTT/metadata/total.json"
-    train_caption_fpath = "/media02/lnthanh01/phatkhoa/ZZZ/data/MSR-VTT/metadata/train.json"
-    val_caption_fpath = "/media02/lnthanh01/phatkhoa/ZZZ/data/MSR-VTT/metadata/val.json"
-    test_caption_fpath = "/media02/lnthanh01/phatkhoa/ZZZ/data/MSR-VTT/metadata/test.json"
+    total_caption_fpath = "/workspace/AKG-sv/data/MSR-VTT/metadata/total.json"
+    train_caption_fpath = "/workspace/AKG-sv/data/MSR-VTT/metadata/train.json"
+    val_caption_fpath = "/workspace/AKG-sv/data/MSR-VTT/metadata/val.json"
+    test_caption_fpath = "/workspace/AKG-sv/data/MSR-VTT/metadata/test.json"
     min_count = 3
     max_caption_len = 15
 
-    total_video_feat_fpath_tpl = "/media02/lnthanh01/phatkhoa/ZZZ/data/{}/features/{}.{}"
-    phase_video_feat_fpath_tpl = "/media02/lnthanh01/phatkhoa/ZZZ/data/{}/features/{}_{}.{}"
+    total_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}.{}"
+    phase_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}_{}.{}"
     frame_sampling_method = 'uniform'
     assert frame_sampling_method in ['uniform', 'random']
     frame_sample_len = 60
@@ -172,7 +172,7 @@ class TrainConfig(object):
     model_id = " | ".join([feat.model, timestamp])
 
     """ Log """
-    path = "/media02/lnthanh01/phatkhoa/ZZZ"
+    path = "/workspace/AKG-sv"
     log_dpath = os.path.join(path, "logs/{}/{}".format(corpus, model_id))
     ckpt_dpath = os.path.join(os.path.join(path,"checkpoints/{}".format(corpus)), model_id)
     captioning_dpath = os.path.join(os.path.join(path,"captioning/{}".format(corpus)), model_id)
