@@ -88,7 +88,7 @@ class TransformerConfig(object):
     dropout = 0.1
     n_heads_big = 128
 
-    max_frames = 30
+    max_frames = 50
     num_object = 9
     visual_num_hidden_layers = 4
     d_graph = 1024

@@ -32,7 +32,7 @@ def clones(module, n):
     return nn.ModuleList([copy.deepcopy(module) for _ in range(n)])
 
 def pad_mask(src, r2l_trg, trg, pad_idx, video_mask):
-    if isinstance(src, tuple): 
+    if not isinstance(src, tuple): 
         src_vid_mask = (video_mask != pad_idx).unsqueeze(1)
         enc_src_mask = src_vid_mask
         dec_src_mask = src_vid_mask
