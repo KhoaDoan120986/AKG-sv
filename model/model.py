@@ -47,7 +47,7 @@ def pad_mask(src, r2l_trg, trg, pad_idx, video_mask):
         src_mask = (enc_src_mask, dec_src_mask)
     elif len(src) == 2:
         src_vid_mask = (video_mask != pad_idx).unsqueeze(1)
-        src_rel_mask = (src[2][:, :, 0] != pad_idx).unsqueeze(1)
+        src_rel_mask = (src[1][:, :, 0] != pad_idx).unsqueeze(1)
 
         enc_src_mask = (src_vid_mask, src_rel_mask)
         dec_src_mask = src_vid_mask
