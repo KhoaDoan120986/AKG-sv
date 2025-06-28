@@ -11,7 +11,7 @@ import  logging
 
 logger = logging.getLogger(__name__)
 
-def build_loader(ckpt_fpath, graph_data):
+def build_loader(ckpt_fpath):
     checkpoint = torch.load(ckpt_fpath)
     config = dict_to_cls(checkpoint['config'])
     """ Build Data Loader """

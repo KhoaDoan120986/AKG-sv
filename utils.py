@@ -75,7 +75,7 @@ def parse_batch(batch, feature_mode, graph_data):
         geo_edge_attr_feats = []
         for video_id in vids:
             stgraph =  graph_data[video_id]
-            zero_arr  = torch.zeros([9 * C.loader.frame_sample_len - stgraph['x'].shape[0], stgraph['x'].shape[1]], dtype=torch.float32)
+            zero_arr  = torch.zeros([C.transformer.num_object * C.loader.frame_sample_len - stgraph['x'].shape[0], stgraph['x'].shape[1]], dtype=torch.float32)
             geo_x_feats.append(torch.cat([stgraph['x'], zero_arr], dim=0).cuda())
             geo_edge_index_feats.append(stgraph['edge_index'].cuda())
             geo_edge_attr_feats.append(torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32).cuda())
@@ -103,7 +103,7 @@ def parse_batch(batch, feature_mode, graph_data):
         geo_edge_attr_feats = []
         for video_id in vids:
             stgraph =  graph_data[video_id]
-            zero_arr  = torch.zeros([9 * C.loader.frame_sample_len - stgraph['x'].shape[0], stgraph['x'].shape[1]], dtype=torch.float32)
+            zero_arr  = torch.zeros([C.transformer.num_object * C.loader.frame_sample_len - stgraph['x'].shape[0], stgraph['x'].shape[1]], dtype=torch.float32)
             geo_x_feats.append(torch.cat([stgraph['x'], zero_arr], dim=0).cuda())
             geo_edge_index_feats.append(stgraph['edge_index'].cuda())
             geo_edge_attr_feats.append(torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32).cuda())
