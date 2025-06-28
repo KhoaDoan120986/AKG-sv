@@ -122,7 +122,7 @@ def main():
     parser.add_argument('--hidden_size', type=int, default=768)
     
     # Training settings
-    parser.add_argument('--epochs', type=int, default=10)
+    parser.add_argument('--epochs', type=int, default=30)
     args = parser.parse_args()
     
     C.loader.max_caption_len = args.max_caption_len
@@ -153,6 +153,7 @@ def main():
     logger.info("Model Dim: {}".format(C.transformer.d_model))
     logger.info("Hidden Size: {}".format(C.transformer.hidden_size))
     logger.info("Feature Mode: {}".format(C.feat.feature_mode))
+    logger.info("Epochs: {}".format(C.epochs))
     graph_data, train_iter, val_iter, test_iter, vocab = build_loaders()
     
     print("[Memory when loading data]")

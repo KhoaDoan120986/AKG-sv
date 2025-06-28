@@ -455,18 +455,18 @@ class VCModel(nn.Module):
         if self.feature_mode == 'grid-obj-rel':
             self.object_src_embed = FeatEmbedding(d_feat[0], C_tran.d_model, C_tran.dropout)
             self.rel_src_embed = FeatEmbedding(d_feat[1], C_tran.d_model, C_tran.dropout)
+            self.encoder = Encoder(C_tran.n_layers, EncoderLayer(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
+            self.encoder_no_attention = Encoder(C_tran.n_layers, EncoderLayerNoAttention(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
         elif self.feature_mode == 'grid-rel':
             self.rel_src_embed = FeatEmbedding(d_feat[0], C_tran.d_model, C_tran.dropout)
+            # self.encoder = Encoder(C_tran.n_layers, EncoderLayer(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
+            self.encoder_no_attention = Encoder(C_tran.n_layers, EncoderLayerNoAttention(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
 
-        # STE
-        self.stg_encoder_big = GraphTransformer(head_type='n_heads_big', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
-        # ORE
-        self.stg_encoder = GraphTransformer(head_type='n_heads_small', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)    
+        self.stg_encoder_big = GraphTransformer(head_type='n_heads_big', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran) # STE
+        self.stg_encoder = GraphTransformer(head_type='n_heads_small', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran) # ORE
         self.trg_embed = TextEmbedding(vocab.n_vocabs, C_tran.d_model)
         self.pos_embed = PositionalEncoding(C_tran.d_model, C_tran.dropout) 
-        self.encoder = Encoder(C_tran.n_layers, EncoderLayer(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
-        self.encoder_no_attention = Encoder(C_tran.n_layers, EncoderLayerNoAttention(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
-
+        
         self.r2l_decoder = R2L_Decoder(C_tran.n_layers, DecoderLayer(C_tran.d_model, c(attn), c(feed_forward), sublayer_num=3, dropout=C_tran.dropout))
         self.l2r_decoder = L2R_Decoder(C_tran.n_layers, DecoderLayer(C_tran.d_model, c(attn), c(feed_forward), sublayer_num=4, dropout=C_tran.dropout))
         self.generator = Generator(C_tran.d_model, vocab.n_vocabs)
