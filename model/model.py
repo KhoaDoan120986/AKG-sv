@@ -457,8 +457,7 @@ class VCModel(nn.Module):
             self.rel_src_embed = FeatEmbedding(d_feat[1], C_tran.d_model, C_tran.dropout)
         elif self.feature_mode == 'grid-rel':
             self.rel_src_embed = FeatEmbedding(d_feat[0], C_tran.d_model, C_tran.dropout)
-        elif self.feature_mode == 'grid-rel':
-            pass
+
         # STE
         self.stg_encoder_big = GraphTransformer(head_type='n_heads_big', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran)
         # ORE
@@ -490,7 +489,7 @@ class VCModel(nn.Module):
             x1 = self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
             
             x2 = self.rel_src_embed(src[1])
-            x2 = self.encoder(x2, src_mask[1])
+            x2 = self.encoder_no_attention(x2, src_mask[1])
             return x1 + x2
         elif self.feature_mode == 'grid':
             return self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
