@@ -284,7 +284,7 @@ def main():
     
     test_graph_data, test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0])
         
-    for i in range(len(ckpt_list) - 1):  # because have a best.ckpt
+    for i in range(len(ckpt_list)):
         if i + 1 <= 3:
             continue
         ckpt_fpath = file + '/' + str(i + 1) + '.ckpt'
