@@ -459,8 +459,8 @@ class VCModel(nn.Module):
             self.encoder_no_attention = Encoder(C_tran.n_layers, EncoderLayerNoAttention(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
         elif self.feature_mode == 'grid-rel':
             self.rel_src_embed = FeatEmbedding(d_feat[0], C_tran.d_model, C_tran.dropout)
-            # self.encoder = Encoder(C_tran.n_layers, EncoderLayer(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
-            self.encoder_no_attention = Encoder(C_tran.n_layers, EncoderLayerNoAttention(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
+            self.encoder = Encoder(C_tran.n_layers, EncoderLayer(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
+            # self.encoder_no_attention = Encoder(C_tran.n_layers, EncoderLayerNoAttention(C_tran.d_model, c(attn), c(feed_forward), C_tran.dropout))
 
         self.stg_encoder_big = GraphTransformer(head_type='n_heads_big', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran) # STE
         self.stg_encoder = GraphTransformer(head_type='n_heads_small', state_dict=model_state_dict, cache_dir=cache_dir, args=C_tran) # ORE
@@ -489,7 +489,8 @@ class VCModel(nn.Module):
             x1 = self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
             
             x2 = self.rel_src_embed(src[1])
-            x2 = self.encoder_no_attention(x2, src_mask[1])
+            x2 = self.pos_embed(x2)
+            x2 = self.encoder(x2, src_mask[1])
             return x1 + x2
         elif self.feature_mode == 'grid':
             return self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
