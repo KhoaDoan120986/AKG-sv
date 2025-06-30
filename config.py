@@ -20,7 +20,8 @@ class FeatureConfig(object):
         size = [1028, 300]
         feature_mode = 'grid-obj-rel'
     elif model == 'MSVD_GBased+rel+videomask' or model == 'MSR-VTT_GBased+rel+videomask':
-        size = [300]
+        # size = [300]
+        size = [512]
         feature_mode = 'grid-rel'
     elif model == 'MSVD_GBased+videomask' or model == 'MSR-VTT_GBased+videomask':
         feature_mode = 'grid'   
