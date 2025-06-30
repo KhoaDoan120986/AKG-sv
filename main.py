@@ -261,7 +261,7 @@ def main():
     folder_path = "./result"
     os.makedirs(folder_path, exist_ok=True)
     f = open(os.path.join(folder_path, "{}.txt".format(C.model_id)), 'w')
-    f.write('#vocabs: {} ({}), #words: {} ({}). Trim words which appear less than {} times.'.format(
+    f.write('#vocabs: {} ({}), #words: {} ({}). Trim words which appear less than {} times.\n'.format(
     vocab.n_vocabs, vocab.n_vocabs_untrimmed, vocab.n_words, vocab.n_words_untrimmed, C.loader.min_count))
     f.write("Max caption length: {}\n".format(C.loader.max_caption_len))
     f.write("Heads: {}\n".format(C.transformer.n_heads))
