@@ -489,7 +489,7 @@ class VCModel(nn.Module):
             x1 = self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
             
             x2 = self.rel_src_embed(src[1])
-            x2 = self.pos_embed(x2)
+            # x2 = self.pos_embed(x2)
             x2 = self.encoder(x2, src_mask[1])
             return x1 + x2
         elif self.feature_mode == 'grid':
