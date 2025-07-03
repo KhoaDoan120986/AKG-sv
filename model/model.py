@@ -295,7 +295,7 @@ class TransC(nn.Module):
         super().__init__()
         self.node_feat_dim = node_feat_dim
         self.d_model = d_model 
-        if self.node_feat_dim != node_feat_dim:
+        if self.node_feat_dim != self.d_model:
             self.lp = nn.Linear(node_feat_dim, d_model)
         self.more_skip = more_skip
         self.project_edge_dim = project_edge_dim
@@ -314,7 +314,7 @@ class TransC(nn.Module):
 
     def forward(self, data):
         x = data.x
-        if self.node_feat_dim != node_feat_dim:
+        if self.node_feat_dim != self.d_model:
             x = self.lp(x)
         if self.project_edge_dim is not None:
             e = F.relu(self.lp_edge_attr(data.edge_attr))
