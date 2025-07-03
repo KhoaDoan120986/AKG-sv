@@ -293,7 +293,10 @@ class Generator(nn.Module):
 class TransC(nn.Module):
     def __init__(self, node_feat_dim, d_model, edge_dim, heads=4, project_edge_dim=None, more_skip=True, last_average=False, beta=True):
         super().__init__()
-        self.lp = nn.Linear(node_feat_dim, d_model)
+        self.node_feat_dim = node_feat_dim
+        self.d_model = d_model 
+        if self.node_feat_dim != node_feat_dim:
+            self.lp = nn.Linear(node_feat_dim, d_model)
         self.more_skip = more_skip
         self.project_edge_dim = project_edge_dim
         if self.project_edge_dim is not None:
@@ -310,7 +313,9 @@ class TransC(nn.Module):
             self.conv3 = TransformerConv(d_model, int(d_model/heads), heads, edge_dim=edge_dim, aggr='mean', beta=beta)
 
     def forward(self, data):
-        x = self.lp(data.x)
+        x = data.x
+        if self.node_feat_dim != node_feat_dim:
+            x = self.lp(x)
         if self.project_edge_dim is not None:
             e = F.relu(self.lp_edge_attr(data.edge_attr))
         else:
