@@ -348,10 +348,10 @@ class STGraphEncoder(nn.Module):
                                          self.task_config, "visual_num_hidden_layers")
         self.visual_config = update_attr("visual_config", self.visual_config, "num_attention_heads",
                                          self.task_config, heads_type)
-        self.visual_config = update_attr("visual_config", self.visual_config, "hidden_size",
-                                         self.task_config, "hidden_size")
-        self.visual_config = update_attr("visual_config", self.visual_config, "vocab_size",
-                                         self.task_config, "vocab_size")
+        # self.visual_config = update_attr("visual_config", self.visual_config, "hidden_size",
+        #                                  self.task_config, "hidden_size")
+        # self.visual_config = update_attr("visual_config", self.visual_config, "vocab_size",
+        #                                  self.task_config, "vocab_size")
 
         self.visual = VisualModel(self.visual_config)
         self.normalize_video = NormalizeVideo(task_config.video_dim)

@@ -92,12 +92,10 @@ class TransformerConfig(object):
     max_frames = 50
     num_object = 9
     visual_num_hidden_layers = 4
-    d_graph = 512
-    vocab_size = d_graph
-    video_dim = d_graph
+    d_graph = 1024
+    video_dim = 1024
     node_feat_dim = 512
     edge_dim = 1024
-    hidden_size = 768
     visual_model = "visual-base"
     init_model = "./model/weight/univl.pretrained.bin"
     gnn_model_type = "transformer"
