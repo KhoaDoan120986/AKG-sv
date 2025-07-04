@@ -48,12 +48,11 @@ def build_loaders():
     
     return corpus.graph_data, corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
 
-def build_model(vocab):
-    # model_state_dict = torch.load(C.transformer.init_model, map_location='cpu')
+def build_model(vocab, attention_mode):
     model_state_dict = None
     cache_dir = C.transformer.cache_dir if C.transformer.cache_dir else os.path.join(str(PYTORCH_PRETRAINED_BERT_CACHE), 'distributed')
 
-    model = VCModel(vocab, model_state_dict, cache_dir, C.feat.feature_mode, C.transformer, C.feat.size)
+    model = VCModel(vocab, model_state_dict, cache_dir, C.feat.feature_mode, C.transformer, C.feat.size, attention_mode)
     model.cuda()
     return model
 
@@ -111,27 +110,8 @@ def get_parameter_number(net):
 
 def main():
     parser = argparse.ArgumentParser()
-    # Loader settings
-    parser.add_argument('--max_caption_len', type=int, default=15)
-    parser.add_argument('--frame_sample_len', type=int, default=50)
-
-    # Transformer settings
-    parser.add_argument('--n_heads_small', type=int, default=12)
-    parser.add_argument('--n_heads_big', type=int, default=128)
-    parser.add_argument('--d_model', type=int, default=640)
-    parser.add_argument('--hidden_size', type=int, default=768)
-    
-    # Training settings
-    parser.add_argument('--epochs', type=int, default=30)
+    parser.add_argument('--attention', type=int, default=1)
     args = parser.parse_args()
-    
-    C.loader.max_caption_len = args.max_caption_len
-    C.loader.frame_sample_len = args.frame_sample_len 
-    C.transformer.n_heads_small = args.n_heads_small
-    C.transformer.n_heads_big = args.n_heads_big
-    C.transformer.d_model = args.d_model
-    C.transformer.hidden_size = args.hidden_size
-    C.epochs = args.epochs
 
     global logger
     logger = get_logger(filename="log.txt")
@@ -154,6 +134,13 @@ def main():
     logger.info("Hidden Size: {}".format(C.transformer.hidden_size))
     logger.info("Feature Mode: {}".format(C.feat.feature_mode))
     logger.info("Epochs: {}".format(C.epochs))
+    if args.attention == 1:
+        logger.info("MHA for relation")
+    elif args.attention == 2:
+        logger.info("MHA + pe for relation")
+    elif args.attention == 3:
+        logger.info("FFN for relation")
+
     graph_data, train_iter, val_iter, test_iter, vocab = build_loaders()
     
     print("[Memory when loading data]")
@@ -166,7 +153,7 @@ def main():
     tmp = round(psutil.Process(os.getpid()).memory_info().rss / 1024**2)
     print("  RAM used      : {} MB".format(tmp))
 
-    model = build_model(vocab)
+    model = build_model(vocab, args.attention)
     # C.lr_decay_start_from = 8 # ban đầu là 12
     # C.lr_decay_patience = 3 # ban đầu là 5
     # optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay, amsgrad=True)
@@ -268,6 +255,12 @@ def main():
     f.write("Small Heads: {}\n".format(C.transformer.n_heads_small))
     f.write("Big Heads: {}\n".format(C.transformer.n_heads_big))
     f.write("Model Dim: {}\n".format(C.transformer.d_model))
+    if args.attention == 1:
+        f.write("MHA for relation\n")
+    elif args.attention == 2:
+        f.write("MHA + pe for relation\n")
+    elif args.attention == 3:
+        f.write("FFN for relation\n")
     f.write(os.linesep)
     f.write("\n[BEST: {} SEED:{}]".format(best_epoch, seed) + os.linesep)
         
@@ -291,7 +284,7 @@ def main():
         ckpt_fpath = file + '/' + str(i + 1) + '.ckpt'
         logger.info("Now is test in the " + ckpt_fpath)
         captioning_fpath = C.captioning_fpath_tpl.format(str(i + 1))
-        run(ckpt_fpath, test_iter, test_graph_data, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath)
+        run(ckpt_fpath, test_iter, test_graph_data, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath, args.attention)
    
     f.close()
     
