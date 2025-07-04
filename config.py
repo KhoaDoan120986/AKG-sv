@@ -92,9 +92,10 @@ class TransformerConfig(object):
     max_frames = 50
     num_object = 9
     visual_num_hidden_layers = 4
-    d_graph = 1024
+    d_graph = 512
+    vocab_size = d_graph
+    video_dim = d_graph
     node_feat_dim = 512
-    video_dim = 1024
     edge_dim = 1024
     hidden_size = 768
     visual_model = "visual-base"
