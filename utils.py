@@ -8,7 +8,6 @@ import torch.nn as nn
 from tqdm import tqdm
 from model.model import pad_mask
 from model.label_smoothing import LabelSmoothing
-from config import TrainConfig as C
 import numpy as np
 from torch_geometric.data import Data
 
@@ -37,7 +36,7 @@ class LossChecker:
         return mean_losses
 
 
-def parse_batch(batch, feature_mode, graph_data):
+def parse_batch(batch, feature_mode, graph_data, num_object, frame_sample_len):
     if feature_mode == 'grid-obj-rel':
         vids, video_masks, object_feats, rel_feats, r2l_captions, l2r_captions = batch
         geo_x_feats = []
@@ -45,7 +44,7 @@ def parse_batch(batch, feature_mode, graph_data):
         geo_edge_attr_feats = []
         for video_id in vids:
             stgraph =  graph_data[video_id]
-            zero_arr  = torch.zeros([C.transformer.num_object * C.loader.frame_sample_len - stgraph['x'].shape[0], stgraph['x'].shape[1]], dtype=torch.float32)
+            zero_arr  = torch.zeros([num_object * frame_sample_len - stgraph['x'].shape[0], stgraph['x'].shape[1]], dtype=torch.float32)
             geo_x_feats.append(torch.cat([stgraph['x'], zero_arr], dim=0).cuda())
             geo_edge_index_feats.append(stgraph['edge_index'].cuda())
             geo_edge_attr_feats.append(torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32).cuda())
@@ -75,7 +74,7 @@ def parse_batch(batch, feature_mode, graph_data):
         geo_edge_attr_feats = []
         for video_id in vids:
             stgraph =  graph_data[video_id]
-            zero_arr  = torch.zeros([C.transformer.num_object * C.loader.frame_sample_len - stgraph['x'].shape[0], stgraph['x'].shape[1]], dtype=torch.float32)
+            zero_arr  = torch.zeros([num_object * frame_sample_len - stgraph['x'].shape[0], stgraph['x'].shape[1]], dtype=torch.float32)
             geo_x_feats.append(torch.cat([stgraph['x'], zero_arr], dim=0).cuda())
             geo_edge_index_feats.append(stgraph['edge_index'].cuda())
             geo_edge_attr_feats.append(torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32).cuda())
@@ -103,7 +102,7 @@ def parse_batch(batch, feature_mode, graph_data):
         geo_edge_attr_feats = []
         for video_id in vids:
             stgraph =  graph_data[video_id]
-            zero_arr  = torch.zeros([C.transformer.num_object * C.loader.frame_sample_len - stgraph['x'].shape[0], stgraph['x'].shape[1]], dtype=torch.float32)
+            zero_arr  = torch.zeros([num_object * frame_sample_len - stgraph['x'].shape[0], stgraph['x'].shape[1]], dtype=torch.float32)
             geo_x_feats.append(torch.cat([stgraph['x'], zero_arr], dim=0).cuda())
             geo_edge_index_feats.append(stgraph['edge_index'].cuda())
             geo_edge_attr_feats.append(torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32).cuda())
@@ -124,14 +123,14 @@ def parse_batch(batch, feature_mode, graph_data):
         return vids, feats, r2l_captions, l2r_captions
 
 
-def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradient_clip, feature_mode, lr_scheduler, gradient_accumulation_steps):
+def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradient_clip, feature_mode, lr_scheduler, gradient_accumulation_steps, C):
     model.train()
     loss_checker = LossChecker(3)
     pad_idx = vocab.word2idx['<PAD>']
     criterion = LabelSmoothing(vocab.n_vocabs, pad_idx, C.label_smoothing)
     t = tqdm(train_iter)
     for step, batch in enumerate(t):
-        _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
+        _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data, C.transformer.num_object, C.loader.frame_sample_len)
 
         r2l_trg = r2l_captions[:, :-1]
         r2l_trg_y = r2l_captions[:, 1:]
@@ -261,7 +260,7 @@ def train(e, model, optimizer, train_iter, graph_data, vocab, reg_lambda, gradie
     return loss
 
 
-def test(model, val_iter, graph_data, vocab, reg_lambda, feature_mode):
+def test(model, val_iter, graph_data, vocab, reg_lambda, feature_mode, C):
     model.eval()
 
     loss_checker = LossChecker(3)

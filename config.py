@@ -1,36 +1,26 @@
 import os
 import time
 
-
 class FeatureConfig(object):
-    # model = "MSVD_GBased+OFeat+rel+videomask"
-    # model = "MSR-VTT_GBased+OFeat+rel+videomask"
+    def __init__(self, model):
+        self.model = model
+        self.num_boxes = 60
+        self.three_turple = 60
 
-    model = "MSVD_GBased+rel+videomask"
-    # model = "MSR-VTT_GBased+rel+videomask"
-    
-    # model = "MSVD_GBased"
-    # model = "MSR-VTT_GBased
+        if model in ['MSVD_GBased+OFeat+rel+videomask', 'MSR-VTT_GBased+OFeat+rel+videomask']:
+            self.size = [1028, 300]
+            self.feature_mode = 'grid-obj-rel'
+        elif model in ['MSVD_GBased+rel+videomask', 'MSR-VTT_GBased+rel+videomask']:
+            self.size = [512]
+            self.feature_mode = 'grid-rel'
+        elif model in ['MSVD_GBased+videomask', 'MSR-VTT_GBased+videomask']:
+            self.size = [512]
+            self.feature_mode = 'grid'
+        else:
+            raise NotImplementedError(f"Unknown model: {model}")
 
-    size = None
-    feature_mode = None
-    num_boxes = 60
-    three_turple = 60
-    if model == 'MSVD_GBased+OFeat+rel+videomask' or model == 'MSR-VTT_GBased+OFeat+rel+videomask':
-        size = [1028, 300]
-        feature_mode = 'grid-obj-rel'
-    elif model == 'MSVD_GBased+rel+videomask' or model == 'MSR-VTT_GBased+rel+videomask':
-        # size = [300]
-        size = [512]
-        feature_mode = 'grid-rel'
-    elif model == 'MSVD_GBased+videomask' or model == 'MSR-VTT_GBased+videomask':
-        feature_mode = 'grid'   
-    else:
-        raise NotImplementedError("Unknown model: {}".format(model))
-
-    if model.split('_')[0] == "MSR-VTT":
-        size = [s + 300 for s in size]
-
+        if model.split('_')[0] == "MSR-VTT":
+            self.size = [s + 300 for s in self.size]
 
 class VocabConfig(object):
     init_word2idx = {'<PAD>': 0, '<S>': 1}
@@ -109,84 +99,77 @@ class TransformerConfig(object):
     select_num = 0  # if sn==0, automatic select num
 
 class TrainConfig(object):
-    feat = FeatureConfig
-    msrvtt_dim = 1028
-    rel_dim = 300
+    def __init__(self, model_name):
+        self.feat = FeatureConfig(model_name)
+        self.attention_mode = 1
+        self.msrvtt_dim = 1028
+        self.rel_dim = 300
 
-    vocab = VocabConfig
-    corpus = feat.model.split('_')[0]
-    loader = {
-        'MSVD': MSVDLoaderConfig,
-        'MSR-VTT': MSRVTTLoaderConfig
-    }[corpus]
-    transformer = TransformerConfig
+        self.vocab = VocabConfig
+        self.corpus = self.feat.model.split('_')[0]
 
-    """ Optimization """
-    epochs = {
-        'MSVD': 30,
-        'MSR-VTT': 18,
-    }[corpus]
+        self.loader = {
+            'MSVD': MSVDLoaderConfig,
+            'MSR-VTT': MSRVTTLoaderConfig
+        }[self.corpus]
 
-    batch_size = 32
+        self.transformer = TransformerConfig
+        self.transformer.max_frames = self.loader.frame_sample_len
 
-    optimizer = "Adam"
-    gradient_clip = 5.0  # None if not used
-    lr = {
-        'MSVD': 1e-4,
-        'MSR-VTT': 3e-5,
-    }[corpus]
-    lr_decay_start_from = 12
-    lr_decay_gamma = 0.5
-    lr_decay_patience = 5
-    weight_decay = 0.5e-5
+        """ Optimization """
+        self.epochs = {
+            'MSVD': 30,
+            'MSR-VTT': 18,
+        }[self.corpus]
+        self.batch_size = 32
+        self.optimizer = "Adam"
+        self.gradient_clip = 5.0
+        self.lr = {
+            'MSVD': 1e-4,
+            'MSR-VTT': 3e-5,
+        }[self.corpus]
 
-    reg_lambda = 0.6  # weights of r2l
+        self.gradient_accumulation_steps = 2
+        self.weight_decay = 0.5e-5
+        self.reg_lambda = 0.6
+        self.beam_size = 5
+        self.label_smoothing = 0.15
 
-    beam_size = 5
-    label_smoothing = 0.15
+        """ Pretrained Model """
+        self.pretrained_decoder_fpath = None
 
-    """ Pretrained Model """
-    pretrained_decoder_fpath = None
+        """ Evaluate """
+        self.metrics = ['Bleu_4', 'CIDEr', 'METEOR', 'ROUGE_L']
 
-    """ Evaluate """
-    metrics = ['Bleu_4', 'CIDEr', 'METEOR', 'ROUGE_L']
+        """ ID """
+        self.exp_id = "Transformer"
+        self.feat_id = f"FEAT {self.feat.model} fsl-{self.loader.frame_sample_len} mcl-{self.loader.max_caption_len}"
+        self.embedding_id = f"EMB {self.vocab.embedding_size}"
+        self.transformer_id = f"Transformer d-{self.transformer.d_model}-N-{self.transformer.n_layers}-h-{self.transformer.n_heads}-h_big-{self.transformer.n_heads_big}-dp-{self.transformer.dropout}-sn-{self.transformer.select_num}"
+        self.optimizer_id = f"OPTIM {self.optimizer} lr-{self.lr}-gac{self.gradient_accumulation_steps}-wd-{self.weight_decay}-rg-{self.reg_lambda}"
+        self.hyperparams_id = f"bs-{self.batch_size}"
+        if self.gradient_clip is not None:
+            self.hyperparams_id += f" gc-{self.gradient_clip}"
 
-    """ ID """
-    exp_id = "Transformer"
-    feat_id = "FEAT {} fsl-{} mcl-{}".format(feat.model, loader.frame_sample_len, loader.max_caption_len)
-    embedding_id = "EMB {}".format(vocab.embedding_size)
-    transformer_id = "Transformer d-{}-N-{}-h-{}-h_big-{}-dp-{}-sn-{}".format(transformer.d_model, transformer.n_layers,
-                                                                              transformer.n_heads,
-                                                                              transformer.n_heads_big,
-                                                                              transformer.dropout,
-                                                                              transformer.select_num)
-    optimizer_id = "OPTIM {} lr-{}-dc-{}-{}-{}-wd-{}-rg-{}".format(
-        optimizer, lr, lr_decay_start_from, lr_decay_gamma, lr_decay_patience, weight_decay, reg_lambda)
-    hyperparams_id = "bs-{}".format(batch_size)
-    if gradient_clip is not None:
-        hyperparams_id += " gc-{}".format(gradient_clip)
+        self.timestamp = time.strftime("%Y-%m-%d %X", time.localtime(time.time()))
+        self.model_id = f"{self.feat.model} | {self.timestamp}"
 
-    timestamp = time.strftime("%Y-%m-%d %X", time.localtime(time.time()))
-    # model_id = " | ".join(
-    #     [timestamp, exp_id, corpus, feat_id, embedding_id, transformer_id, optimizer_id, hyperparams_id])
-    model_id = " | ".join([feat.model, timestamp])
+        """ Log """
+        self.path = "/workspace/AKG-sv"
+        self.log_dpath = os.path.join(self.path, f"logs/{self.corpus}/{self.model_id}")
+        self.ckpt_dpath = os.path.join(self.path, f"checkpoints/{self.corpus}/{self.model_id}")
+        self.captioning_dpath = os.path.join(self.path, f"captioning/{self.corpus}/{self.model_id}")
+        self.ckpt_fpath_tpl = os.path.join(self.ckpt_dpath, "{}.ckpt")
+        self.captioning_fpath_tpl = os.path.join(self.captioning_dpath, "{}.csv")
+        
+        self.save_from = 1
+        self.save_every = 1
 
-    """ Log """
-    path = "/workspace/AKG-sv"
-    log_dpath = os.path.join(path, "logs/{}/{}".format(corpus, model_id))
-    ckpt_dpath = os.path.join(os.path.join(path,"checkpoints/{}".format(corpus)), model_id)
-    captioning_dpath = os.path.join(os.path.join(path,"captioning/{}".format(corpus)), model_id)
-    ckpt_fpath_tpl = os.path.join(ckpt_dpath, "{}.ckpt")
-    captioning_fpath_tpl = os.path.join(captioning_dpath, "{}.csv")
-
-    save_from = 1
-    save_every = 1
-
-    """ TensorboardX """
-    tx_train_loss = "loss/train"
-    tx_train_r2l_cross_entropy_loss = "loss/train/r2l_loss"
-    tx_train_l2r_cross_entropy_loss = "loss/train/l2r_loss"
-    tx_val_loss = "loss/val"
-    tx_val_r2l_cross_entropy_loss = "loss/val/r2l_loss"
-    tx_val_l2r_cross_entropy_loss = "loss/val/l2r_loss"
-    tx_lr = "params/vc_model_LR"
+        """ TensorboardX """
+        self.tx_train_loss = "loss/train"
+        self.tx_train_r2l_cross_entropy_loss = "loss/train/r2l_loss"
+        self.tx_train_l2r_cross_entropy_loss = "loss/train/l2r_loss"
+        self.tx_val_loss = "loss/val"
+        self.tx_val_r2l_cross_entropy_loss = "loss/val/r2l_loss"
+        self.tx_val_l2r_cross_entropy_loss = "loss/val/l2r_loss"
+        self.tx_lr = "params/vc_model_LR"

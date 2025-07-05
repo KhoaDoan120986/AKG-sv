@@ -4,7 +4,6 @@ import gc
 import torch
 from loader.MSVD import MSVD
 from loader.MSRVTT import MSRVTT
-from config import TrainConfig as C
 from model.model import VCModel
 from utils import dict_to_cls, get_predicted_captions, get_groundtruth_captions, save_result, score
 import  logging 
@@ -37,7 +36,7 @@ def build_loader(ckpt_fpath):
     return test_graph_data, test_iter, vocab, l2r_test_vid2GTs
 
 
-def run(ckpt_fpath, test_iter, graph_data, vocab, ckpt, l2r_test_vid2GTs, f, captioning_fpath, attention_mode):
+def run(ckpt_fpath, test_iter, graph_data, vocab, ckpt, l2r_test_vid2GTs, f, captioning_fpath, C):
     captioning_dpath = os.path.dirname(captioning_fpath)
 
     if not os.path.exists(captioning_dpath):
@@ -50,7 +49,7 @@ def run(ckpt_fpath, test_iter, graph_data, vocab, ckpt, l2r_test_vid2GTs, f, cap
     """ Build Models """
     model_state_dict = None
     cache_dir = None
-    model = VCModel(vocab, model_state_dict, cache_dir, C.feat.feature_mode, C.transformer, C.feat.size, attention_mode)
+    model = VCModel(vocab, model_state_dict, cache_dir, C.feat.feature_mode, C.transformer, C.feat.size, C.attention_mode)
     
     model.load_state_dict(checkpoint['vc_model'])
     model = model.cuda()

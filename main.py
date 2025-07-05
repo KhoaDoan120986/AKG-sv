@@ -6,8 +6,7 @@ import random
 import numpy as np
 from loader.MSVD import MSVD
 from loader.MSRVTT import MSRVTT
-from config import TrainConfig as C
-
+from config import TrainConfig
 from model.model import VCModel
 from model.modules.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 from torch.optim.lr_scheduler import ReduceLROnPlateau
@@ -34,7 +33,7 @@ def get_logger(filename=None):
         logging.getLogger().addHandler(handler)
     return logger
 
-def build_loaders():
+def build_loaders(C):
     global logger
     corpus = None
     if C.corpus == "MSVD":
@@ -48,16 +47,16 @@ def build_loaders():
     
     return corpus.graph_data, corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
 
-def build_model(vocab, attention_mode):
+def build_model(vocab, C):
     model_state_dict = None
     cache_dir = C.transformer.cache_dir if C.transformer.cache_dir else os.path.join(str(PYTORCH_PRETRAINED_BERT_CACHE), 'distributed')
 
-    model = VCModel(vocab, model_state_dict, cache_dir, C.feat.feature_mode, C.transformer, C.feat.size, attention_mode)
+    model = VCModel(vocab, model_state_dict, cache_dir, C.feat.feature_mode, C.transformer, C.feat.size, C.attention_mode)
     model.cuda()
     return model
 
 
-def log_train(summary_writer, e, loss, lr, reg_lambda, scores=None):
+def log_train(summary_writer, e, loss, lr, reg_lambda, scores, C):
     global logger
     summary_writer.add_scalar(C.tx_train_loss, loss['total'], e)
     summary_writer.add_scalar(C.tx_train_r2l_cross_entropy_loss, loss['r2l_loss'], e)
@@ -74,7 +73,7 @@ def log_train(summary_writer, e, loss, lr, reg_lambda, scores=None):
         logger.info("scores: {}".format(scores))
 
 
-def log_val(summary_writer, e, loss, reg_lambda, r2l_scores, l2r_scores):
+def log_val(summary_writer, e, loss, reg_lambda, r2l_scores, l2r_scores, C):
     global logger
     summary_writer.add_scalar(C.tx_val_loss, loss['total'], e)
     summary_writer.add_scalar(C.tx_val_r2l_cross_entropy_loss, loss['r2l_loss'], e)
@@ -110,8 +109,21 @@ def get_parameter_number(net):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--attention', type=int, default=1)
+    parser.add_argument('--attention', type=int, default=1, choices = [1,2,3])
+    parser.add_argument('--model_id', type=str, required=True,
+                        choices=[
+                            "MSVD_GBased+OFeat+rel+videomask",
+                            "MSR-VTT_GBased+OFeat+rel+videomask",
+                            "MSVD_GBased+rel+videomask",
+                            "MSR-VTT_GBased+rel+videomask",
+                            "MSVD_GBased+videomask",
+                            "MSR-VTT_GBased+videomask"
+                        ],
+                        help='Specify the model configuration')
     args = parser.parse_args()
+
+    C = TrainConfig(args.model_id)
+    C.attention_model = args.attention
 
     global logger
     logger = get_logger(filename="log.txt")
@@ -131,7 +143,6 @@ def main():
     logger.info("Small Heads: {}".format(C.transformer.n_heads_small))
     logger.info("Big Heads: {}".format(C.transformer.n_heads_big))
     logger.info("Model Dim: {}".format(C.transformer.d_model))
-    logger.info("Hidden Size: {}".format(C.transformer.hidden_size))
     logger.info("Feature Mode: {}".format(C.feat.feature_mode))
     logger.info("Epochs: {}".format(C.epochs))
     if args.attention == 1:
@@ -141,7 +152,7 @@ def main():
     elif args.attention == 3:
         logger.info("FFN for relation")
 
-    graph_data, train_iter, val_iter, test_iter, vocab = build_loaders()
+    graph_data, train_iter, val_iter, test_iter, vocab = build_loaders(C)
     
     print("[Memory when loading data]")
     tmp = round(torch.cuda.memory_allocated() / 1024**2)
@@ -153,20 +164,10 @@ def main():
     tmp = round(psutil.Process(os.getpid()).memory_info().rss / 1024**2)
     print("  RAM used      : {} MB".format(tmp))
 
-    model = build_model(vocab, args.attention)
-    # C.lr_decay_start_from = 8 # ban đầu là 12
-    # C.lr_decay_patience = 3 # ban đầu là 5
-    # optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay, amsgrad=True)
-    # # lr_scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=C.lr_decay_gamma,
-    # #                                 patience=C.lr_decay_patience, verbose=True) # monitor theo loss
+    model = build_model(vocab, C)
 
-    # lr_scheduler = ReduceLROnPlateau(optimizer, mode='max', factor=C.lr_decay_gamma,
-    #                                 patience=C.lr_decay_patience, verbose=True) # monitor theo metric
-
-    gradient_accumulation_steps = 2
-    # C.weight_decay = 1e-4 #1e-5 # ban đầu là 0.5e-5
     optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
-    num_training_steps = int(len(train_iter) / gradient_accumulation_steps) * C.epochs
+    num_training_steps = int(len(train_iter) / C.gradient_accumulation_steps) * C.epochs
     num_warmup_steps = int(0.1 * num_training_steps)
     lr_scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps)
     
@@ -186,11 +187,11 @@ def main():
         """ Train """
         if graph_data is None:
             train_loss = train(e, model, optimizer, train_iter, None, vocab, 
-                            C.reg_lambda, C.gradient_clip, C.feat.feature_mode, lr_scheduler, gradient_accumulation_steps)
+                            C.reg_lambda, C.gradient_clip, C.feat.feature_mode, lr_scheduler, C.gradient_accumulation_steps, C)
         else:
             train_loss = train(e, model, optimizer, train_iter, graph_data['train'], vocab, 
-                                C.reg_lambda, C.gradient_clip, C.feat.feature_mode, lr_scheduler, gradient_accumulation_steps)
-        log_train(summary_writer, e, train_loss, get_lr(optimizer), C.reg_lambda)
+                                C.reg_lambda, C.gradient_clip, C.feat.feature_mode, lr_scheduler, C.gradient_accumulation_steps, C)
+        log_train(summary_writer, e, train_loss, get_lr(optimizer), C.reg_lambda, None,C)
 
         vram_u.append(round(torch.cuda.memory_allocated() / 1024**2))
         vram_r.append(round(torch.cuda.memory_reserved() / 1024**2))
@@ -198,14 +199,15 @@ def main():
 
         """ Validation """
         if graph_data is None:
-            val_loss = test(model, val_iter, None, vocab, C.reg_lambda, C.feat.feature_mode)
+            val_loss = test(model, val_iter, None, vocab, C.reg_lambda, C.feat.feature_mode, C)
             r2l_val_scores, l2r_val_scores = evaluate(val_iter, None, model, vocab, C.beam_size, C.loader.max_caption_len,
                                                     C.feat.feature_mode)
         else: 
             val_loss = test(model, val_iter, graph_data['val'], vocab, C.reg_lambda, C.feat.feature_mode)
             r2l_val_scores, l2r_val_scores = evaluate(val_iter, graph_data['val'], model, vocab, C.beam_size, C.loader.max_caption_len,
                                                     C.feat.feature_mode)
-        log_val(summary_writer, e, val_loss, C.reg_lambda, r2l_val_scores, l2r_val_scores)
+
+        log_val(summary_writer, e, val_loss, C.reg_lambda, r2l_val_scores, l2r_val_scores, C)
 
         summary_writer.add_scalars("compare_loss/total_loss", {'train_total_loss': train_loss['total'],
                                                                 'val_total_loss': val_loss['total']}, e)
@@ -284,7 +286,7 @@ def main():
         ckpt_fpath = file + '/' + str(i + 1) + '.ckpt'
         logger.info("Now is test in the " + ckpt_fpath)
         captioning_fpath = C.captioning_fpath_tpl.format(str(i + 1))
-        run(ckpt_fpath, test_iter, test_graph_data, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath, args.attention)
+        run(ckpt_fpath, test_iter, test_graph_data, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath, C)
    
     f.close()
     
