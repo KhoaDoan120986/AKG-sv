@@ -268,7 +268,7 @@ def test(model, val_iter, graph_data, vocab, reg_lambda, feature_mode, C):
     criterion = LabelSmoothing(vocab.n_vocabs, pad_idx, C.label_smoothing)
     with torch.no_grad():
         for batch in tqdm(val_iter, desc='Test'):
-            _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
+            _, feats, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data, C.transformer.num_object, C.loader.frame_sample_len)
             
             r2l_trg = r2l_captions[:, :-1]
             r2l_trg_y = r2l_captions[:, 1:]
@@ -383,94 +383,91 @@ def test(model, val_iter, graph_data, vocab, reg_lambda, feature_mode, C):
         }
     return loss
 
-
-def get_predicted_captions(data_iter, graph_data, model, beam_size, max_len, feature_mode):
-    def build_onlyonce_iter(data_iter):
-        onlyonce_dataset = {}
-        for batch in tqdm(iter(data_iter), desc='build onlyonce_iter'):
-            vids, feats, _, _ = parse_batch(batch, feature_mode, graph_data)
-            if feature_mode == 'grid-obj-rel':
-                for vid, geo_x, geo_edge_indexs, geo_edge_attrs, object_feat, rel_feat, video_mask in zip(vids, feats[0], feats[1], feats[2],
-                                                                                feats[3], feats[4], feats[5]):
-                    if vid not in onlyonce_dataset:
-                        onlyonce_dataset[vid] = (geo_x, geo_edge_indexs, geo_edge_attrs, object_feat, rel_feat, video_mask)
-            elif feature_mode == 'grid-rel':
-                for vid, geo_x, geo_edge_indexs, geo_edge_attrs, rel_feat, video_mask in zip(vids, feats[0], feats[1], feats[2],
-                                                                                feats[3], feats[4]):
-                    if vid not in onlyonce_dataset:
-                        onlyonce_dataset[vid] = (geo_x, geo_edge_indexs, geo_edge_attrs, rel_feat, video_mask)
-            elif feature_mode == 'grid':
-                for vid, geo_x, geo_edge_indexs, geo_edge_attrs, video_mask in zip(vids, feats[0], feats[1], feats[2],
-                                                                                feats[3]):
-                    if vid not in onlyonce_dataset:
-                        onlyonce_dataset[vid] = (geo_x, geo_edge_indexs, geo_edge_attrs, rel_feat, video_mask)
-                
-        onlyonce_iter = []
-        vids = list(onlyonce_dataset.keys())
-        feats = list(onlyonce_dataset.values())
-        del onlyonce_dataset
-        torch.cuda.empty_cache()
-        time.sleep(5)
-        batch_size = 1
-        while len(vids) > 0:
-            if feature_mode == 'grid-obj-rel':
-                geo_x_feats = []
-                geo_edge_index_feats = []
-                geo_edge_attr_feats = []
-                object_feats = []
-                rel_feats = []
-                video_masks = []
-                for geo_x_feat, geo_edge_index_feat, geo_edge_attr_feat, object_feat, rel_feat, video_mask in feats[:batch_size]:
-                    geo_x_feats.append(geo_x_feat)
-                    geo_edge_index_feats.append(geo_edge_index_feat)
-                    geo_edge_attr_feats.append(geo_edge_attr_feat)
-                    object_feats.append(object_feat)
-                    rel_feats.append(rel_feat)
-                    video_masks.append(video_mask)
-                onlyonce_iter.append((vids[:batch_size],
-                                    (torch.stack(geo_x_feats), torch.stack(geo_edge_index_feats), torch.stack(geo_edge_attr_feats),
-                                    torch.stack(object_feats), torch.stack(rel_feats), torch.stack(video_masks))))
-            if feature_mode == 'grid-rel':
-                geo_x_feats = []
-                geo_edge_index_feats = []
-                geo_edge_attr_feats = []
-                rel_feats = []
-                video_masks = []
-                for geo_x_feat, geo_edge_index_feat, geo_edge_attr_feat, rel_feat, video_mask in feats[:batch_size]:
-                    geo_x_feats.append(geo_x_feat)
-                    geo_edge_index_feats.append(geo_edge_index_feat)
-                    geo_edge_attr_feats.append(geo_edge_attr_feat)
-                    rel_feats.append(rel_feat)
-                    video_masks.append(video_mask)
-                onlyonce_iter.append((vids[:batch_size],
-                                    (torch.stack(geo_x_feats), torch.stack(geo_edge_index_feats), torch.stack(geo_edge_attr_feats),
-                                    torch.stack(rel_feats), torch.stack(video_masks))))
-            if feature_mode == 'grid':
-                geo_x_feats = []
-                geo_edge_index_feats = []
-                geo_edge_attr_feats = []
-                video_masks = []
-                for geo_x_feat, geo_edge_index_feat, geo_edge_attr_feat, video_mask in feats[:batch_size]:
-                    geo_x_feats.append(geo_x_feat)
-                    geo_edge_index_feats.append(geo_edge_index_feat)
-                    geo_edge_attr_feats.append(geo_edge_attr_feat)
-                    video_masks.append(video_mask)
-                onlyonce_iter.append((vids[:batch_size],
-                                    (torch.stack(geo_x_feats), torch.stack(geo_edge_index_feats), torch.stack(geo_edge_attr_feats),
-                                    torch.stack(video_masks))))
-            vids = vids[batch_size:]
-            feats = feats[batch_size:]
-        return onlyonce_iter
+def build_onlyonce_iter(data_iter, graph_data, feature_mode, num_object, frame_sample_len):
+    onlyonce_dataset = {}
+    for batch in tqdm(iter(data_iter), desc='build onlyonce_iter'):
+        vids, feats, _, _ = parse_batch(batch, feature_mode, graph_data, num_object, frame_sample_len)
+        if feature_mode == 'grid-obj-rel':
+            for vid, geo_x, geo_edge_indexs, geo_edge_attrs, object_feat, rel_feat, video_mask in zip(vids, feats[0], feats[1], feats[2],
+                                                                            feats[3], feats[4], feats[5]):
+                if vid not in onlyonce_dataset:
+                    onlyonce_dataset[vid] = (geo_x, geo_edge_indexs, geo_edge_attrs, object_feat, rel_feat, video_mask)
+        elif feature_mode == 'grid-rel':
+            for vid, geo_x, geo_edge_indexs, geo_edge_attrs, rel_feat, video_mask in zip(vids, feats[0], feats[1], feats[2],
+                                                                            feats[3], feats[4]):
+                if vid not in onlyonce_dataset:
+                    onlyonce_dataset[vid] = (geo_x, geo_edge_indexs, geo_edge_attrs, rel_feat, video_mask)
+        elif feature_mode == 'grid':
+            for vid, geo_x, geo_edge_indexs, geo_edge_attrs, video_mask in zip(vids, feats[0], feats[1], feats[2],
+                                                                            feats[3]):
+                if vid not in onlyonce_dataset:
+                    onlyonce_dataset[vid] = (geo_x, geo_edge_indexs, geo_edge_attrs, rel_feat, video_mask)
+            
+    onlyonce_iter = []
+    vids = list(onlyonce_dataset.keys())
+    feats = list(onlyonce_dataset.values())
+    del onlyonce_dataset
+    torch.cuda.empty_cache()
+    time.sleep(5)
+    batch_size = 1
+    while len(vids) > 0:
+        if feature_mode == 'grid-obj-rel':
+            geo_x_feats = []
+            geo_edge_index_feats = []
+            geo_edge_attr_feats = []
+            object_feats = []
+            rel_feats = []
+            video_masks = []
+            for geo_x_feat, geo_edge_index_feat, geo_edge_attr_feat, object_feat, rel_feat, video_mask in feats[:batch_size]:
+                geo_x_feats.append(geo_x_feat)
+                geo_edge_index_feats.append(geo_edge_index_feat)
+                geo_edge_attr_feats.append(geo_edge_attr_feat)
+                object_feats.append(object_feat)
+                rel_feats.append(rel_feat)
+                video_masks.append(video_mask)
+            onlyonce_iter.append((vids[:batch_size],
+                                (torch.stack(geo_x_feats), torch.stack(geo_edge_index_feats), torch.stack(geo_edge_attr_feats),
+                                torch.stack(object_feats), torch.stack(rel_feats), torch.stack(video_masks))))
+        if feature_mode == 'grid-rel':
+            geo_x_feats = []
+            geo_edge_index_feats = []
+            geo_edge_attr_feats = []
+            rel_feats = []
+            video_masks = []
+            for geo_x_feat, geo_edge_index_feat, geo_edge_attr_feat, rel_feat, video_mask in feats[:batch_size]:
+                geo_x_feats.append(geo_x_feat)
+                geo_edge_index_feats.append(geo_edge_index_feat)
+                geo_edge_attr_feats.append(geo_edge_attr_feat)
+                rel_feats.append(rel_feat)
+                video_masks.append(video_mask)
+            onlyonce_iter.append((vids[:batch_size],
+                                (torch.stack(geo_x_feats), torch.stack(geo_edge_index_feats), torch.stack(geo_edge_attr_feats),
+                                torch.stack(rel_feats), torch.stack(video_masks))))
+        if feature_mode == 'grid':
+            geo_x_feats = []
+            geo_edge_index_feats = []
+            geo_edge_attr_feats = []
+            video_masks = []
+            for geo_x_feat, geo_edge_index_feat, geo_edge_attr_feat, video_mask in feats[:batch_size]:
+                geo_x_feats.append(geo_x_feat)
+                geo_edge_index_feats.append(geo_edge_index_feat)
+                geo_edge_attr_feats.append(geo_edge_attr_feat)
+                video_masks.append(video_mask)
+            onlyonce_iter.append((vids[:batch_size],
+                                (torch.stack(geo_x_feats), torch.stack(geo_edge_index_feats), torch.stack(geo_edge_attr_feats),
+                                torch.stack(video_masks))))
+        vids = vids[batch_size:]
+        feats = feats[batch_size:]
+    return onlyonce_iter
     
+def get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mode):
     model.eval()
-    onlyonce_iter = build_onlyonce_iter(data_iter)
-
     r2l_vid2pred = {}
     l2r_vid2pred = {}
 
     # BOS_idx = vocab.word2idx['<BOS>']
     with torch.no_grad():
-        for vids, feats in tqdm(onlyonce_iter):
+        for vids, feats in tqdm(onlyonce_iter, desc='get_predicted_captions'):
             if feature_mode == 'grid-obj-rel':
                 geo_x, geo_edge, geo_edge_attr, object_feat, rel_feat, video_mask = feats
                 data_geo_graph = Data(x=geo_x[0], edge_index=geo_edge[0], edge_attr=geo_edge_attr[0])
@@ -494,13 +491,13 @@ def get_predicted_captions(data_iter, graph_data, model, beam_size, max_len, fea
     return r2l_vid2pred, l2r_vid2pred
 
 
-def get_groundtruth_captions(data_iter, graph_data, vocab, feature_mode):
+def get_groundtruth_captions(data_iter, graph_data, vocab, feature_mode, num_object, frame_sample_len):
     r2l_vid2GTs = {}
     l2r_vid2GTs = {}
     S_idx = vocab.word2idx['<S>']
     for batch in tqdm(iter(data_iter), desc='get_groundtruth_captions'):
 
-        vids, _, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data)
+        vids, _, r2l_captions, l2r_captions = parse_batch(batch, feature_mode, graph_data, num_object, frame_sample_len)
 
         for vid, r2l_caption, l2r_caption in zip(vids, r2l_captions, l2r_captions):
             if vid not in r2l_vid2GTs:
@@ -548,9 +545,10 @@ def calc_scores(ref, hypo):
     return final_scores
 
 
-def evaluate(data_iter, graph_data, model, vocab, beam_size, max_len, feature_mode):
-    r2l_vid2pred, l2r_vid2pred = get_predicted_captions(data_iter, graph_data, model, beam_size, max_len, feature_mode)
-    r2l_vid2GTs, l2r_vid2GTs = get_groundtruth_captions(data_iter, graph_data, vocab, feature_mode)
+def evaluate(data_iter, graph_data, model, vocab, beam_size, max_len, feature_mode, C):
+    onlyonce_iter = build_onlyonce_iter(data_iter, graph_data, feature_mode, C.transformer.num_object, C.loader.frame_sample_len)
+    r2l_vid2pred, l2r_vid2pred = get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mode)
+    r2l_vid2GTs, l2r_vid2GTs = get_groundtruth_captions(data_iter, graph_data, vocab, feature_mode, C.transformer.num_object, C.loader.frame_sample_len)
     r2l_scores = score(r2l_vid2pred, r2l_vid2GTs)
     l2r_scores = score(l2r_vid2pred, l2r_vid2GTs)
     return r2l_scores, l2r_scores

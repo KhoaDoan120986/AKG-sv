@@ -25,7 +25,8 @@ def build_loader(ckpt_fpath):
         corpus.train_data_loader, corpus.val_data_loader, corpus.test_data_loader, corpus.vocab
     
     test_graph_data = graph_data['test']
-    r2l_test_vid2GTs, l2r_test_vid2GTs = get_groundtruth_captions(test_iter, test_graph_data, vocab, config.feat.feature_mode)
+    r2l_test_vid2GTs, l2r_test_vid2GTs = get_groundtruth_captions(test_iter, test_graph_data, vocab,
+                                                                 config.feat.feature_mode, config.transformer.num_object, config.loader.frame_sample_len)
     
     logger.info('#vocabs: {} ({}), #words: {} ({}). Trim words which appear less than {} times.'.format(
         vocab.n_vocabs, vocab.n_vocabs_untrimmed, vocab.n_words, vocab.n_words_untrimmed, config.loader.min_count))
@@ -36,7 +37,7 @@ def build_loader(ckpt_fpath):
     return test_graph_data, test_iter, vocab, l2r_test_vid2GTs
 
 
-def run(ckpt_fpath, test_iter, graph_data, vocab, ckpt, l2r_test_vid2GTs, f, captioning_fpath, C):
+def run(ckpt_fpath, test_iter, vocab, ckpt, l2r_test_vid2GTs, f, captioning_fpath, C):
     captioning_dpath = os.path.dirname(captioning_fpath)
 
     if not os.path.exists(captioning_dpath):
@@ -56,9 +57,7 @@ def run(ckpt_fpath, test_iter, graph_data, vocab, ckpt, l2r_test_vid2GTs, f, cap
 
     """ Test Set """
     logger.info('Finish the model load in CUDA. Try to enter Test Set.')
-    r2l_test_vid2pred, l2r_test_vid2pred = get_predicted_captions(test_iter, graph_data, model, config.beam_size,
-                                                                  config.loader.max_caption_len,
-                                                                  config.feat.feature_mode)
+    r2l_test_vid2pred, l2r_test_vid2pred = get_predicted_captions(test_iter, model, config.beam_size, config.loader.max_caption_len, config.feat.feature_mode)
     l2r_test_scores = score(l2r_test_vid2pred, l2r_test_vid2GTs)
     logger.info("[TEST L2R] in {} is {}".format(ckpt, l2r_test_scores))
 

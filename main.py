@@ -10,7 +10,7 @@ from config import TrainConfig
 from model.model import VCModel
 from model.modules.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-from utils import evaluate, get_lr, load_checkpoint, save_checkpoint, test, train
+from utils import evaluate, get_lr, load_checkpoint, save_checkpoint, test, train, build_onlyonce_iter
 from transformers import get_linear_schedule_with_warmup
 from run import build_loader, run
 import psutil
@@ -201,11 +201,11 @@ def main():
         if graph_data is None:
             val_loss = test(model, val_iter, None, vocab, C.reg_lambda, C.feat.feature_mode, C)
             r2l_val_scores, l2r_val_scores = evaluate(val_iter, None, model, vocab, C.beam_size, C.loader.max_caption_len,
-                                                    C.feat.feature_mode)
+                                                    C.feat.feature_mode, C)
         else: 
-            val_loss = test(model, val_iter, graph_data['val'], vocab, C.reg_lambda, C.feat.feature_mode)
+            val_loss = test(model, val_iter, graph_data['val'], vocab, C.reg_lambda, C.feat.feature_mode, C)
             r2l_val_scores, l2r_val_scores = evaluate(val_iter, graph_data['val'], model, vocab, C.beam_size, C.loader.max_caption_len,
-                                                    C.feat.feature_mode)
+                                                    C.feat.feature_mode, C)
 
         log_val(summary_writer, e, val_loss, C.reg_lambda, r2l_val_scores, l2r_val_scores, C)
 
@@ -279,6 +279,7 @@ def main():
     logger.info('Build data_loader according to ' + ckpt_list[0])
     
     test_graph_data, test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0])
+    onlyonce_iter = build_onlyonce_iter(test_iter, test_graph_data, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len)
         
     for i in range(len(ckpt_list)):
         if i + 1 <= 3:
@@ -286,7 +287,7 @@ def main():
         ckpt_fpath = file + '/' + str(i + 1) + '.ckpt'
         logger.info("Now is test in the " + ckpt_fpath)
         captioning_fpath = C.captioning_fpath_tpl.format(str(i + 1))
-        run(ckpt_fpath, test_iter, test_graph_data, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath, C)
+        run(ckpt_fpath, onlyonce_iter, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath, C)
    
     f.close()
     
