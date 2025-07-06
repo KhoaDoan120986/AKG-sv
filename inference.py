@@ -75,7 +75,7 @@ def main():
     C.attention_model = args.attention
     
     global logger
-    logger = get_logger(filename="/inference.txt")
+    logger = get_logger(filename="inference.txt")
           
         
     folder_path = "./result"
@@ -87,7 +87,6 @@ def main():
     f.write("Small Heads: {}\n".format(C.transformer.n_heads_small))
     f.write("Big Heads: {}\n".format(C.transformer.n_heads_big))
     f.write("Model Dim: {}\n".format(C.transformer.d_model))
-    f.write("Hidden Size: {}\n".format(C.transformer.hidden_size))
     f.write("Feature Mode: {}\n".format(C.feat.feature_mode))
     f.write(os.linesep)
     

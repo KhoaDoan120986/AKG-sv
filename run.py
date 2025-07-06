@@ -11,7 +11,7 @@ import  logging
 logger = logging.getLogger(__name__)
 
 def build_loader(ckpt_fpath):
-    checkpoint = torch.load(ckpt_fpath)
+    checkpoint = torch.load(ckpt_fpath, weights_only=False)
     config = dict_to_cls(checkpoint['config'])
     """ Build Data Loader """
     if config.corpus == "MSVD":
@@ -43,7 +43,7 @@ def run(ckpt_fpath, test_iter, vocab, ckpt, l2r_test_vid2GTs, f, captioning_fpat
     if not os.path.exists(captioning_dpath):
         os.makedirs(captioning_dpath)
 
-    checkpoint = torch.load(ckpt_fpath)
+    checkpoint = torch.load(ckpt_fpath, weights_only=False)
     """ Load Config """
     config = dict_to_cls(checkpoint['config'])
 
