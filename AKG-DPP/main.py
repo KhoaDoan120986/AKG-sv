@@ -154,11 +154,9 @@ def main():
     C = TrainConfig(args.model_id, args.n_gpus)
     C.attention_model = args.attention
     load_graph_data(C.corpus, 'train')
-    load_graph_data(C.corpus, 'val')
 
     if args.local_rank == 0:
-        # load_graph_data(C.corpus, 'train')
-        # load_graph_data(C.corpus, 'val')
+        load_graph_data(C.corpus, 'val')
         summary_writer = SummaryWriter(C.log_dpath)
         logger.info("MODEL ID: {}".format(C.model_id))
         logger.info("Max caption length: {}".format(C.loader.max_caption_len))
