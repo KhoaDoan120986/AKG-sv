@@ -52,7 +52,7 @@ def run(ckpt_fpath, test_iter, vocab, ckpt, l2r_test_vid2GTs, f, captioning_fpat
 
     """ Test Set """
     logger.info('Finish the model load in CUDA. Try to enter Test Set.')
-    r2l_test_vid2pred, l2r_test_vid2pred = get_predicted_captions(test_iter, model, config.beam_size, config.loader.max_caption_len, config.feat.feature_mode)
+    r2l_test_vid2pred, l2r_test_vid2pred = get_predicted_captions(test_iter, model, config.beam_size, config.loader.max_caption_len, config.feat.feature_mode, device)
     l2r_test_scores = score(l2r_test_vid2pred, l2r_test_vid2GTs)
     logger.info("[TEST L2R] in {} is {}".format(ckpt, l2r_test_scores))
 
