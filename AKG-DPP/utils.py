@@ -17,6 +17,7 @@ from pycocoevalcap.cider.cider import Cider
 from pycocoevalcap.meteor.meteor import Meteor
 
 from config import get_graph
+import gc
 
 
 class LossChecker:
@@ -217,9 +218,9 @@ def train(e, model, optimizer, train_iter, vocab, reg_lambda, gradient_clip, fea
 
         loss_checker.update(loss.item(), r2l_loss.item(), l2r_loss.item())
 
-        del r2l_trg, r2l_trg_y, l2r_trg, l2r_trg_y, r2l_pred, l2r_pred, mask, feats
-        if feature_mode.startswith('grid'):
-            del data_geo_graph_batch, geo_graph_batch_offset, geo_graph_batch_offset, edge_attr_batch, edge_index_batch, x_batch
+        # del r2l_trg, r2l_trg_y, l2r_trg, l2r_trg_y, r2l_pred, l2r_pred, mask, feats
+        # if feature_mode.startswith('grid'):
+        #     del data_geo_graph_batch, geo_graph_batch_offset, geo_graph_batch_offset, edge_attr_batch, edge_index_batch, x_batch
         torch.cuda.empty_cache()
         gc.collect()
 
@@ -352,9 +353,9 @@ def test(model, val_iter, vocab, reg_lambda, feature_mode, C, device):
             loss = reg_lambda * l2r_loss + (1 - reg_lambda) * r2l_loss
             loss_checker.update(loss.item(), r2l_loss.item(), l2r_loss.item())
 
-            del r2l_trg, r2l_trg_y, l2r_trg, l2r_trg_y, r2l_pred, l2r_pred, mask, feats
-            if feature_mode.startswith('grid'):
-                del data_geo_graph_batch, geo_graph_batch_offset, geo_graph_batch_offset, edge_attr_batch, edge_index_batch, x_batch
+            # del r2l_trg, r2l_trg_y, l2r_trg, l2r_trg_y, r2l_pred, l2r_pred, mask, feats
+            # if feature_mode.startswith('grid'):
+            #     del data_geo_graph_batch, geo_graph_batch_offset, geo_graph_batch_offset, edge_attr_batch, edge_index_batch, x_batch
             torch.cuda.empty_cache()
             gc.collect()
 
@@ -446,12 +447,12 @@ def build_onlyonce_iter(data_iter, feature_mode, num_object, frame_sample_len, d
         vids = vids[batch_size:]
         feats = feats[batch_size:]
 
-        del geo_x_feats, geo_edge_index_feats, geo_edge_attr_feats
-        del video_masks
-        if feature_mode == 'grid-obj-rel':
-            del object_feats, rel_feats
-        elif feature_mode == 'grid-rel':
-            del rel_feats
+        # del geo_x_feats, geo_edge_index_feats, geo_edge_attr_feats
+        # del video_masks
+        # if feature_mode == 'grid-obj-rel':
+        #     del object_feats, rel_feats
+        # elif feature_mode == 'grid-rel':
+        #     del rel_feats
         gc.collect()
         torch.cuda.empty_cache()
     return onlyonce_iter
@@ -485,7 +486,7 @@ def get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mod
             r2l_vid2pred.update({v: p for v, p in zip(vids, r2l_captions)})
             l2r_vid2pred.update({v: p for v, p in zip(vids, l2r_captions)})
 
-            del feats, data_geo_graph, r2l_captions, l2r_captions
+            # del feats, data_geo_graph, r2l_captions, l2r_captions
             torch.cuda.empty_cache()
             gc.collect()
 
@@ -513,7 +514,7 @@ def get_groundtruth_captions(data_iter, vocab, feature_mode):
             l2r_caption = idxs_to_sentence(l2r_caption, vocab.idx2word, S_idx)
             r2l_vid2GTs[vid].append(r2l_caption)
             l2r_vid2GTs[vid].append(l2r_caption)
-        del r2l_captions, l2r_captions, vids
+        # del r2l_captions, l2r_captions, vids
         gc.collect()
     return r2l_vid2GTs, l2r_vid2GTs
 

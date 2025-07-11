@@ -22,8 +22,8 @@ class FeatureConfig(object):
         else:
             raise NotImplementedError(f"Unknown model: {model}")
 
-        if model.split('_')[0] == "MSR-VTT":
-            self.size = [s + 300 for s in self.size]
+        # if model.split('_')[0] == "MSR-VTT":
+        #     self.size = [s + 300 for s in self.size]
 
 class VocabConfig(object):
     init_word2idx = {'<PAD>': 0, '<S>': 1}
@@ -181,13 +181,13 @@ def load_graph_data(corpus, phase):
     global GRAPH_DATA_DICT
 
     if phase == 'train':
-        with open(f"data/MSVD/features/{corpus}_GBased_train.pickle", "rb") as f:
+        with open(f"data/{corpus}/features/{corpus}_GBased_train.pickle", "rb") as f:
             GRAPH_DATA_DICT[phase] = pickle.load(f)
     elif phase == 'val':  
-        with open(f"data/MSVD/features/{corpus}_GBased_val.pickle", "rb") as f:
+        with open(f"data/{corpus}/features/{corpus}_GBased_val.pickle", "rb") as f:
             GRAPH_DATA_DICT[phase] = pickle.load(f)
     elif phase == 'test':
-        with open(f"data/MSVD/features/{corpus}_GBased_val.pickle", "rb") as f:
+        with open(f"data/{corpus}/features/{corpus}_GBased_val.pickle", "rb") as f:
             GRAPH_DATA_DICT[phase] = pickle.load(f)
 
 def get_graph(video_id, phase):
