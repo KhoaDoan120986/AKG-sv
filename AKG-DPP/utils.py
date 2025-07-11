@@ -56,18 +56,17 @@ def parse_batch(batch, feature_mode, num_object, frame_sample_len, device, phase
     for video_id in vids:
         stgraph = get_graph(video_id, phase)
         x = stgraph['x']
-        pad_len = num_object * frame_sample_len - x.shape[0]
-        if pad_len > 0:
-            x = torch.cat([x, torch.zeros(pad_len, x.shape[1], dtype=torch.float32)], dim=0)
+        x = torch.cat([x, torch.zeros(num_object * frame_sample_len - x.shape[0], x.shape[1], dtype=torch.float32)], dim=0)
         geo_x_list.append(x)
         edge_index_list.append(stgraph['edge_index'])
-        edge_attr = torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32)
-        edge_attr_list.append(edge_attr)
+        edge_attr_list.append(torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32))
+        del stgraph, x
 
     geo_x_feats = torch.stack(geo_x_list).to(device, non_blocking=True)
     geo_edge_index_feats = torch.stack(edge_index_list).to(device, non_blocking=True)
     geo_edge_attr_feats = torch.stack(edge_attr_list).to(device, non_blocking=True)
     video_mask_feats = torch.cat(video_masks, dim=1).to(device, non_blocking=True)
+    del geo_x_list, edge_index_list, edge_attr_list, video_masks
 
     if object_feats is not None:
         object_feats = torch.cat([f.to(device, non_blocking=True) for f in object_feats], dim=2)
@@ -84,12 +83,11 @@ def parse_batch(batch, feature_mode, num_object, frame_sample_len, device, phase
     elif feature_mode == 'grid':
         feats = (geo_x_feats, geo_edge_index_feats, geo_edge_attr_feats, video_mask_feats)
 
+    gc.collect()
     return vids, feats, r2l_captions, l2r_captions
 
 
-def train(e, model, optimizer, train_iter, vocab, reg_lambda, gradient_clip,\
-     feature_mode, lr_scheduler, C, device, local_rank):
-    
+def train(e, model, optimizer, train_iter, vocab, reg_lambda, gradient_clip, feature_mode, lr_scheduler, C, device, local_rank):
     torch.cuda.empty_cache()
     model.train()
     loss_checker = LossChecker(3)
@@ -218,6 +216,13 @@ def train(e, model, optimizer, train_iter, vocab, reg_lambda, gradient_clip,\
             optimizer.zero_grad()
 
         loss_checker.update(loss.item(), r2l_loss.item(), l2r_loss.item())
+
+        del r2l_trg, r2l_trg_y, l2r_trg, l2r_trg_y, r2l_pred, l2r_pred, mask, feats
+        if feature_mode.startswith('grid'):
+            del data_geo_graph_batch, geo_graph_batch_offset, geo_graph_batch_offset, edge_attr_batch, edge_index_batch, x_batch
+        torch.cuda.empty_cache()
+        gc.collect()
+
         if local_rank == 0: 
             t.set_description("[Epoch #{0}] loss: {3:.3f} = (reg: {1:.3f} * r2l_loss: {4:.3f} + "
                             "(1 - reg): {2:.3f} * l2r_loss: {5:.3f})"
@@ -347,6 +352,12 @@ def test(model, val_iter, vocab, reg_lambda, feature_mode, C, device):
             loss = reg_lambda * l2r_loss + (1 - reg_lambda) * r2l_loss
             loss_checker.update(loss.item(), r2l_loss.item(), l2r_loss.item())
 
+            del r2l_trg, r2l_trg_y, l2r_trg, l2r_trg_y, r2l_pred, l2r_pred, mask, feats
+            if feature_mode.startswith('grid'):
+                del data_geo_graph_batch, geo_graph_batch_offset, geo_graph_batch_offset, edge_attr_batch, edge_index_batch, x_batch
+            torch.cuda.empty_cache()
+            gc.collect()
+
         total_loss, r2l_loss, l2r_loss = loss_checker.mean()
         loss = {
             'total': total_loss,
@@ -375,8 +386,8 @@ def build_onlyonce_iter(data_iter, feature_mode, num_object, frame_sample_len, d
             geo_x = torch.cat([x, torch.zeros(pad_len, x.shape[1], dtype=torch.float32)], dim=0).cuda()
             geo_edge_index = stgraph['edge_index'].cuda()
             geo_edge_attr = torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32).cuda()
-            video_mask = video_masks[i].cuda()
-
+            video_mask = video_masks[0][i].cuda()
+            del stgraph, x
             if feature_mode == 'grid-obj-rel':
                 object_feat = object_feats[0][i].cuda()
                 rel_feat = rel_feats[0][i].cuda()
@@ -434,6 +445,15 @@ def build_onlyonce_iter(data_iter, feature_mode, num_object, frame_sample_len, d
                                 torch.stack(video_masks))))
         vids = vids[batch_size:]
         feats = feats[batch_size:]
+
+        del geo_x_feats, geo_edge_index_feats, geo_edge_attr_feats
+        del video_masks
+        if feature_mode == 'grid-obj-rel':
+            del object_feats, rel_feats
+        elif feature_mode == 'grid-rel':
+            del rel_feats
+        gc.collect()
+        torch.cuda.empty_cache()
     return onlyonce_iter
     
 def get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mode):
@@ -464,6 +484,11 @@ def get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mod
             r2l_captions = [" ".join(caption[0].value) for caption in r2l_captions]
             r2l_vid2pred.update({v: p for v, p in zip(vids, r2l_captions)})
             l2r_vid2pred.update({v: p for v, p in zip(vids, l2r_captions)})
+
+            del feats, data_geo_graph, r2l_captions, l2r_captions
+            torch.cuda.empty_cache()
+            gc.collect()
+
     return r2l_vid2pred, l2r_vid2pred
 
 
@@ -488,6 +513,8 @@ def get_groundtruth_captions(data_iter, vocab, feature_mode):
             l2r_caption = idxs_to_sentence(l2r_caption, vocab.idx2word, S_idx)
             r2l_vid2GTs[vid].append(r2l_caption)
             l2r_vid2GTs[vid].append(l2r_caption)
+        del r2l_captions, l2r_captions, vids
+        gc.collect()
     return r2l_vid2GTs, l2r_vid2GTs
 
 
@@ -533,6 +560,10 @@ def evaluate(data_iter, model, vocab, beam_size, max_len, feature_mode, C, devic
     r2l_vid2GTs, l2r_vid2GTs = get_groundtruth_captions(data_iter, vocab, feature_mode)
     r2l_scores = score(r2l_vid2pred, r2l_vid2GTs)
     l2r_scores = score(l2r_vid2pred, l2r_vid2GTs)
+
+    del onlyonce_iter, r2l_vid2pred, l2r_vid2pred, r2l_vid2GTs, l2r_vid2GTs
+    gc.collect()
+    
     return r2l_scores, l2r_scores
 
 

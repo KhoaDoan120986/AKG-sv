@@ -122,13 +122,8 @@ class TrainConfig(object):
             'MSVD': 30,
             'MSR-VTT': 18,
         }[self.corpus]
-
         
-        self.batch_size = {
-            'MSVD': n_gpus * 32,
-            'MSR-VTT': 128,
-        }[self.corpus]
-
+        self.batch_size = self.n_gpus * 32
         self.optimizer = "Adam"
         self.gradient_clip = 5.0
         self.lr = {

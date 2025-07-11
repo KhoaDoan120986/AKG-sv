@@ -23,7 +23,7 @@ import argparse
 global logger
 C = None
 args = None 
-
+torch.distributed.init_process_group(backend="nccl")
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--n_gpus", default=1, type=int, help="distribted training")
@@ -142,7 +142,6 @@ def main():
     args = get_args()
     torch.cuda.set_device(args.local_rank)
     device = torch.device(f'cuda:{args.local_rank}')
-    torch.distributed.init_process_group(backend="nccl")
     logger = get_logger(filename="log.txt")
 
     seed = 904666
@@ -182,14 +181,9 @@ def main():
     train_iter, val_iter, vocab= build_loaders(C)
     if args.local_rank == 0:
         logger.info("[Memory when loading data]")
-        tmp = round(torch.cuda.memory_allocated() / 1024**2)
-        logger.info("  VRAM used     : {} MB".format(tmp))
-        
-        tmp = round(torch.cuda.memory_reserved() / 1024**2)
-        logger.info("  VRAM reserved : {} MB".format(tmp))
-        
-        tmp = round(psutil.Process(os.getpid()).memory_info().rss / 1024**2)
-        logger.info("  RAM used      : {} MB".format(tmp))
+        logger.info("  VRAM used     : {:.2f} MB".format(round(torch.cuda.memory_allocated() / 1024**2)))
+        logger.info("  VRAM reserved : {:.2f} MB".format(round(torch.cuda.memory_reserved() / 1024**2)))
+        logger.info("  RAM used      : {:.2f} MB".format(round(psutil.Process(os.getpid()).memory_info().rss / 1024**2)))
 
     model = build_model(vocab, C, device , args.local_rank)
     if args.local_rank == 0:
@@ -206,9 +200,6 @@ def main():
     best_epoch = None
     best_ckpt_fpath = None
 
-    vram_u = []
-    vram_r = []
-    ram = []
     for e in range(1, C.epochs + 1):
         ckpt_fpath = C.ckpt_fpath_tpl.format(e)
         train_iter.sampler.set_epoch(e)
@@ -220,10 +211,6 @@ def main():
 
         if args.local_rank == 0:
             log_train(summary_writer, e, train_loss, get_lr(optimizer), C.reg_lambda, None,C)
-
-            vram_u.append(round(torch.cuda.memory_allocated() / 1024**2))
-            vram_r.append(round(torch.cuda.memory_reserved() / 1024**2))
-            ram.append(round(psutil.Process(os.getpid()).memory_info().rss / 1024**2)) 
 
             """ Validation """
             val_loss = test(model, val_iter, vocab, C.reg_lambda, C.feat.feature_mode, C, device)
@@ -239,7 +226,10 @@ def main():
             summary_writer.add_scalars("compare_loss/r2l_loss", {'train_r2l_loss': train_loss['r2l_loss'],
                                                                 'val_r2l_loss': val_loss['r2l_loss']}, e)
 
-
+            logger.info("Epoch {} memory usage:".format(e))
+            logger.info("  VRAM used     : {:.2f} MB".format(torch.cuda.memory_allocated() / 1024**2))
+            logger.info("  VRAM reserved : {:.2f} MB".format(torch.cuda.memory_reserved() / 1024**2))
+            logger.info("  RAM used      : {:.2f} MB".format(psutil.Process(os.getpid()).memory_info().rss / 1024**2))
             if e >= C.save_from and e % C.save_every == 0:
                 logger.info("Saving checkpoint at epoch={} to {}".format(e, ckpt_fpath))
                 save_checkpoint(e, model, ckpt_fpath, C)
@@ -248,26 +238,26 @@ def main():
                 best_epoch = e
                 best_val_CIDEr = l2r_val_scores['CIDEr']
                 best_ckpt_fpath = ckpt_fpath
+
+            del val_loss, r2l_val_scores, l2r_val_scores
+            torch.cuda.empty_cache()
+            gc.collect()
         
     if args.local_rank == 0:
-        logger.info("[Memory when training]")
-        
-        tmp = np.mean(vram_u) 
-        logger.info("  VRAM used     : {} MB".format(tmp))
-        
-        tmp = np.mean(vram_r)
-        logger.info("  VRAM reserved : {} MB".format(tmp))
-        
-        tmp = np.mean(ram)
-        logger.info("  RAM used      : {} MB".format(tmp))
+        logger.info("[Memory after training]")
+        logger.info("  VRAM used     : {:.2f} MB".format(torch.cuda.memory_allocated() / 1024**2))
+        logger.info("  VRAM reserved : {:.2f} MB".format(torch.cuda.memory_reserved() / 1024**2))
+        logger.info("  RAM used      : {:.2f} MB".format(psutil.Process(os.getpid()).memory_info().rss / 1024**2))
     
     """ Test with Best Model """
+    del train_iter, val_iter, model, optimizer, lr_scheduler, train_loss
+    summary_writer.close()
     gc.collect()
     torch.cuda.empty_cache()
     clear_graph_data('all')
-    logger.info("[BEST: {} SEED: {}]".format(best_epoch, seed))
-    
+
     if args.local_rank == 0: 
+        logger.info("[BEST: {} SEED: {}]".format(best_epoch, seed))
         folder_path = "./result"
         os.makedirs(folder_path, exist_ok=True)
         f = open(os.path.join(folder_path, "{}.txt".format(C.model_id)), 'w')
@@ -287,11 +277,6 @@ def main():
         f.write(os.linesep)
         f.write("\n[BEST: {} SEED:{}]".format(best_epoch, seed) + os.linesep)
             
-        summary_writer.close()
-        del train_iter, val_iter, vocab, model, optimizer, lr_scheduler, train_loss
-        gc.collect()
-        torch.cuda.empty_cache()
-            
         file = C.ckpt_dpath
         ckpt_list = os.listdir(file)
         logger.info(file)
@@ -309,8 +294,16 @@ def main():
             logger.info("Now is test in the " + ckpt_fpath)
             captioning_fpath = C.captioning_fpath_tpl.format(str(i + 1))
             run(ckpt_fpath, onlyonce_iter, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath, C, device)
+
+            logger.info("Memory usage after testing checkpoint {}:".format(ckpt_fpath))
+            logger.info("  VRAM used     : {:.2f} MB".format(torch.cuda.memory_allocated() / 1024**2))
+            logger.info("  VRAM reserved : {:.2f} MB".format(torch.cuda.memory_reserved() / 1024**2))
+            logger.info("  RAM used      : {:.2f} MB".format(psutil.Process(os.getpid()).memory_info().rss / 1024**2))
     
         f.close()
+        del test_iter, onlyonce_iter
+        gc.collect()
+        torch.cuda.empty_cache()
         clear_graph_data('all')
 
     torch.distributed.destroy_process_group()

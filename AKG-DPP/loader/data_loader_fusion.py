@@ -17,11 +17,6 @@ from loader.transform import UniformSample, RandomSample, ToTensor, TrimExceptAs
     ToIndex
 from torch_geometric.data import Data
 
-def default_list():
-    return []
-
-def default_zero():
-    return 0
 class CustomVocab(object):
     def __init__(self, caption_fpath, init_word2idx, min_count=1, transform=str.split):
         self.caption_fpath = caption_fpath
@@ -30,7 +25,7 @@ class CustomVocab(object):
 
         self.word2idx = init_word2idx
         self.idx2word = {v: k for k, v in self.word2idx.items()}
-        self.word_freq_dict = defaultdict(default_zero)
+        self.word_freq_dict = defaultdict(lambda: 0)
         self.n_vocabs = len(self.word2idx)
         self.n_words = self.n_vocabs
         self.max_sentence_len = -1
@@ -76,17 +71,21 @@ class CustomDataset(Dataset):
         self.feature_mode = C.feat.feature_mode
 
         if self.feature_mode == 'grid-obj-rel':
-            self.object_video_feats = defaultdict(default_list)
-            self.rel_feats = defaultdict(default_list)
+            self.object_video_feats = defaultdict(lambda: [])
+            self.rel_feats = defaultdict(lambda: [])
         elif self.feature_mode == 'grid-rel':
-            self.rel_feats = defaultdict(default_list)
+            self.rel_feats = defaultdict(lambda: [])
 
-        self.video_mask = defaultdict(default_list)
-        self.r2l_captions = defaultdict(default_list)
-        self.l2r_captions = defaultdict(default_list)
+        self.video_mask = defaultdict(lambda: [])
+        self.r2l_captions = defaultdict(lambda: [])
+        self.l2r_captions = defaultdict(lambda: [])
 
         self.data = []
         self.build_video_caption_pairs()
+
+        self.r2l_captions.clear()
+        self.l2r_captions.clear()
+        gc.collect()
 
     def __len__(self):
         return len(self.data)
@@ -270,15 +269,18 @@ class Corpus(object):
     """ Data Loader """
     def __init__(self, C, vocab_cls=CustomVocab, dataset_cls=CustomDataset):
         self.C = C
+        self.feature_mode = C.feat.feature_mode
+
         self.vocab = None
+
         self.train_dataset = None
         self.val_dataset = None
         self.test_dataset = None
+
         self.train_data_loader = None
         self.val_data_loader = None
         self.test_data_loader = None
-        self.feature_mode = C.feat.feature_mode
-
+        
         self.CustomVocab = vocab_cls
         self.CustomDataset = dataset_cls
 
@@ -295,6 +297,10 @@ class Corpus(object):
     def build(self):
         self.build_vocab()
         self.build_data_loaders()
+
+        del self.CustomVocab
+        del self.CustomDataset
+        gc.collect()
 
     def build_vocab(self):
         self.vocab = self.CustomVocab(
@@ -335,10 +341,7 @@ class Corpus(object):
         self.test_data_loader = self.build_data_loader(self.test_dataset, phase='test')
         
     def build_dataset(self, phase, caption_fpath):
-        dataset = self.CustomDataset(
-            self.C,
-            phase,
-            caption_fpath,
+        dataset = self.CustomDataset(self.C, phase, caption_fpath,
             transform_frame=self.transform_frame,
             transform_caption=self.transform_caption,
         )
@@ -384,14 +387,9 @@ class Corpus(object):
     def gor_feature_collate_fn(self, batch):
         vids, video_masks, object_video_feats, rel_feats, r2l_captions, l2r_captions = zip(*batch)
 
-        video_mask_list = [torch.stack(video_feats) for video_feats in zip(*video_masks)]
-        video_mask_list = [video_feats.float() for video_feats in video_mask_list]
-
-        object_video_feats_list = [torch.stack(video_feats) for video_feats in zip(*object_video_feats)]
-        object_video_feats_list = [video_feats.float() for video_feats in object_video_feats_list]
-
-        rel_feats_list = [torch.stack(video_feats) for video_feats in zip(*rel_feats)]
-        rel_feats_list = [video_feats.float() for video_feats in rel_feats_list]
+        video_mask_list = [torch.stack(video_feats).float() for video_feats in zip(*video_masks)]
+        object_video_feats_list = [torch.stack(video_feats).float() for video_feats in zip(*object_video_feats)]
+        rel_feats_list = [torch.stack(video_feats).float() for video_feats in zip(*rel_feats)]
 
         r2l_captions = torch.stack(r2l_captions).float()
         l2r_captions = torch.stack(l2r_captions).float()
@@ -401,22 +399,17 @@ class Corpus(object):
     def gr_feature_collate_fn(self, batch):
         vids, video_masks, rel_feats, r2l_captions, l2r_captions = zip(*batch)
 
-        video_mask_list = [torch.stack(video_feats) for video_feats in zip(*video_masks)]
-        video_mask_list = [video_feats.float() for video_feats in video_mask_list]
-
-        rel_feats_list = [torch.stack(video_feats) for video_feats in zip(*rel_feats)]
-        rel_feats_list = [video_feats.float() for video_feats in rel_feats_list]
+        video_mask_list = [torch.stack(video_feats).float() for video_feats in zip(*video_masks)]
+        rel_feats_list = [torch.stack(video_feats).float() for video_feats in zip(*rel_feats)]
 
         r2l_captions = torch.stack(r2l_captions).float()
         l2r_captions = torch.stack(l2r_captions).float()
-
         return vids, video_mask_list, rel_feats_list, r2l_captions, l2r_captions
     
     def g_feature_collate_fn(self, batch):
         vids, video_masks, r2l_captions, l2r_captions = zip(*batch)
 
-        video_mask_list = [torch.stack(video_feats) for video_feats in zip(*video_masks)]
-        video_mask_list = [video_feats.float() for video_feats in video_mask_list]
+        video_mask_list = [torch.stack(video_feats).float() for video_feats in zip(*video_masks)]
 
         r2l_captions = torch.stack(r2l_captions).float()
         l2r_captions = torch.stack(l2r_captions).float()

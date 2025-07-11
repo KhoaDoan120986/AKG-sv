@@ -19,7 +19,7 @@ def build_loader(ckpt_fpath, device):
     elif config.corpus == "MSR-VTT":
         corpus = MSRVTT(config)
     else:
-        raise "无该数据集"
+        raise "Error in build_loader"
 
     test_iter, vocab = corpus.test_data_loader, corpus.vocab
     
@@ -29,7 +29,7 @@ def build_loader(ckpt_fpath, device):
     logger.info('#vocabs: {} ({}), #words: {} ({}). Trim words which appear less than {} times.'.format(
         vocab.n_vocabs, vocab.n_vocabs_untrimmed, vocab.n_words, vocab.n_words_untrimmed, config.loader.min_count))
     
-
+    del corpus
     del  r2l_test_vid2GTs
     gc.collect()
     return test_iter, vocab, l2r_test_vid2GTs
@@ -41,15 +41,12 @@ def run(ckpt_fpath, test_iter, vocab, ckpt, l2r_test_vid2GTs, f, captioning_fpat
     if not os.path.exists(captioning_dpath):
         os.makedirs(captioning_dpath)
 
-    checkpoint = torch.load(ckpt_fpath, weights_only=False)
     """ Load Config """
+    checkpoint = torch.load(ckpt_fpath, weights_only=False)
     config = dict_to_cls(checkpoint['config'])
 
     """ Build Models """
-    model_state_dict = None
-    cache_dir = None
-    model = VCModel(vocab, model_state_dict, cache_dir, C.feat.feature_mode, C.transformer, C.feat.size, C.attention_mode, device)
-    
+    model = VCModel(vocab, None, None, C.feat.feature_mode, C.transformer, C.feat.size, C.attention_mode, device)
     model.load_state_dict(checkpoint['vc_model'])
     model = model.to(device)
 
@@ -64,3 +61,10 @@ def run(ckpt_fpath, test_iter, vocab, ckpt, l2r_test_vid2GTs, f, captioning_fpat
     f.write('\n')
 
     save_result(l2r_test_vid2pred, l2r_test_vid2GTs, captioning_fpath)
+
+    del checkpoint
+    del model
+    del r2l_test_vid2pred
+    del l2r_test_vid2pred
+    gc.collect()
+    torch.cuda.empty_cache()
