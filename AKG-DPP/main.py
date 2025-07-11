@@ -19,11 +19,12 @@ from tensorboardX import SummaryWriter
 import pickle
 import logging
 import argparse
+import datetime
 
 global logger
 C = None
 args = None 
-torch.distributed.init_process_group(backend="nccl")
+torch.distributed.init_process_group(backend="nccl", timeout=datetime.timedelta(seconds=1800))
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--n_gpus", default=1, type=int, help="distribted training")
@@ -240,8 +241,11 @@ def main():
             del val_loss, r2l_val_scores, l2r_val_scores
             torch.cuda.empty_cache()
             gc.collect()
-        if torch.distributed.is_initialized():
-            torch.distributed.barrier()
+            if torch.distributed.is_initialized():
+                torch.distributed.barrier()
+        elif args.local_rank != 0:
+            if torch.distributed.is_initialized():
+                torch.distributed.barrier()
     if args.local_rank == 0:
         logger.info("[Memory after training]")
         logger.info("  VRAM used     : {:.2f} MB".format(torch.cuda.memory_allocated() / 1024**2))
