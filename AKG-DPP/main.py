@@ -19,13 +19,12 @@ from tensorboardX import SummaryWriter
 import pickle
 import logging
 import argparse
-import torch.multiprocessing as mp
 
 global logger
 C = None
 args = None 
 
-def parse_args():
+def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--n_gpus", default=1, type=int, help="distribted training")
     parser.add_argument("--local_rank", default=0, type=int, help="distribted training")
@@ -42,6 +41,8 @@ def parse_args():
                         help='Specify the model configuration')
 
     args = parser.parse_args()
+    args.local_rank = int(os.environ.get("LOCAL_RANK", 0))
+    args.n_gpus = torch.distributed.get_world_size()
     return args
 
 def get_logger(filename=None):
@@ -135,18 +136,14 @@ def get_parameter_number(net):
     trainable_num = sum(p.numel() for p in net.parameters() if p.requires_grad)
     return {'Total': total_num, 'Trainable': trainable_num}
 
-def main_worker(rank, n_gpus):
-    global args, C, logger, GRAPH_DATA_DICT
-    args = parse_args()
-    logger = get_logger(filename="log.txt")
-    os.environ["RANK"] = str(rank)
-    os.environ["WORLD_SIZE"] = str(n_gpus)
-    os.environ["LOCAL_RANK"] = str(rank)
 
-    args.local_rank = int(os.environ.get("LOCAL_RANK", 0))
-    torch.distributed.init_process_group(backend="nccl")
+def main():
+    global args, C, logger, GRAPH_DATA_DICT
+    args = get_args()
     torch.cuda.set_device(args.local_rank)
     device = torch.device(f'cuda:{args.local_rank}')
+    torch.distributed.init_process_group(backend="nccl")
+    logger = get_logger(filename="log.txt")
 
     seed = 904666
     random.seed(seed)
@@ -155,11 +152,14 @@ def main_worker(rank, n_gpus):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
-    C = TrainConfig(args.model_id, n_gpus)
-    if args.local_rank == 0:
-        load_graph_data(C.corpus, 'train')
-        load_graph_data(C.corpus, 'val')
+    C = TrainConfig(args.model_id, args.n_gpus)
+    C.attention_model = args.attention
+    load_graph_data(C.corpus, 'train')
+    load_graph_data(C.corpus, 'val')
 
+    if args.local_rank == 0:
+        # load_graph_data(C.corpus, 'train')
+        # load_graph_data(C.corpus, 'val')
         summary_writer = SummaryWriter(C.log_dpath)
         logger.info("MODEL ID: {}".format(C.model_id))
         logger.info("Max caption length: {}".format(C.loader.max_caption_len))
@@ -178,8 +178,6 @@ def main_worker(rank, n_gpus):
             logger.info("MHA + pe for relation")
         elif args.attention == 3:
             logger.info("FFN for relation")
-
-    torch.distributed.barrier(device_ids=[rank])
 
     train_iter, val_iter, vocab= build_loaders(C)
     if args.local_rank == 0:
@@ -317,5 +315,4 @@ def main_worker(rank, n_gpus):
 
     torch.distributed.destroy_process_group()
 if __name__ == "__main__":
-    n_gpus = torch.cuda.device_count()
-    mp.spawn(main_worker, args=(n_gpus,), nprocs=n_gpus)
+    main()
