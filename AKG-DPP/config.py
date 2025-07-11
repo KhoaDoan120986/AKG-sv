@@ -203,4 +203,4 @@ def clear_graph_data(phase='all'):
     if phase == 'all':
         GRAPH_DATA_DICT.clear()
     elif phase in GRAPH_DATA_DICT:
-        del GRAPH_DATA_DICT[split]
+        del GRAPH_DATA_DICT[phase]

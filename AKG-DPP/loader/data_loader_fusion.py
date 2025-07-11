@@ -17,6 +17,11 @@ from loader.transform import UniformSample, RandomSample, ToTensor, TrimExceptAs
     ToIndex
 from torch_geometric.data import Data
 
+def default_list():
+    return []
+
+def default_zero():
+    return 0
 class CustomVocab(object):
     def __init__(self, caption_fpath, init_word2idx, min_count=1, transform=str.split):
         self.caption_fpath = caption_fpath
@@ -25,7 +30,7 @@ class CustomVocab(object):
 
         self.word2idx = init_word2idx
         self.idx2word = {v: k for k, v in self.word2idx.items()}
-        self.word_freq_dict = defaultdict(lambda: 0)
+        self.word_freq_dict = defaultdict(default_zero)
         self.n_vocabs = len(self.word2idx)
         self.n_words = self.n_vocabs
         self.max_sentence_len = -1
@@ -71,14 +76,14 @@ class CustomDataset(Dataset):
         self.feature_mode = C.feat.feature_mode
 
         if self.feature_mode == 'grid-obj-rel':
-            self.object_video_feats = defaultdict(lambda: [])
-            self.rel_feats = defaultdict(lambda: [])
+            self.object_video_feats = defaultdict(default_list)
+            self.rel_feats = defaultdict(default_list)
         elif self.feature_mode == 'grid-rel':
-            self.rel_feats = defaultdict(lambda: [])
+            self.rel_feats = defaultdict(default_list)
 
-        self.video_mask = defaultdict(lambda: [])
-        self.r2l_captions = defaultdict(lambda: [])
-        self.l2r_captions = defaultdict(lambda: [])
+        self.video_mask = defaultdict(default_list)
+        self.r2l_captions = defaultdict(default_list)
+        self.l2r_captions = defaultdict(default_list)
 
         self.data = []
         self.build_video_caption_pairs()

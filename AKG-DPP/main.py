@@ -136,13 +136,15 @@ def get_parameter_number(net):
     return {'Total': total_num, 'Trainable': trainable_num}
 
 def main_worker(rank, n_gpus):
-    global args, C, logger
+    global args, C, logger, GRAPH_DATA_DICT
+    args = parse_args()
     logger = get_logger(filename="log.txt")
     os.environ["RANK"] = str(rank)
     os.environ["WORLD_SIZE"] = str(n_gpus)
     os.environ["LOCAL_RANK"] = str(rank)
 
     args.local_rank = int(os.environ.get("LOCAL_RANK", 0))
+    torch.distributed.init_process_group(backend="nccl")
     torch.cuda.set_device(args.local_rank)
     device = torch.device(f'cuda:{args.local_rank}')
 
@@ -153,9 +155,6 @@ def main_worker(rank, n_gpus):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
-    torch.distributed.init_process_group(backend="nccl")
-
-    args = parse_args()
     C = TrainConfig(args.model_id, n_gpus)
     if args.local_rank == 0:
         load_graph_data(C.corpus, 'train')
@@ -179,7 +178,9 @@ def main_worker(rank, n_gpus):
             logger.info("MHA + pe for relation")
         elif args.attention == 3:
             logger.info("FFN for relation")
-    torch.distributed.barrier()
+
+    torch.distributed.barrier(device_ids=[rank])
+
     train_iter, val_iter, vocab= build_loaders(C)
     if args.local_rank == 0:
         logger.info("[Memory when loading data]")
