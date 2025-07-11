@@ -242,7 +242,8 @@ def main():
             del val_loss, r2l_val_scores, l2r_val_scores
             torch.cuda.empty_cache()
             gc.collect()
-        
+        if torch.distributed.is_initialized():
+            torch.distributed.barrier()
     if args.local_rank == 0:
         logger.info("[Memory after training]")
         logger.info("  VRAM used     : {:.2f} MB".format(torch.cuda.memory_allocated() / 1024**2))

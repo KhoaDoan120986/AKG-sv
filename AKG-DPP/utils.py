@@ -384,18 +384,18 @@ def build_onlyonce_iter(data_iter, feature_mode, num_object, frame_sample_len, d
             stgraph = get_graph(vid, phase)
             x = stgraph['x']
             pad_len = num_object * frame_sample_len - x.shape[0]
-            geo_x = torch.cat([x, torch.zeros(pad_len, x.shape[1], dtype=torch.float32)], dim=0).cuda()
-            geo_edge_index = stgraph['edge_index'].cuda()
-            geo_edge_attr = torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32).cuda()
-            video_mask = video_masks[0][i].cuda()
+            geo_x = torch.cat([x, torch.zeros(pad_len, x.shape[1], dtype=torch.float32)], dim=0)#.cuda()
+            geo_edge_index = stgraph['edge_index']#.cuda()
+            geo_edge_attr = torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32)#.cuda()
+            video_mask = video_masks[0][i]#.cuda()
             del stgraph, x
             if feature_mode == 'grid-obj-rel':
-                object_feat = object_feats[0][i].cuda()
-                rel_feat = rel_feats[0][i].cuda()
+                object_feat = object_feats[0][i]#.cuda()
+                rel_feat = rel_feats[0][i]#.cuda()
                 onlyonce_dataset[vid] = (geo_x, geo_edge_index, geo_edge_attr, object_feat, rel_feat, video_mask)
 
             elif feature_mode == 'grid-rel':
-                rel_feat = rel_feats[0][i].cuda()
+                rel_feat = rel_feats[0][i]#.cuda()
                 onlyonce_dataset[vid] = (geo_x, geo_edge_index, geo_edge_attr, rel_feat, video_mask)
 
             elif feature_mode == 'grid':
@@ -457,7 +457,7 @@ def build_onlyonce_iter(data_iter, feature_mode, num_object, frame_sample_len, d
         torch.cuda.empty_cache()
     return onlyonce_iter
     
-def get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mode):
+def get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mode, device):
     model.eval()
     r2l_vid2pred = {}
     l2r_vid2pred = {}
@@ -467,19 +467,19 @@ def get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mod
         for vids, feats in tqdm(onlyonce_iter, desc='get_predicted_captions'):
             if feature_mode == 'grid-obj-rel':
                 geo_x, geo_edge, geo_edge_attr, object_feat, rel_feat, video_mask = feats
-                data_geo_graph = Data(x=geo_x[0], edge_index=geo_edge[0], edge_attr=geo_edge_attr[0])
-                feats = (data_geo_graph, object_feat, rel_feat)
-                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask)
+                data_geo_graph = Data(x=geo_x[0].to(device), edge_index=geo_edge[0].to(device), edge_attr=geo_edge_attr[0].to(device))
+                feats = (data_geo_graph, object_feat.to(device), rel_feat.to(device))
+                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask.to(device))
             if feature_mode == 'grid-rel':
                 geo_x, geo_edge, geo_edge_attr, rel_feat, video_mask = feats
-                data_geo_graph = Data(x=geo_x[0], edge_index=geo_edge[0], edge_attr=geo_edge_attr[0])
-                feats = (data_geo_graph, rel_feat)
-                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask)
+                data_geo_graph = Data(x=geo_x[0].to(device), edge_index=geo_edge[0].to(device), edge_attr=geo_edge_attr[0].to(device))
+                feats = (data_geo_graph, rel_feat.to(device))
+                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask.to(device))
             if feature_mode == 'grid':
                 geo_x, geo_edge, geo_edge_attr, video_mask = feats
-                data_geo_graph = Data(x=geo_x[0], edge_index=geo_edge[0], edge_attr=geo_edge_attr[0])
+                data_geo_graph = Data(x=geo_x[0].to(device), edge_index=geo_edge[0].to(device), edge_attr=geo_edge_attr[0].to(device))
                 feats = data_geo_graph
-                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask)
+                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask.to(device))
             # r2l_captions = [idxs_to_sentence(caption, vocab.idx2word, BOS_idx) for caption in r2l_captions]
             l2r_captions = [" ".join(caption[0].value) for caption in l2r_captions]
             r2l_captions = [" ".join(caption[0].value) for caption in r2l_captions]
@@ -557,7 +557,7 @@ def evaluate(data_iter, model, vocab, beam_size, max_len, feature_mode, C, devic
     if isinstance(model, torch.nn.parallel.DistributedDataParallel):
         model = model.module
     onlyonce_iter = build_onlyonce_iter(data_iter, feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, phase)
-    r2l_vid2pred, l2r_vid2pred = get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mode)
+    r2l_vid2pred, l2r_vid2pred = get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mode, device)
     r2l_vid2GTs, l2r_vid2GTs = get_groundtruth_captions(data_iter, vocab, feature_mode)
     r2l_scores = score(r2l_vid2pred, r2l_vid2GTs)
     l2r_scores = score(l2r_vid2pred, l2r_vid2GTs)
