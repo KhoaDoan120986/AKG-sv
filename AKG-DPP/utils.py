@@ -369,7 +369,7 @@ def build_onlyonce_iter(data_iter, feature_mode, num_object, frame_sample_len, d
             if vid in onlyonce_dataset:
                 continue
 
-            stgraph = get_graph(video_id, phase)
+            stgraph = get_graph(vid, phase)
             x = stgraph['x']
             pad_len = num_object * frame_sample_len - x.shape[0]
             geo_x = torch.cat([x, torch.zeros(pad_len, x.shape[1], dtype=torch.float32)], dim=0).cuda()
