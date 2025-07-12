@@ -59,6 +59,7 @@ def build_model(vocab, C):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--attention', type=int, default=1, choices = [1,2,3])
+    parser.add_argument('--do_train', action='store_true')
     parser.add_argument('--model_name', type=str, default="MSVD_GBased+rel+videomask",
                         choices=[
                             "MSVD_GBased+OFeat+rel+videomask",
@@ -77,8 +78,19 @@ def main():
     global logger
     logger = get_logger(filename="inference.txt")
           
-    C.model_id = "MSR-VTT_GBased+OFeat+rel+videomask _ 2025-06-26 00_49_35"    
-    logger.info("[BEST: {} SEED: {}]".format(best_epoch, seed))
+    # C.model_id = "MSR-VTT_GBased+OFeat+rel+videomask _ 2025-06-26 00_49_35" 
+    # path = "/workspace/AKG-sv"
+    # file =  os.path.join(path, f"checkpoints/{C.corpus}/{C.model_id}")
+    file = C.ckpt_dpath
+    ckpt_list = os.listdir(file)
+    logger.info(file)
+    logger.info(ckpt_list)
+    logger.info('Build data_loader according to ' + ckpt_list[0])
+
+    load_graph_data(C.corpus, 'test')
+    test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], device)
+    onlyonce_iter = build_onlyonce_iter(test_iter, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, 'test')
+
     folder_path = "./result"
     os.makedirs(folder_path, exist_ok=True)
     f = open(os.path.join(folder_path, "{}.txt".format(C.model_id)), 'w')
@@ -97,18 +109,6 @@ def main():
         f.write("FFN for relation\n")
     f.write(os.linesep)
     f.write("\n[BEST: {} SEED:{}]".format(best_epoch, seed) + os.linesep)
-        
-    path = "/workspace/AKG-sv"
-    file =  os.path.join(path, f"checkpoints/{C.corpus}/{C.model_id}")
-    ckpt_list = os.listdir(file)
-    logger.info(file)
-    logger.info(ckpt_list)
-    logger.info('Build data_loader according to ' + ckpt_list[0])
-    
-    load_graph_data(C.corpus, 'test')
-    test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], device)
-    onlyonce_iter = build_onlyonce_iter(test_iter, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, 'test')
-        
     for i in range(len(ckpt_list)):
         if i + 1 <= 3:
             continue
