@@ -10,7 +10,7 @@ import  logging
 
 logger = logging.getLogger(__name__)
 
-def build_loader(ckpt_fpath, device):
+def build_loader(ckpt_fpath):
     checkpoint = torch.load(ckpt_fpath, weights_only=False)
     config = dict_to_cls(checkpoint['config'])
     """ Build Data Loader """

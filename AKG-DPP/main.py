@@ -273,7 +273,7 @@ def main():
             logger.info('Build data_loader according to ' + ckpt_list[0])
 
             load_graph_data(C.corpus, 'test')
-            test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], device)
+            test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0])
             onlyonce_iter = build_onlyonce_iter(test_iter, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, 'test')
 
             folder_path = "./result"
