@@ -59,7 +59,7 @@ def build_model(vocab, C):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--attention', type=int, default=1, choices = [1,2,3])
-    parser.add_argument('--model_id', type=str, default="MSVD_GBased+rel+videomask",
+    parser.add_argument('--model_name', type=str, default="MSVD_GBased+rel+videomask",
                         choices=[
                             "MSVD_GBased+OFeat+rel+videomask",
                             "MSR-VTT_GBased+OFeat+rel+videomask",
@@ -71,7 +71,7 @@ def main():
                         help='Specify the model configuration')
     args = parser.parse_args()
 
-    C = TrainConfig(model_id=args.model_id, n_gpus=args.n_gpus, do_train=False)
+    C = TrainConfig(model_name=args.model_name, n_gpus=args.n_gpus, do_train=False)
     C.attention_model = args.attention
     
     global logger
@@ -98,7 +98,8 @@ def main():
     f.write(os.linesep)
     f.write("\n[BEST: {} SEED:{}]".format(best_epoch, seed) + os.linesep)
         
-    file = os.path.join(f"./ckpt/{C.corpus}", (C.model_id))
+    path = "/workspace/AKG-sv"
+    file =  os.path.join(path, f"checkpoints/{C.corpus}/{C.model_id}")
     ckpt_list = os.listdir(file)
     logger.info(file)
     logger.info(ckpt_list)

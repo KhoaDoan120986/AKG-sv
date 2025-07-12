@@ -30,7 +30,7 @@ def get_args():
     parser.add_argument("--n_gpus", default=1, type=int, help="distribted training")
     parser.add_argument("--local_rank", default=0, type=int, help="distribted training")
     parser.add_argument('--attention', type=int, default=1, choices = [1,2,3])
-    parser.add_argument('--model_id', type=str, default="MSVD_GBased+rel+videomask",
+    parser.add_argument('--model_name', type=str, default="MSVD_GBased+rel+videomask",
                         choices=[
                             "MSVD_GBased+OFeat+rel+videomask",
                             "MSR-VTT_GBased+OFeat+rel+videomask",
@@ -152,7 +152,7 @@ def main():
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
-    C = TrainConfig(model_id=args.model_id, n_gpus=args.n_gpus, do_train=True)
+    C = TrainConfig(model_name=args.model_name, n_gpus=args.n_gpus, do_train=True)
     C.attention_model = args.attention
     load_graph_data(C.corpus, 'train')
 
