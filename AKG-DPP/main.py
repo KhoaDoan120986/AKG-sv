@@ -152,7 +152,7 @@ def main():
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
-    C = TrainConfig(args.model_id, args.n_gpus)
+    C = TrainConfig(model_id=args.model_id, n_gpus=args.n_gpus, do_train=True)
     C.attention_model = args.attention
     load_graph_data(C.corpus, 'train')
 

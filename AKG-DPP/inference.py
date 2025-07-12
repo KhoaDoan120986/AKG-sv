@@ -58,9 +58,8 @@ def build_model(vocab, C):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser = argparse.ArgumentParser()
     parser.add_argument('--attention', type=int, default=1, choices = [1,2,3])
-    parser.add_argument('--model_id', type=str, required=True,
+    parser.add_argument('--model_id', type=str, default="MSVD_GBased+rel+videomask",
                         choices=[
                             "MSVD_GBased+OFeat+rel+videomask",
                             "MSR-VTT_GBased+OFeat+rel+videomask",
@@ -72,31 +71,39 @@ def main():
                         help='Specify the model configuration')
     args = parser.parse_args()
 
-    C = TrainConfig(args.model_id)
+    C = TrainConfig(model_id=args.model_id, n_gpus=args.n_gpus, do_train=False)
     C.attention_model = args.attention
     
     global logger
     logger = get_logger(filename="inference.txt")
           
-        
+    C.model_id = "MSR-VTT_GBased+OFeat+rel+videomask _ 2025-06-26 00_49_35"    
+    logger.info("[BEST: {} SEED: {}]".format(best_epoch, seed))
     folder_path = "./result"
     os.makedirs(folder_path, exist_ok=True)
     f = open(os.path.join(folder_path, "{}.txt".format(C.model_id)), 'w')
+    f.write('#vocabs: {} ({}), #words: {} ({}). Trim words which appear less than {} times.\n'.format(
+    vocab.n_vocabs, vocab.n_vocabs_untrimmed, vocab.n_words, vocab.n_words_untrimmed, C.loader.min_count))
     f.write("Max caption length: {}\n".format(C.loader.max_caption_len))
-    f.write("Max frame: {}\n".format(C.loader.frame_sample_len))
     f.write("Heads: {}\n".format(C.transformer.n_heads))
     f.write("Small Heads: {}\n".format(C.transformer.n_heads_small))
     f.write("Big Heads: {}\n".format(C.transformer.n_heads_big))
     f.write("Model Dim: {}\n".format(C.transformer.d_model))
-    f.write("Feature Mode: {}\n".format(C.feat.feature_mode))
+    if args.attention == 1:
+        f.write("MHA for relation\n")
+    elif args.attention == 2:
+        f.write("MHA + pe for relation\n")
+    elif args.attention == 3:
+        f.write("FFN for relation\n")
     f.write(os.linesep)
-    
-    gc.collect()
-    torch.cuda.empty_cache()
-    
-    file = "/media02/lnthanh01/phatkhoa/ZZZ/checkpoints/MSVD/MSVD_GBased+OFeat+rel+videomask | 2025-05-31 11:59:21"
+    f.write("\n[BEST: {} SEED:{}]".format(best_epoch, seed) + os.linesep)
+        
+    file = os.path.join(f"./ckpt/{C.corpus}", (C.model_id))
     ckpt_list = os.listdir(file)
-
+    logger.info(file)
+    logger.info(ckpt_list)
+    logger.info('Build data_loader according to ' + ckpt_list[0])
+    
     load_graph_data(C.corpus, 'test')
     test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], device)
     onlyonce_iter = build_onlyonce_iter(test_iter, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, 'test')
@@ -109,7 +116,15 @@ def main():
         captioning_fpath = C.captioning_fpath_tpl.format(str(i + 1))
         run(ckpt_fpath, onlyonce_iter, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath, C, device)
 
+        logger.info("Memory usage after testing checkpoint {}:".format(ckpt_fpath))
+        logger.info("  VRAM used     : {:.2f} MB".format(torch.cuda.memory_allocated() / 1024**2))
+        logger.info("  VRAM reserved : {:.2f} MB".format(torch.cuda.memory_reserved() / 1024**2))
+        logger.info("  RAM used      : {:.2f} MB".format(psutil.Process(os.getpid()).memory_info().rss / 1024**2))
+
     f.close()
+    del test_iter, onlyonce_iter
+    gc.collect()
+    torch.cuda.empty_cache()
     clear_graph_data('all')
     
 if __name__ == "__main__":

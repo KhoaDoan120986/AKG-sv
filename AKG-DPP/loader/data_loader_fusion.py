@@ -332,13 +332,15 @@ class Corpus(object):
             ToTensor(torch.long),
         ])
         
-        self.train_dataset = self.build_dataset("train", self.C.loader.train_caption_fpath)
-        self.val_dataset = self.build_dataset("val", self.C.loader.val_caption_fpath)
-        self.test_dataset = self.build_dataset("test", self.C.loader.test_caption_fpath)
+        if self.C.do_train == True: 
+            self.train_dataset = self.build_dataset("train", self.C.loader.train_caption_fpath)
+            self.val_dataset = self.build_dataset("val", self.C.loader.val_caption_fpath)
 
-        self.train_data_loader = self.build_data_loader(self.train_dataset, phase='train')
-        self.val_data_loader = self.build_data_loader(self.val_dataset, phase='val')
-        self.test_data_loader = self.build_data_loader(self.test_dataset, phase='test')
+            self.train_data_loader = self.build_data_loader(self.train_dataset, phase='train')
+            self.val_data_loader = self.build_data_loader(self.val_dataset, phase='val')
+        else: 
+            self.test_dataset = self.build_dataset("test", self.C.loader.test_caption_fpath)
+            self.test_data_loader = self.build_data_loader(self.test_dataset, phase='test')
         
     def build_dataset(self, phase, caption_fpath):
         dataset = self.CustomDataset(self.C, phase, caption_fpath,

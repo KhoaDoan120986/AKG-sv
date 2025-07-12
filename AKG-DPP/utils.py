@@ -239,6 +239,8 @@ def train(e, model, optimizer, train_iter, vocab, reg_lambda, gradient_clip, fea
 
 
 def test(model, val_iter, vocab, reg_lambda, feature_mode, C, device):
+    if isinstance(model, torch.nn.parallel.DistributedDataParallel):
+        model = model.module
     model.eval()
 
     loss_checker = LossChecker(3)
