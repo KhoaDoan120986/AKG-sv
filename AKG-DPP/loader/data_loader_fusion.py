@@ -174,8 +174,13 @@ class CustomDataset(Dataset):
                         sampled_idxs = np.linspace(0, len(feats) - 1, frames, dtype=int)
                         self.rel_feats[vid].append(feats[sampled_idxs])
                     elif i == 3:
-                        zero_arr = torch.zeros([frames - feats.shape[1]], dtype=torch.float32)
-                        self.video_mask[vid].append(torch.cat([torch.tensor(feats[0]), zero_arr], dim = 0))
+                        pad_len = frames - feats.shape[1]
+                        if pad_len > 0:
+                            zero_arr = torch.zeros([pad_len], dtype=torch.float32)
+                            padded_feat = torch.cat([torch.tensor(feats[0]), zero_arr], dim=0)
+                        else:
+                            padded_feat = torch.tensor(feats[0])
+                        self.video_mask[vid].append(padded_feat)
           
     def load_gr_video_feats(self):
         models = self.C.feat.model.split('_')[1].split('+')
@@ -206,8 +211,13 @@ class CustomDataset(Dataset):
                         sampled_idxs = np.linspace(0, len(feats) - 1, frames, dtype=int)
                         self.rel_feats[vid].append(feats[sampled_idxs])
                     elif i == 2: #video_mask
-                        zero_arr = torch.zeros([frames - feats.shape[1]], dtype=torch.float32)
-                        self.video_mask[vid].append(torch.cat([torch.tensor(feats[0]), zero_arr], dim = 0))
+                        pad_len = frames - feats.shape[1]
+                        if pad_len > 0:
+                            zero_arr = torch.zeros([pad_len], dtype=torch.float32)
+                            padded_feat = torch.cat([torch.tensor(feats[0]), zero_arr], dim=0)
+                        else:
+                            padded_feat = torch.tensor(feats[0])
+                        self.video_mask[vid].append(padded_feat)
 
           
 
@@ -233,8 +243,13 @@ class CustomDataset(Dataset):
                         continue
                     # Xử lý i == 1 (object_video_feats)
                     elif i == 1:
-                        zero_arr = torch.zeros([frames - feats.shape[1]], dtype=torch.float32)
-                        self.video_mask[vid].append(torch.cat([torch.tensor(feats[0]), zero_arr], dim = 0))
+                        pad_len = frames - feats.shape[1]
+                        if pad_len > 0:
+                            zero_arr = torch.zeros([pad_len], dtype=torch.float32)
+                            padded_feat = torch.cat([torch.tensor(feats[0]), zero_arr], dim=0)
+                        else:
+                            padded_feat = torch.tensor(feats[0])
+                        self.video_mask[vid].append(padded_feat)
 
 
     def load_captions(self):

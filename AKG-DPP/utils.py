@@ -57,7 +57,10 @@ def parse_batch(batch, feature_mode, num_object, frame_sample_len, device, phase
     for video_id in vids:
         stgraph = get_graph(video_id, phase)
         x = stgraph['x']
-        x = torch.cat([x, torch.zeros(num_object * frame_sample_len - x.shape[0], x.shape[1], dtype=torch.float32)], dim=0)
+        pad_len = num_object * frame_sample_len - x.shape[0]
+        if pad_len > 0:
+            pad_tensor = torch.zeros(pad_len, x.shape[1], dtype=torch.float32)
+            x = torch.cat([x, pad_tensor], dim=0)
         geo_x_list.append(x)
         edge_index_list.append(stgraph['edge_index'])
         edge_attr_list.append(torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32))
@@ -384,13 +387,15 @@ def build_onlyonce_iter(data_iter, feature_mode, num_object, frame_sample_len, d
                 continue
 
             stgraph = get_graph(vid, phase)
-            x = stgraph['x']
-            pad_len = num_object * frame_sample_len - x.shape[0]
-            geo_x = torch.cat([x, torch.zeros(pad_len, x.shape[1], dtype=torch.float32)], dim=0)#.cuda()
+            geo_x = stgraph['x']#.cuda()
+            pad_len = num_object * frame_sample_len - geo_x.shape[0]
+            if pad_len > 0:
+                pad_tensor = torch.zeros(pad_len, geo_x.shape[1], dtype=torch.float32)
+                geo_x = torch.cat([geo_x, pad_tensor], dim=0)
             geo_edge_index = stgraph['edge_index']#.cuda()
             geo_edge_attr = torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32)#.cuda()
             video_mask = video_masks[0][i]#.cuda()
-            del stgraph, x
+            del stgraph
             if feature_mode == 'grid-obj-rel':
                 object_feat = object_feats[0][i]#.cuda()
                 rel_feat = rel_feats[0][i]#.cuda()
