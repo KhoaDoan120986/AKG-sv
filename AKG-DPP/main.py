@@ -11,7 +11,7 @@ from model.model import VCModel
 from model.modules.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import Dataset, DataLoader, RandomSampler
-from utils import evaluate, get_lr, load_checkpoint, save_checkpoint, test, train, build_onlyonce_iter
+from utils import get_lr, load_checkpoint, save_checkpoint, test, train, build_onlyonce_iter, score
 from transformers import get_linear_schedule_with_warmup
 from run import build_loader, run
 import psutil
@@ -189,6 +189,10 @@ def main():
         if args.local_rank == 0:
             parameter_number = get_parameter_number(model)
             logger.info(parameter_number)
+
+            val_onlyonce_iter = build_onlyonce_iter(val_iter, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, 'val')
+            r2l_val_vid2GTs, l2r_val_vid2GTs = get_groundtruth_captions(test_iter, vocab,
+                                                                 config.feat.feature_mode)
         
 
         optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
@@ -214,8 +218,10 @@ def main():
 
                 """ Validation """
                 val_loss = test(model, val_iter, vocab, C.reg_lambda, C.feat.feature_mode, C, device)
-                r2l_val_scores, l2r_val_scores = evaluate(val_iter, model, vocab, C.beam_size, C.loader.max_caption_len,
-                                                        C.feat.feature_mode, C, device, 'val')
+
+                r2l_val_vid2pred, l2r_val_vid2pred = get_predicted_captions(val_iter, model, C.beam_size, C.loader.max_caption_len, C.feat.feature_mode, device)
+                r2l_val_scores = score(r2l_val_vid2pred, r2l_val_vid2GTs)
+                l2r_val_scores = score(l2r_val_vid2pred, l2r_val_vid2GTs)
 
                 log_val(summary_writer, e, val_loss, C.reg_lambda, r2l_val_scores, l2r_val_scores, C)
 

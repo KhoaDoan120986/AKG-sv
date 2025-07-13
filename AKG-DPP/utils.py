@@ -465,6 +465,8 @@ def build_onlyonce_iter(data_iter, feature_mode, num_object, frame_sample_len, d
     return onlyonce_iter
     
 def get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mode, device):
+    if isinstance(model, torch.nn.parallel.DistributedDataParallel):
+        model = model.module
     model.eval()
     r2l_vid2pred = {}
     l2r_vid2pred = {}
@@ -561,8 +563,6 @@ def calc_scores(ref, hypo):
 
 
 def evaluate(data_iter, model, vocab, beam_size, max_len, feature_mode, C, device, phase):
-    if isinstance(model, torch.nn.parallel.DistributedDataParallel):
-        model = model.module
     onlyonce_iter = build_onlyonce_iter(data_iter, feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, phase)
     r2l_vid2pred, l2r_vid2pred = get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mode, device)
     r2l_vid2GTs, l2r_vid2GTs = get_groundtruth_captions(data_iter, vocab, feature_mode)
