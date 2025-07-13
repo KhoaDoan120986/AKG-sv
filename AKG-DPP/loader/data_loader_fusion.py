@@ -282,7 +282,7 @@ class CustomDataset(Dataset):
 
 class Corpus(object):
     """ Data Loader """
-    def __init__(self, C, vocab_cls=CustomVocab, dataset_cls=CustomDataset, do_train):
+    def __init__(self, C, vocab_cls=CustomVocab, dataset_cls=CustomDataset, do_train=True):
         self.C = C
         self.feature_mode = C.feat.feature_mode
         self.do_train = do_train

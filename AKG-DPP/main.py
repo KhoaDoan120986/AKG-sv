@@ -11,7 +11,7 @@ from model.model import VCModel
 from model.modules.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import Dataset, DataLoader, RandomSampler
-from utils import get_lr, load_checkpoint, save_checkpoint, test, train, build_onlyonce_iter, score
+from utils import get_lr, load_checkpoint, save_checkpoint, test, train, build_onlyonce_iter, score, get_groundtruth_captions
 from transformers import get_linear_schedule_with_warmup
 from run import build_loader, run
 import psutil
@@ -178,7 +178,7 @@ def main():
             elif args.attention == 3:
                 logger.info("FFN for relation")
 
-        train_iter, val_iter, vocab= build_loaders(C, do_train)
+        train_iter, val_iter, vocab= build_loaders(C, args.do_train)
         if args.local_rank == 0:
             logger.info("[Memory when loading data]")
             logger.info("  VRAM used     : {:.2f} MB".format(round(torch.cuda.memory_allocated() / 1024**2)))
@@ -191,8 +191,8 @@ def main():
             logger.info(parameter_number)
 
             val_onlyonce_iter = build_onlyonce_iter(val_iter, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, 'val')
-            r2l_val_vid2GTs, l2r_val_vid2GTs = get_groundtruth_captions(test_iter, vocab,
-                                                                 config.feat.feature_mode)
+            r2l_val_vid2GTs, l2r_val_vid2GTs = get_groundtruth_captions(val_iter, vocab,
+                                                                 C..feat.feature_mode)
         
 
         optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
