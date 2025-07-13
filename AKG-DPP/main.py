@@ -24,7 +24,7 @@ import datetime
 global logger
 C = None
 args = None 
-torch.distributed.init_process_group(backend="nccl", timeout=datetime.timedelta(seconds=1800))
+torch.distributed.init_process_group(backend="nccl", timeout=datetime.timedelta(seconds=3600))
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--n_gpus", default=1, type=int, help="distribted training")
