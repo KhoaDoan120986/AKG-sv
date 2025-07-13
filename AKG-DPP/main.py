@@ -192,7 +192,7 @@ def main():
 
             val_onlyonce_iter = build_onlyonce_iter(val_iter, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, 'val')
             r2l_val_vid2GTs, l2r_val_vid2GTs = get_groundtruth_captions(val_iter, vocab,
-                                                                 C..feat.feature_mode)
+                                                                 C.feat.feature_mode)
         
 
         optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
