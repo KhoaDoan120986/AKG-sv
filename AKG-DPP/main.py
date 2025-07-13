@@ -219,7 +219,7 @@ def main():
                 """ Validation """
                 val_loss = test(model, val_iter, vocab, C.reg_lambda, C.feat.feature_mode, C, device)
 
-                r2l_val_vid2pred, l2r_val_vid2pred = get_predicted_captions(val_iter, model, C.beam_size, C.loader.max_caption_len, C.feat.feature_mode, device)
+                r2l_val_vid2pred, l2r_val_vid2pred = get_predicted_captions(val_onlyonce_iter, model, C.beam_size, C.loader.max_caption_len, C.feat.feature_mode, device)
                 r2l_val_scores = score(r2l_val_vid2pred, r2l_val_vid2GTs)
                 l2r_val_scores = score(l2r_val_vid2pred, l2r_val_vid2GTs)
 
