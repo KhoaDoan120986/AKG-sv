@@ -72,7 +72,7 @@ def main():
                         help='Specify the model configuration')
     args = parser.parse_args()
 
-    C = TrainConfig(model_name=args.model_name, n_gpus=args.n_gpus, do_train=False)
+    C = TrainConfig(model_name=args.model_name, n_gpus=args.n_gpus)
     C.attention_model = args.attention
     
     global logger
@@ -85,10 +85,10 @@ def main():
     ckpt_list = os.listdir(file)
     logger.info(file)
     logger.info(ckpt_list)
-    logger.info('Build data_loader according to ' + ckpt_list[0])
+    logger.info('Build data_loader according to ' + ckpt_list[0], False)
 
     load_graph_data(C.corpus, 'test')
-    test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0])
+    test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], False)
     onlyonce_iter = build_onlyonce_iter(test_iter, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, 'test')
 
     folder_path = "./result"

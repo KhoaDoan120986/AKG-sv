@@ -282,9 +282,10 @@ class CustomDataset(Dataset):
 
 class Corpus(object):
     """ Data Loader """
-    def __init__(self, C, vocab_cls=CustomVocab, dataset_cls=CustomDataset):
+    def __init__(self, C, vocab_cls=CustomVocab, dataset_cls=CustomDataset, do_train):
         self.C = C
         self.feature_mode = C.feat.feature_mode
+        self.do_train = do_train
 
         self.vocab = None
 
@@ -347,7 +348,7 @@ class Corpus(object):
             ToTensor(torch.long),
         ])
         
-        if self.C.do_train == True: 
+        if self.do_train == True: 
             self.train_dataset = self.build_dataset("train", self.C.loader.train_caption_fpath)
             self.val_dataset = self.build_dataset("val", self.C.loader.val_caption_fpath)
 

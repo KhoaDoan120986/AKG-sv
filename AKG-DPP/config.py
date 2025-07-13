@@ -101,8 +101,7 @@ class TransformerConfig(object):
     select_num = 0  # if sn==0, automatic select num
 
 class TrainConfig(object):
-    def __init__(self, model_name, n_gpus, do_train):
-        self.do_train = do_train
+    def __init__(self, model_name, n_gpus):
         self.n_gpus = n_gpus
         self.feat = FeatureConfig(model_name)
         self.attention_mode = 1

@@ -57,6 +57,6 @@ class MSVDDataset(CustomDataset):
 class MSVD(Corpus):
     """ MSVD Corpus """
 
-    def __init__(self, C):
-        super(MSVD, self).__init__(C, MSVDVocab, MSVDDataset)
+    def __init__(self, C, do_train):
+        super(MSVD, self).__init__(C, MSVDVocab, MSVDDataset, do_train)
 

@@ -10,14 +10,14 @@ import  logging
 
 logger = logging.getLogger(__name__)
 
-def build_loader(ckpt_fpath):
+def build_loader(ckpt_fpath, do_train):
     checkpoint = torch.load(ckpt_fpath, weights_only=False)
     config = dict_to_cls(checkpoint['config'])
     """ Build Data Loader """
     if config.corpus == "MSVD":
-        corpus = MSVD(config)
+        corpus = MSVD(config, do_train)
     elif config.corpus == "MSR-VTT":
-        corpus = MSRVTT(config)
+        corpus = MSRVTT(config, do_train)
     else:
         raise "Error in build_loader"
 
