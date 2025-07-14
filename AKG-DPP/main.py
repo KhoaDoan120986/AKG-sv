@@ -172,6 +172,7 @@ def main():
             logger.info("Epochs: {}".format(C.epochs))
             logger.info("Effective Batch Size: {}".format(C.batch_size * C.gradient_accumulation_steps))
             logger.info("GPUs: {}".format(C.n_gpus))
+            logger.info("Num workers: {}".format(C.loader.num_workers))
             if args.attention == 1:
                 logger.info("MHA for relation")
             elif args.attention == 2:

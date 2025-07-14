@@ -47,8 +47,8 @@ class MSVDLoaderConfig(object):
 
     frame_sampling_method = 'uniform'
     assert frame_sampling_method in ['uniform', 'random']
-    frame_sample_len = 50
-    num_workers = 4
+    frame_sample_len = 20
+    num_workers = 8
 
 
 class MSRVTTLoaderConfig(object):
@@ -67,9 +67,8 @@ class MSRVTTLoaderConfig(object):
     phase_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}_{}.{}"
     frame_sampling_method = 'uniform'
     assert frame_sampling_method in ['uniform', 'random']
-    frame_sample_len = 60
-
-    num_workers = 4
+    frame_sample_len = 30
+    num_workers = 8
 
 
 class TransformerConfig(object):
