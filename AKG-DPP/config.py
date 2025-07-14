@@ -128,7 +128,7 @@ class TrainConfig(object):
         self.gradient_clip = 5.0
         self.lr = {
             'MSVD': 1e-4,
-            'MSR-VTT': 3e-5,
+            'MSR-VTT': 3e-4,
         }[self.corpus]
 
         self.gradient_accumulation_steps = 2
