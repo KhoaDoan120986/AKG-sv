@@ -6,7 +6,7 @@ import random
 import numpy as np
 from loader.MSVD import MSVD
 from loader.MSRVTT import MSRVTT
-from config import TrainConfig, load_graph_data, clear_graph_data
+from config import TrainConfig
 from model.model import VCModel
 from model.modules.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 from torch.optim.lr_scheduler import ReduceLROnPlateau
@@ -100,7 +100,7 @@ def log_train(summary_writer, e, loss, lr, reg_lambda, scores, C):
 
     if scores is not None:
         for metric in C.metrics:
-            summary_writer.add_scalar("TRAIN SCORE/{}".format(metric), scores[metric], e)
+            summary_writer.add_scalar("TRAIN_SCORE/{}".format(metric), scores[metric], e)
         logger.info("scores: {}".format(scores))
 
 
@@ -114,9 +114,9 @@ def log_val(summary_writer, e, loss, reg_lambda, r2l_scores, l2r_scores, C):
         loss['total'], 1 - reg_lambda, loss['r2l_loss'], reg_lambda, loss['l2r_loss']))
     
     for metric in C.metrics:
-        summary_writer.add_scalar("VAL R2L SCORE/{}".format(metric), r2l_scores[metric], e)
+        summary_writer.add_scalar("VAL_R2L_SCORE/{}".format(metric), r2l_scores[metric], e)
     for metric in C.metrics:
-        summary_writer.add_scalar("VAL L2R SCORE/{}".format(metric), l2r_scores[metric], e)
+        summary_writer.add_scalar("VAL_L2R_SCORE/{}".format(metric), l2r_scores[metric], e)
         
     logger.info("r2l_scores: {}".format(r2l_scores))
     logger.info("l2r_scores: {}".format(l2r_scores))
@@ -126,11 +126,11 @@ def log_test(summary_writer, e, r2l_scores, l2r_scores):
     global logger
     
     for metric in C.metrics:
-        summary_writer.add_scalar("TEST R2L SCORE/{}".format(metric), r2l_scores[metric], e) 
+        summary_writer.add_scalar("TEST_R2L_SCORE/{}".format(metric), r2l_scores[metric], e) 
     logger.info("r2l_scores: {}".format(r2l_scores))
     
     for metric in C.metrics:
-        summary_writer.add_scalar("TEST L2R SCORE/{}".format(metric), l2r_scores[metric], e)
+        summary_writer.add_scalar("TEST_L2R_SCORE/{}".format(metric), l2r_scores[metric], e)
     logger.info("l2r_scores: {}".format(l2r_scores))
     
 def get_parameter_number(net):
@@ -140,7 +140,7 @@ def get_parameter_number(net):
 
 
 def main():
-    global args, C, logger, GRAPH_DATA_DICT
+    global args, C, logger
     args = get_args()
     torch.cuda.set_device(args.local_rank)
     device = torch.device(f'cuda:{args.local_rank}')
@@ -156,10 +156,8 @@ def main():
         torch.cuda.manual_seed_all(seed)
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
-        load_graph_data(C.corpus, 'train')
 
         if args.local_rank == 0:
-            load_graph_data(C.corpus, 'val')
             summary_writer = SummaryWriter(C.log_dpath)
             logger.info("MODEL ID: {}".format(C.model_id))
             logger.info("Max caption length: {}".format(C.loader.max_caption_len))
@@ -195,6 +193,9 @@ def main():
             val_onlyonce_iter = build_onlyonce_iter(val_iter, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, 'val')
             r2l_val_vid2GTs, l2r_val_vid2GTs = get_groundtruth_captions(val_iter, vocab,
                                                                  C.feat.feature_mode)
+        else: 
+            del val_iter
+            val_iter = None
         
 
         optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
@@ -213,7 +214,6 @@ def main():
             train_loss = train(e, model, optimizer, train_iter, vocab, 
                                     C.reg_lambda, C.gradient_clip, C.feat.feature_mode, lr_scheduler,
                                     C, device, args.local_rank)
-
 
             if args.local_rank == 0:
                 log_train(summary_writer, e, train_loss, get_lr(optimizer), C.reg_lambda, None,C)
@@ -261,13 +261,12 @@ def main():
             logger.info("  VRAM used     : {:.2f} MB".format(torch.cuda.memory_allocated() / 1024**2))
             logger.info("  VRAM reserved : {:.2f} MB".format(torch.cuda.memory_reserved() / 1024**2))
             logger.info("  RAM used      : {:.2f} MB".format(psutil.Process(os.getpid()).memory_info().rss / 1024**2))
+            summary_writer.close()
         
         """ Test with Best Model """
         del train_iter, val_iter, model, optimizer, lr_scheduler, train_loss
-        summary_writer.close()
         gc.collect()
         torch.cuda.empty_cache()
-        clear_graph_data('all')
     
     if args.local_rank == 0:
         # C.model_id = "MSR-VTT_GBased+OFeat+rel+videomask _ 2025-06-26 00_49_35" 
@@ -282,8 +281,8 @@ def main():
 
         load_graph_data(C.corpus, 'test')
         test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], False)
-        onlyonce_iter = build_onlyonce_iter(test_iter, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, 'test')
-
+        onlyonce_iter = build_onlyonce_iter(test_iter, C.feat.feature_mode)
+        
         folder_path = "./result"
         os.makedirs(folder_path, exist_ok=True)
         f = open(os.path.join(folder_path, "{}.txt".format(C.model_id)), 'w')
@@ -319,7 +318,6 @@ def main():
         del test_iter, onlyonce_iter
         gc.collect()
         torch.cuda.empty_cache()
-        clear_graph_data('all')
     torch.distributed.destroy_process_group()
 if __name__ == "__main__":
     main()

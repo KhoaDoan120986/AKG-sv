@@ -119,7 +119,7 @@ class TrainConfig(object):
         """ Optimization """
         self.epochs = {
             'MSVD': 30,
-            'MSR-VTT': 18,
+            'MSR-VTT': 30,
         }[self.corpus]
         
         self.batch_size = self.n_gpus * 32
@@ -130,7 +130,11 @@ class TrainConfig(object):
             'MSR-VTT': 3e-4,
         }[self.corpus]
 
-        self.gradient_accumulation_steps = 2
+        self.gradient_accumulation_steps = {
+            'MSVD': 2,
+            'MSR-VTT': 16,
+        }[self.corpus]
+        
         self.weight_decay = 0.5e-5
         self.reg_lambda = 0.6
         self.beam_size = 5
@@ -174,27 +178,3 @@ class TrainConfig(object):
         self.tx_val_r2l_cross_entropy_loss = "loss/val/r2l_loss"
         self.tx_val_l2r_cross_entropy_loss = "loss/val/l2r_loss"
         self.tx_lr = "params/vc_model_LR"
-
-
-def load_graph_data(corpus, phase):
-    global GRAPH_DATA_DICT
-
-    if phase == 'train':
-        with open(f"data/{corpus}/features/{corpus}_GBased_train.pickle", "rb") as f:
-            GRAPH_DATA_DICT[phase] = pickle.load(f)
-    elif phase == 'val':  
-        with open(f"data/{corpus}/features/{corpus}_GBased_val.pickle", "rb") as f:
-            GRAPH_DATA_DICT[phase] = pickle.load(f)
-    elif phase == 'test':
-        with open(f"data/{corpus}/features/{corpus}_GBased_val.pickle", "rb") as f:
-            GRAPH_DATA_DICT[phase] = pickle.load(f)
-
-def get_graph(video_id, phase):
-    return GRAPH_DATA_DICT[phase][video_id]
-
-def clear_graph_data(phase='all'):
-    global GRAPH_DATA_DICT
-    if phase == 'all':
-        GRAPH_DATA_DICT.clear()
-    elif phase in GRAPH_DATA_DICT:
-        del GRAPH_DATA_DICT[phase]

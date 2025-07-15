@@ -80,6 +80,12 @@ class CustomDataset(Dataset):
         self.r2l_captions = defaultdict(lambda: [])
         self.l2r_captions = defaultdict(lambda: [])
 
+        models = self.C.feat.model.split('_')[1].split('+')
+        path = self.C.loader.phase_video_feat_fpath_tpl.format(self.C.corpus, f"{self.C.corpus}_{models[0]}",
+                                                                    self.phase, 'pickle')
+        with open(path, "rb") as fb:
+            self.graph = pickle.load(fb)
+
         self.data = []
         self.build_video_caption_pairs()
 
@@ -93,25 +99,41 @@ class CustomDataset(Dataset):
     def __getitem__(self, idx):
         vid, r2l_caption, l2r_caption = self.data[idx]
         video_mask = self.video_mask[vid]
+
+        stgraph = self.graph[vid]
+        x = stgraph['x']
+        pad_len = self.C.transformer.num_object * self.C.loader.frame_sample_len - x.shape[0]
+        if pad_len > 0:
+            pad_tensor = torch.zeros(pad_len, x.shape[1], dtype=torch.float32)
+            x = torch.cat([x, pad_tensor], dim=0)
+        edge_index = stgraph['edge_index']
+        edge_attr = torch.tensor(stgraph['edge_attr'].todense(), dtype=torch.float32)
+        
         if self.transform_caption:
             r2l_caption = self.transform_caption(r2l_caption)
             l2r_caption = self.transform_caption(l2r_caption)
+
+
         if self.feature_mode == 'grid-obj-rel':
             object_video_feats = self.object_video_feats[vid]
             rel_feats = self.rel_feats[vid]
+
             if self.transform_frame:
-                object_video_feats = [self.transform_frame(feat) for feat in object_video_feats]
-                rel_feats = [self.transform_frame(feat) for feat in rel_feats]
-            return vid, video_mask, object_video_feats, rel_feats, r2l_caption, l2r_caption
+                object_video_feats = self.transform_frame(object_video_feats).float()
+                rel_feats = self.transform_frame(rel_feats).float()
+            object_video_feats = object_video_feats.squeeze(0)
+            rel_feats = rel_feats.squeeze(0)
+            return vid, video_mask, x, edge_index, edge_attr, object_video_feats, rel_feats, r2l_caption, l2r_caption
 
         elif self.feature_mode == 'grid-rel':
             rel_feats = self.rel_feats[vid]
             if self.transform_frame:
-                rel_feats = [self.transform_frame(feat) for feat in rel_feats]
-            return vid, video_mask, rel_feats, r2l_caption, l2r_caption
+                rel_feats = self.transform_frame(rel_feats).float()
+            rel_feats = rel_feats.squeeze(0)
+            return vid, video_mask, x, edge_index, edge_attr, rel_feats, r2l_caption, l2r_caption
 
         elif self.feature_mode == 'grid':
-            return vid, video_mask, r2l_caption, l2r_caption
+            return vid, video_mask, x, edge_index, edge_attr, r2l_caption, l2r_caption
         
         else:
             raise NotImplementedError("Unknown feature mode: {}".format(self.feature_mode))
@@ -138,10 +160,6 @@ class CustomDataset(Dataset):
             frames = self.C.loader.frame_sample_len
             if i == 0:
                 continue
-            elif i == 1:
-                frames = self.C.feat.num_boxes
-            elif i == 2:
-                frames = self.C.feat.three_turple
 
             fpath = self.C.loader.phase_video_feat_fpath_tpl.format(self.C.corpus,
                                                                     f"{self.C.corpus}_{model}",
@@ -186,11 +204,8 @@ class CustomDataset(Dataset):
         models = self.C.feat.model.split('_')[1].split('+')
         for i, model in enumerate(models):
             frames = self.C.loader.frame_sample_len
-
             if i == 0: #grid
                 continue
-            elif i == 1: #rel
-                frames = self.C.feat.three_turple
 
             fpath = self.C.loader.phase_video_feat_fpath_tpl.format(self.C.corpus,
                                                                     f"{self.C.corpus}_{model}",
@@ -219,15 +234,12 @@ class CustomDataset(Dataset):
                             padded_feat = torch.tensor(feats[0])
                         self.video_mask[vid].append(padded_feat)
 
-          
-
     def load_g_video_feats(self):
         models = self.C.feat.model.split('_')[1].split('+')
         print('\nEnter the load4 method. data_loader_fusion.py--row279')
 
         for i, model in enumerate(models):
             frames = self.C.loader.frame_sample_len
-
             if i == 0:
                 continue
             fpath = self.C.loader.phase_video_feat_fpath_tpl.format(self.C.corpus,
@@ -366,15 +378,6 @@ class Corpus(object):
         return dataset
     
     def build_data_loader(self, dataset, phase):
-        if self.feature_mode == 'grid-obj-rel':
-            collate_fn = self.gor_feature_collate_fn
-        elif self.feature_mode == 'grid-rel':
-            collate_fn = self.gr_feature_collate_fn
-        elif self.feature_mode == 'grid':
-            collate_fn = self.g_feature_collate_fn
-        else:
-            raise NotImplementedError("Unknown feature mode: {}".format(self.feature_mode))
-
         if phase == 'test': batch_size = 1
         elif phase == 'val': batch_size = 32
         else: batch_size = self.C.batch_size // self.C.n_gpus
@@ -387,8 +390,8 @@ class Corpus(object):
             shuffle=False,
             sampler=sampler,
             num_workers=self.C.loader.num_workers,
-            collate_fn=collate_fn,
-            pin_memory=True, drop_last=True)
+            # collate_fn=collate_fn,
+            pin_memory=True, drop_last=True, persistent_workers=True)
             return data_loader
         else:
             sampler = RandomSampler(dataset, replacement=False)
@@ -398,38 +401,7 @@ class Corpus(object):
             shuffle=False,
             sampler=sampler,
             num_workers=self.C.loader.num_workers,
-            collate_fn=collate_fn,
+            # collate_fn=collate_fn,
             pin_memory=True, drop_last=False)
             return data_loader
     
-    def gor_feature_collate_fn(self, batch):
-        vids, video_masks, object_video_feats, rel_feats, r2l_captions, l2r_captions = zip(*batch)
-
-        video_mask_list = [torch.stack(video_feats).float() for video_feats in zip(*video_masks)]
-        object_video_feats_list = [torch.stack(video_feats).float() for video_feats in zip(*object_video_feats)]
-        rel_feats_list = [torch.stack(video_feats).float() for video_feats in zip(*rel_feats)]
-
-        r2l_captions = torch.stack(r2l_captions).float()
-        l2r_captions = torch.stack(l2r_captions).float()
-
-        return vids, video_mask_list, object_video_feats_list, rel_feats_list, r2l_captions, l2r_captions
-
-    def gr_feature_collate_fn(self, batch):
-        vids, video_masks, rel_feats, r2l_captions, l2r_captions = zip(*batch)
-
-        video_mask_list = [torch.stack(video_feats).float() for video_feats in zip(*video_masks)]
-        rel_feats_list = [torch.stack(video_feats).float() for video_feats in zip(*rel_feats)]
-
-        r2l_captions = torch.stack(r2l_captions).float()
-        l2r_captions = torch.stack(l2r_captions).float()
-        return vids, video_mask_list, rel_feats_list, r2l_captions, l2r_captions
-    
-    def g_feature_collate_fn(self, batch):
-        vids, video_masks, r2l_captions, l2r_captions = zip(*batch)
-
-        video_mask_list = [torch.stack(video_feats).float() for video_feats in zip(*video_masks)]
-
-        r2l_captions = torch.stack(r2l_captions).float()
-        l2r_captions = torch.stack(l2r_captions).float()
-
-        return vids, video_mask_list, r2l_captions, l2r_captions
