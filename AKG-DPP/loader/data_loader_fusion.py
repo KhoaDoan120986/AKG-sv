@@ -391,7 +391,7 @@ class Corpus(object):
             sampler=sampler,
             num_workers=self.C.loader.num_workers,
             # collate_fn=collate_fn,
-            pin_memory=True, drop_last=True, persistent_workers=True)
+            pin_memory=True, drop_last=True, persistent_workers=True, prefetch_factor=1)
             return data_loader
         else:
             sampler = RandomSampler(dataset, replacement=False)

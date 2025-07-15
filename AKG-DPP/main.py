@@ -190,7 +190,7 @@ def main():
             parameter_number = get_parameter_number(model)
             logger.info(parameter_number)
 
-            val_onlyonce_iter = build_onlyonce_iter(val_iter, C.feat.feature_mode, C.transformer.num_object, C.loader.frame_sample_len, device, 'val')
+            val_onlyonce_iter = build_onlyonce_iter(val_iter, C.feat.feature_mode)
             r2l_val_vid2GTs, l2r_val_vid2GTs = get_groundtruth_captions(val_iter, vocab,
                                                                  C.feat.feature_mode)
         else: 
