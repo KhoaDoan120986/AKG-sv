@@ -48,7 +48,7 @@ class MSVDLoaderConfig(object):
     frame_sampling_method = 'uniform'
     assert frame_sampling_method in ['uniform', 'random']
     frame_sample_len = 20
-    num_workers = 8
+    num_workers = 4
 
 
 class MSRVTTLoaderConfig(object):
@@ -68,7 +68,7 @@ class MSRVTTLoaderConfig(object):
     frame_sampling_method = 'uniform'
     assert frame_sampling_method in ['uniform', 'random']
     frame_sample_len = 30
-    num_workers = 8
+    num_workers = 4
 
 
 class TransformerConfig(object):
