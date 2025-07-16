@@ -150,7 +150,7 @@ def prep_optimizer(model, device, C, local_rank, len_train_iter):
         {'params': no_decay_params, 'weight_decay': 0.0,},
     ]
 
-    optimizer = torch.optim.AdamW(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
+    optimizer = torch.optim.AdamW(optimizer_grouped_parameters, lr=C.lr)
     num_training_steps = int(len_train_iter / C.gradient_accumulation_steps) * C.epochs
     num_warmup_steps = int(0.1 * num_training_steps)
     lr_scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps)
