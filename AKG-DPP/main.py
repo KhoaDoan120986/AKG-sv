@@ -158,7 +158,7 @@ def prep_optimizer(model, device, C, local_rank, len_train_iter):
     model = torch.nn.parallel.DistributedDataParallel(model.to(device), device_ids=[local_rank],
                                                       output_device=local_rank, find_unused_parameters=True)
 
-    return optimizer, scheduler, model
+    return optimizer, lr_scheduler, model
 
 def main():
     global args, C, logger
