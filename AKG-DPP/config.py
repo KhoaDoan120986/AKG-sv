@@ -123,7 +123,7 @@ class TrainConfig(object):
         }[self.corpus]
         
         self.batch_size = self.n_gpus * 32
-        self.optimizer = "Adam"
+        self.optimizer = "AdamW"
         self.gradient_clip = 5.0
         self.lr = {
             'MSVD': 1e-4,

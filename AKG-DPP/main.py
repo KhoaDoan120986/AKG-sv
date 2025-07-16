@@ -82,8 +82,6 @@ def build_model(vocab, C, device ,local_rank):
     cache_dir = C.transformer.cache_dir if C.transformer.cache_dir else os.path.join(str(PYTORCH_PRETRAINED_BERT_CACHE), 'distributed')
 
     model = VCModel(vocab, model_state_dict, cache_dir, C.feat.feature_mode, C.transformer, C.feat.size, C.attention_mode, device)
-    model = torch.nn.parallel.DistributedDataParallel(model.to(device), device_ids=[local_rank],
-                                                      output_device=local_rank, find_unused_parameters=True)
     return model
 
 
@@ -138,6 +136,29 @@ def get_parameter_number(net):
     trainable_num = sum(p.numel() for p in net.parameters() if p.requires_grad)
     return {'Total': total_num, 'Trainable': trainable_num}
 
+def prep_optimizer(model, device, C, local_rank):
+    if hasattr(model, 'module'):
+        model = model.module
+
+    param_optimizer = list(model.named_parameters())
+    no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+    decay_params = [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)]
+    no_decay_params = [p for n, p in param_optimizer if any(nd in n for nd in no_decay)]
+
+    optimizer_grouped_parameters = [
+        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in decay_params)], 'weight_decay': C.weight_decay},
+        {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay_params)], 'weight_decay': 0.0,},
+    ]
+
+    optimizer = torch.optim.AdamW(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
+    num_training_steps = int(len(train_iter) / C.gradient_accumulation_steps) * C.epochs
+    num_warmup_steps = int(0.1 * num_training_steps)
+    lr_scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps)
+
+    model = torch.nn.parallel.DistributedDataParallel(model.to(device), device_ids=[local_rank],
+                                                      output_device=local_rank, find_unused_parameters=True)
+
+    return optimizer, scheduler, model
 
 def main():
     global args, C, logger
@@ -197,11 +218,7 @@ def main():
             del val_iter
             val_iter = None
         
-
-        optimizer = torch.optim.Adam(model.parameters(), lr=C.lr, weight_decay=C.weight_decay)
-        num_training_steps = int(len(train_iter) / C.gradient_accumulation_steps) * C.epochs
-        num_warmup_steps = int(0.1 * num_training_steps)
-        lr_scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps)
+        optimizer, lr_scheduler, model = prep_optimizer(model, device, C, local_rank)
     
         best_val_CIDEr = -1
         best_epoch = None
