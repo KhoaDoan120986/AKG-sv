@@ -7,6 +7,7 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 from torch_geometric.nn import TransformerConv
 from .modules.module_visual import VisualModel, VisualConfig
+from .modules.until_module import LayerNorm
 from collections import namedtuple
 import logging
 logger = logging.getLogger(__name__)
@@ -84,19 +85,7 @@ def self_attention(query, key, value, dropout=None, mask=None):
     if dropout is not None:
         self_attn = dropout(self_attn)
     return torch.matmul(self_attn, value), self_attn
-
-class LayerNorm(nn.Module):
-    def __init__(self, hidden_size, eps=1e-6):
-        super(LayerNorm, self).__init__()
-        self.weight = nn.Parameter(torch.ones(hidden_size))
-        self.bias = nn.Parameter(torch.zeros(hidden_size))
-        self.variance_epsilon = eps
-
-    def forward(self, x):
-        mean = x.mean(-1, keepdim=True)
-        std = x.std(-1, keepdim=True)
-        return self.weight * (x - mean) / (std + self.variance_epsilon) + self.bias
-    
+  
 class FeatEmbedding(nn.Module):
     def __init__(self, d_feat, d_model, dropout):
         super(FeatEmbedding, self).__init__()
@@ -190,13 +179,13 @@ class PositionWiseFeedForward(nn.Module):
         super(PositionWiseFeedForward, self).__init__()
         self.w_1 = nn.Linear(d_model, d_ff)
         self.w_2 = nn.Linear(d_ff, d_model)
-        self.layer_norm = nn.LayerNorm(d_model, eps=1e-6)
+        self.LayerNorm = LayerNorm(d_model, eps=1e-6)
         self.dropout_1 = nn.Dropout(dropout)
         self.relu = nn.ReLU()
         self.dropout_2 = nn.Dropout(dropout)
 
     def forward(self, x):
-        inter = self.dropout_1(self.relu(self.w_1(self.layer_norm(x))))
+        inter = self.dropout_1(self.relu(self.w_1(self.LayerNorm(x))))
         output = self.dropout_2(self.w_2(inter))
         return output
 
@@ -204,11 +193,11 @@ class PositionWiseFeedForward(nn.Module):
 class SublayerConnection(nn.Module):
     def __init__(self, size, dropout=0.1):
         super(SublayerConnection, self).__init__()
-        self.layer_norm = LayerNorm(size)
+        self.LayerNorm = LayerNorm(size)
         self.dropout = nn.Dropout(p=dropout)
 
     def forward(self, x, sublayer):
-        return self.dropout(self.layer_norm(x + sublayer(x)))
+        return self.dropout(self.LayerNorm(x + sublayer(x)))
 
 
 class EncoderLayer(nn.Module):
