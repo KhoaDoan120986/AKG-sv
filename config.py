@@ -40,7 +40,7 @@ class MSVDLoaderConfig(object):
     val_caption_fpath = "/workspace/AKG-sv/data/MSVD/metadata/val.csv"
     test_caption_fpath = "/workspace/AKG-sv/data/MSVD/metadata/test.csv"
     min_count = 3
-    max_caption_len = 15
+    max_caption_len = 20
 
     total_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}.{}"
     phase_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}_{}.{}"
@@ -61,7 +61,7 @@ class MSRVTTLoaderConfig(object):
     val_caption_fpath = "/workspace/AKG-sv/data/MSR-VTT/metadata/val.json"
     test_caption_fpath = "/workspace/AKG-sv/data/MSR-VTT/metadata/test.json"
     min_count = 3
-    max_caption_len = 15
+    max_caption_len = 20
 
     total_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}.{}"
     phase_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}_{}.{}"
@@ -117,25 +117,23 @@ class TrainConfig(object):
         self.transformer.max_frames = self.loader.frame_sample_len
 
         """ Optimization """
-        self.epochs = {
-            'MSVD': 30,
-            'MSR-VTT': 30,
-        }[self.corpus]
+        self.epochs = 30
         
         self.batch_size = self.n_gpus * 32
         self.optimizer = "AdamW"
         self.gradient_clip = 5.0
-        self.lr = {
-            'MSVD': 1e-4,
-            'MSR-VTT': 3e-4,
-        }[self.corpus]
+        self.lr = 1e-4
 
         self.gradient_accumulation_steps = {
             'MSVD': 2,
-            'MSR-VTT': 16,
+            'MSR-VTT': 4,
         }[self.corpus]
         
-        self.weight_decay = 0.5e-5
+        self.weight_decay = {
+            'MSVD': 5e-6,
+            'MSR-VTT': 5e-5,
+        }[self.corpus]
+
         self.reg_lambda = 0.6
         self.beam_size = 5
         self.label_smoothing = 0.15
