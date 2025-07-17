@@ -119,14 +119,14 @@ class TrainConfig(object):
         """ Optimization """
         self.epochs = 30
         
-        self.batch_size = self.n_gpus * 32
+        self.batch_size = 32
         self.optimizer = "AdamW"
         self.gradient_clip = 5.0
         self.lr = 1e-4
 
         self.gradient_accumulation_steps = {
             'MSVD': 2,
-            'MSR-VTT': 4,
+            'MSR-VTT':  4,
         }[self.corpus]
         
         self.weight_decay = {

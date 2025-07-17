@@ -378,9 +378,7 @@ class Corpus(object):
         return dataset
     
     def build_data_loader(self, dataset, phase):
-        if phase == 'test': batch_size = 1
-        elif phase == 'val': batch_size = 32
-        else: batch_size = self.C.batch_size // self.C.n_gpus
+        batch_size = self.C.batch_size
 
         if phase == 'train' and torch.distributed.is_initialized():
             sampler = torch.utils.data.distributed.DistributedSampler(dataset, shuffle=True)
