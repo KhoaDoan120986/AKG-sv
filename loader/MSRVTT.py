@@ -38,6 +38,6 @@ class MSRVTTDataset(CustomDataset):
 class MSRVTT(Corpus):
     """ MSR-VTT Corpus """
 
-    def __init__(self, C):
-        super(MSRVTT, self).__init__(C, MSRVTTVocab, MSRVTTDataset)
+    def __init__(self, C, do_train):
+        super(MSRVTT, self).__init__(C, MSRVTTVocab, MSRVTTDataset, do_train)
 

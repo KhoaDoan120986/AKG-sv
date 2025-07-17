@@ -1,5 +1,8 @@
 import os
 import time
+import pickle
+
+GRAPH_DATA_DICT = {}
 
 class FeatureConfig(object):
     def __init__(self, model):
@@ -19,8 +22,8 @@ class FeatureConfig(object):
         else:
             raise NotImplementedError(f"Unknown model: {model}")
 
-        if model.split('_')[0] == "MSR-VTT":
-            self.size = [s + 300 for s in self.size]
+        # if model.split('_')[0] == "MSR-VTT":
+        #     self.size = [s + 300 for s in self.size]
 
 class VocabConfig(object):
     init_word2idx = {'<PAD>': 0, '<S>': 1}
@@ -44,7 +47,7 @@ class MSVDLoaderConfig(object):
 
     frame_sampling_method = 'uniform'
     assert frame_sampling_method in ['uniform', 'random']
-    frame_sample_len = 50
+    frame_sample_len = 20
     num_workers = 4
 
 
@@ -64,8 +67,7 @@ class MSRVTTLoaderConfig(object):
     phase_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}_{}.{}"
     frame_sampling_method = 'uniform'
     assert frame_sampling_method in ['uniform', 'random']
-    frame_sample_len = 60
-
+    frame_sample_len = 30
     num_workers = 4
 
 
@@ -95,15 +97,13 @@ class TransformerConfig(object):
     no_skip = False
     last_average = False
     no_beta_transformer = False
-    device = "cuda"
     select_num = 0  # if sn==0, automatic select num
 
 class TrainConfig(object):
-    def __init__(self, model_name):
+    def __init__(self, model_name, n_gpus):
+        self.n_gpus = n_gpus
         self.feat = FeatureConfig(model_name)
         self.attention_mode = 1
-        self.msrvtt_dim = 1028
-        self.rel_dim = 300
 
         self.vocab = VocabConfig
         self.corpus = self.feat.model.split('_')[0]
@@ -119,17 +119,22 @@ class TrainConfig(object):
         """ Optimization """
         self.epochs = {
             'MSVD': 30,
-            'MSR-VTT': 18,
+            'MSR-VTT': 30,
         }[self.corpus]
-        self.batch_size = 32
-        self.optimizer = "Adam"
+        
+        self.batch_size = self.n_gpus * 32
+        self.optimizer = "AdamW"
         self.gradient_clip = 5.0
         self.lr = {
             'MSVD': 1e-4,
-            'MSR-VTT': 3e-5,
+            'MSR-VTT': 3e-4,
         }[self.corpus]
 
-        self.gradient_accumulation_steps = 2
+        self.gradient_accumulation_steps = {
+            'MSVD': 2,
+            'MSR-VTT': 16,
+        }[self.corpus]
+        
         self.weight_decay = 0.5e-5
         self.reg_lambda = 0.6
         self.beam_size = 5
