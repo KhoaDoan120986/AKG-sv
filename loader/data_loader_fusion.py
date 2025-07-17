@@ -392,13 +392,11 @@ class Corpus(object):
 
         elif phase == 'val' or phase == 'test':
             sampler = SequentialSampler(dataset)
-            # sampler = RandomSampler(dataset, replacement=False)
             data_loader = DataLoader(
                 dataset,
-                batch_size=32,
+                batch_size=16,
                 shuffle=False,
                 sampler=sampler,
-                num_workers=self.C.loader.num_workers,
                 pin_memory=False
             )
             return data_loader

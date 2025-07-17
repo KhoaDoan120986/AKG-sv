@@ -129,11 +129,7 @@ class TrainConfig(object):
             'MSR-VTT':  4,
         }[self.corpus]
         
-        self.weight_decay = {
-            'MSVD': 5e-6,
-            'MSR-VTT': 5e-5,
-        }[self.corpus]
-
+        self.weight_decay = 0.5e-5
         self.reg_lambda = 0.6
         self.beam_size = 5
         self.label_smoothing = 0.15
