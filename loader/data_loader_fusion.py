@@ -378,37 +378,27 @@ class Corpus(object):
         return dataset
     
     def build_data_loader(self, dataset, phase):
-        batch_size = self.C.batch_size
-
         if phase == 'train' and torch.distributed.is_initialized():
             sampler = torch.utils.data.distributed.DistributedSampler(dataset, shuffle=True)
             data_loader = DataLoader(
-            dataset,
-            batch_size=batch_size,
-            shuffle=False,
-            sampler=sampler,
-            num_workers=self.C.loader.num_workers,
-            pin_memory=True, drop_last=True, persistent_workers=True, prefetch_factor=1)
+                dataset,
+                batch_size=self.C.batch_size,
+                shuffle=False,
+                sampler=sampler,
+                num_workers=self.C.loader.num_workers,
+                pin_memory=False, drop_last=True, persistent_workers=True, prefetch_factor=1
+            )
             return data_loader
 
-        elif phase == 'val':
+        elif phase == 'val' or phase == 'test':
             sampler = SequentialSampler(dataset)
+            # sampler = RandomSampler(dataset, replacement=False)
             data_loader = DataLoader(
-            dataset,
-            batch_size=batch_size,
-            shuffle=False,
-            sampler=sampler,
-            num_workers=self.C.loader.num_workers,
-            pin_memory=True, drop_last=False)
+                dataset,
+                batch_size=32,
+                shuffle=False,
+                sampler=sampler,
+                num_workers=self.C.loader.num_workers,
+                pin_memory=False
+            )
             return data_loader
-        elif phase == 'test':
-            sampler = SequentialSampler(dataset)
-            data_loader = DataLoader(
-            dataset,
-            batch_size=batch_size,
-            shuffle=False,
-            sampler=sampler,
-            num_workers=0,
-            pin_memory=True, drop_last=False)
-            return data_loader
-    
