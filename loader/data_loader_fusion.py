@@ -390,9 +390,9 @@ class Corpus(object):
             num_workers=self.C.loader.num_workers,
             pin_memory=True, drop_last=True, persistent_workers=True, prefetch_factor=1)
             return data_loader
-                   
+
         elif phase == 'val':
-            sampler = SequentialSampler(dataset, replacement=False)
+            sampler = SequentialSampler(dataset)
             data_loader = DataLoader(
             dataset,
             batch_size=batch_size,
@@ -402,7 +402,7 @@ class Corpus(object):
             pin_memory=True, drop_last=False)
             return data_loader
         elif phase == 'test':
-            sampler = SequentialSampler(dataset, replacement=False)
+            sampler = SequentialSampler(dataset)
             data_loader = DataLoader(
             dataset,
             batch_size=batch_size,
