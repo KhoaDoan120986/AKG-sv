@@ -6,7 +6,7 @@ from tqdm import tqdm
 import h5py
 import numpy as np
 import torch
-from torch.utils.data import Dataset, DataLoader, RandomSampler
+from torch.utils.data import Dataset, DataLoader, RandomSampler, SequentialSampler
 from torchvision import transforms
 import pickle
 import sparse
@@ -388,18 +388,27 @@ class Corpus(object):
             shuffle=False,
             sampler=sampler,
             num_workers=self.C.loader.num_workers,
-            # collate_fn=collate_fn,
             pin_memory=True, drop_last=True, persistent_workers=True, prefetch_factor=1)
             return data_loader
-        else:
-            sampler = RandomSampler(dataset, replacement=False)
+                   
+        elif phase == 'val':
+            sampler = SequentialSampler(dataset, replacement=False)
             data_loader = DataLoader(
             dataset,
             batch_size=batch_size,
             shuffle=False,
             sampler=sampler,
             num_workers=self.C.loader.num_workers,
-            # collate_fn=collate_fn,
+            pin_memory=True, drop_last=False)
+            return data_loader
+        elif phase == 'test':
+            sampler = SequentialSampler(dataset, replacement=False)
+            data_loader = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=False,
+            sampler=sampler,
+            num_workers=0,
             pin_memory=True, drop_last=False)
             return data_loader
     
