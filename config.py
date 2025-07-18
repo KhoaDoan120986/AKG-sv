@@ -86,6 +86,7 @@ class TransformerConfig(object):
     no_skip = False
     last_average = False
     no_beta_transformer = False
+    select_num = 0
 
 class TrainConfig(object):
     def __init__(self, model_name, n_gpus):

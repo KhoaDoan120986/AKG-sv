@@ -386,7 +386,7 @@ class Corpus(object):
                 shuffle=False,
                 sampler=sampler,
                 num_workers=self.C.loader.num_workers,
-                pin_memory=False, drop_last=True, persistent_workers=True, prefetch_factor=1
+                pin_memory=True, drop_last=True, persistent_workers=True, prefetch_factor=1
             )
             return data_loader
 
@@ -394,9 +394,9 @@ class Corpus(object):
             sampler = SequentialSampler(dataset)
             data_loader = DataLoader(
                 dataset,
-                batch_size=16,
+                batch_size=32,
                 shuffle=False,
                 sampler=sampler,
-                pin_memory=False
+                pin_memory=True
             )
             return data_loader

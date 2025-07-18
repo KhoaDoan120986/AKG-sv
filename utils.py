@@ -464,7 +464,6 @@ def get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mod
             
             for i, vid in enumerate(vids):
                 if vid not in vids_set:
-                    cnt += 1
                     vids_set.add(vid)
                     data_geo_graph = Data(x=geo_x_list[i].to(device), edge_index=edge_index_list[i].to(device), edge_attr=edge_attr_list[i].to(device))
                     if object_feats is not None and rel_feats is not None:
