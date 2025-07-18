@@ -38,7 +38,7 @@ class MSVDLoaderConfig(object):
     total_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}.{}"
     phase_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}_{}.{}"
     frame_sampling_method = 'uniform'
-    frame_sample_len = 20
+    frame_sample_len = 15
     num_workers = 4
 
 
@@ -52,7 +52,7 @@ class MSRVTTLoaderConfig(object):
     val_caption_fpath = "/workspace/AKG-sv/data/MSR-VTT/metadata/val.json"
     test_caption_fpath = "/workspace/AKG-sv/data/MSR-VTT/metadata/test.json"
     min_count = 3
-    max_caption_len = 20
+    max_caption_len = 15
 
     total_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}.{}"
     phase_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}_{}.{}"
