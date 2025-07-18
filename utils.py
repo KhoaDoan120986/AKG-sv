@@ -356,95 +356,13 @@ def test(model, val_iter, vocab, reg_lambda, feature_mode, C, device):
         }
     return loss
 
-def build_onlyonce_iter(data_iter, feature_mode):
-    onlyonce_dataset = {}
-    for batch in tqdm(iter(data_iter), desc='build onlyonce_iter'):
-        vids = batch[0]
-        if feature_mode == 'grid-obj-rel':
-            video_masks, geo_x_list, edge_index_list, edge_attr_list, object_feats, rel_feats, r2l_captions, l2r_captions = batch[1:]
-        elif feature_mode == 'grid-rel':
-            video_masks, geo_x_list, edge_index_list, edge_attr_list, rel_feats, r2l_captions, l2r_captions = batch[1:]
-            object_feats = None
-        elif feature_mode == 'grid':
-            video_masks, geo_x_list, edge_index_list, edge_attr_list, r2l_captions, l2r_captions = batch[1:]
-        
-        for i, vid in enumerate(vids):
-            if vid in onlyonce_dataset:
-                continue
-
-            geo_x = geo_x_list[i]
-            geo_edge_index = edge_index_list[i]
-            geo_edge_attr = edge_attr_list[i]
-            video_mask = video_masks[0][i]
-            # del stgraph
-            if feature_mode == 'grid-obj-rel':
-                object_feat = object_feats[i]
-                rel_feat = rel_feats[i]
-                onlyonce_dataset[vid] = (geo_x, geo_edge_index, geo_edge_attr, object_feat, rel_feat, video_mask)
-
-            elif feature_mode == 'grid-rel':
-                rel_feat = rel_feats[i]
-                onlyonce_dataset[vid] = (geo_x, geo_edge_index, geo_edge_attr, rel_feat, video_mask)
-
-            elif feature_mode == 'grid':
-                onlyonce_dataset[vid] = (geo_x, geo_edge_index, geo_edge_attr, video_mask)
-            del geo_x, geo_edge_index, geo_edge_attr, video_mask
-            
-    onlyonce_iter = []
-    vids = list(onlyonce_dataset.keys())
-    feats = list(onlyonce_dataset.values())
-    del onlyonce_dataset
-    torch.cuda.empty_cache()
-    time.sleep(5)
-    batch_size = 1
-    while len(vids) > 0:
-        batch_vids = vids[:batch_size]
-        batch_feats = feats[:batch_size]
-        if feature_mode == 'grid-obj-rel':
-            geo_x_feats, geo_edge_index_feats, geo_edge_attr_feats= [], [], []
-            object_feats, rel_feats, video_masks = [], [], []
-            for geo_x_feat, geo_edge_index_feat, geo_edge_attr_feat, object_feat, rel_feat, video_mask in batch_feats:
-                geo_x_feats.append(geo_x_feat)
-                geo_edge_index_feats.append(geo_edge_index_feat)
-                geo_edge_attr_feats.append(geo_edge_attr_feat)
-                object_feats.append(object_feat)
-                rel_feats.append(rel_feat)
-                video_masks.append(video_mask)
-            onlyonce_iter.append((batch_vids, (torch.stack(geo_x_feats), torch.stack(geo_edge_index_feats), torch.stack(geo_edge_attr_feats),
-                                torch.stack(object_feats), torch.stack(rel_feats), torch.stack(video_masks))))
-        if feature_mode == 'grid-rel':
-            geo_x_feats, geo_edge_index_feats, geo_edge_attr_feats= [], [], []
-            rel_feats, video_masks = [], []
-            for geo_x_feat, geo_edge_index_feat, geo_edge_attr_feat, rel_feat, video_mask in batch_feats:
-                geo_x_feats.append(geo_x_feat)
-                geo_edge_index_feats.append(geo_edge_index_feat)
-                geo_edge_attr_feats.append(geo_edge_attr_feat)
-                rel_feats.append(rel_feat)
-                video_masks.append(video_mask)
-            onlyonce_iter.append((batch_vids, (torch.stack(geo_x_feats), torch.stack(geo_edge_index_feats), torch.stack(geo_edge_attr_feats),
-                                torch.stack(rel_feats), torch.stack(video_masks))))
-        if feature_mode == 'grid':
-            geo_x_feats, geo_edge_index_feats, geo_edge_attr_feats= [], [], []
-            video_masks = []
-            for geo_x_feat, geo_edge_index_feat, geo_edge_attr_feat, video_mask in batch_feats:
-                geo_x_feats.append(geo_x_feat)
-                geo_edge_index_feats.append(geo_edge_index_feat)
-                geo_edge_attr_feats.append(geo_edge_attr_feat)
-                video_masks.append(video_mask)
-            onlyonce_iter.append((batch_vids, (torch.stack(geo_x_feats), torch.stack(geo_edge_index_feats), torch.stack(geo_edge_attr_feats),
-                                torch.stack(video_masks))))
-        vids = vids[batch_size:]
-        feats = feats[batch_size:]
-        gc.collect()
-        torch.cuda.empty_cache()
-    return onlyonce_iter
-    
-def get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mode, device):
+def get_predicted_captions(data_iter, model, beam_size, max_len, feature_mode, device):
     if isinstance(model, torch.nn.parallel.DistributedDataParallel):
         model = model.module
     model.eval()
     r2l_vid2pred = {}
     l2r_vid2pred = {}
+    vids_set = ()
     with torch.no_grad():
         for batch in tqdm(iter(data_iter), desc='get_predicted_captions'):
             vids, video_masks = batch[:2]
@@ -544,25 +462,9 @@ def calc_scores(ref, hypo):
             final_scores[method] = float(score)
     return final_scores
 
-
-def evaluate(data_iter, model, vocab, beam_size, max_len, feature_mode, C, device, phase):
-    onlyonce_iter = build_onlyonce_iter(data_iter, feature_mode)
-    r2l_vid2pred, l2r_vid2pred = get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mode, device)
-    r2l_vid2GTs, l2r_vid2GTs = get_groundtruth_captions(data_iter, vocab, feature_mode)
-    r2l_scores = score(r2l_vid2pred, r2l_vid2GTs)
-    l2r_scores = score(l2r_vid2pred, l2r_vid2GTs)
-
-    del onlyonce_iter, r2l_vid2pred, l2r_vid2pred, r2l_vid2GTs, l2r_vid2GTs
-    gc.collect()
-    
-    return r2l_scores, l2r_scores
-
-
-# refers: https://stackoverflow.com/questions/52660985/pytorch-how-to-get-learning-rate-during-training
 def get_lr(optimizer):
     for param_group in optimizer.param_groups:
         return param_group['lr']
-
 
 def idxs_to_sentence(idxs, idx2word, EOS_idx):
     words = []
@@ -588,12 +490,9 @@ def cls_to_dict(cls):
         d[p] = v
     return d
 
-
-# refers https://stackoverflow.com/questions/1305532/convert-nested-python-dict-to-object
 class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
-
 
 def dict_to_cls(d):
     cls = Struct(**d)

@@ -397,6 +397,7 @@ class Corpus(object):
                 batch_size=32,
                 shuffle=False,
                 sampler=sampler,
+                num_workers=self.C.loader.num_workers,
                 pin_memory=True
             )
             return data_loader
