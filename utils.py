@@ -397,8 +397,8 @@ def get_predicted_captions(data_iter, model, beam_size, max_len, feature_mode, d
                     r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_masks[i].unsqueeze(0).to(device))
                     l2r_captions = [" ".join(caption[0].value) for caption in l2r_captions]
                     r2l_captions = [" ".join(caption[0].value) for caption in r2l_captions]
-                    r2l_vid2pred.update({v: p for v, p in zip(vids, r2l_captions)})
-                    l2r_vid2pred.update({v: p for v, p in zip(vids, l2r_captions)})
+                    r2l_vid2pred[vid] = r2l_captions[0]
+                    l2r_vid2pred[vid] = l2r_captions[0]
                 else: 
                     continue
                 torch.cuda.empty_cache()
