@@ -66,14 +66,14 @@ class TransformerConfig(object):
     n_heads = 10
     
     d_ff = 2048
-    n_layers = 4
+    n_layers = 3
     dropout = 0.1
     n_heads_small = 12
     n_heads_big = 128
 
     max_frames = 50
     num_object = 9
-    visual_num_hidden_layers = 4
+    visual_num_hidden_layers = 3
     d_graph = 1024
     video_dim = 1024
     node_feat_dim = 512

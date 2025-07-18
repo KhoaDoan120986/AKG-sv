@@ -47,8 +47,15 @@ def run(ckpt_fpath, test_iter, vocab, ckpt, l2r_test_vid2GTs, f, captioning_fpat
 
     """ Build Models """
     model = VCModel(vocab, None, None, C.feat.feature_mode, C.transformer, C.feat.size, C.attention_mode, device)
-    model.load_state_dict(checkpoint['vc_model'])
     model = model.to(device)
+
+    state_dict = checkpoint['vc_model']
+    new_state_dict = OrderedDict()
+    for k, v in state_dict.items():
+        new_key = k.replace('module.', '') if k.startswith('module.') else k
+        new_state_dict[new_key] = v
+    
+    model.load_state_dict(new_state_dict)
 
     """ Test Set """
     logger.info('Finish the model load in CUDA. Try to enter Test Set.')

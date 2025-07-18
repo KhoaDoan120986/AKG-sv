@@ -362,7 +362,7 @@ def get_predicted_captions(data_iter, model, beam_size, max_len, feature_mode, d
     model.eval()
     r2l_vid2pred = {}
     l2r_vid2pred = {}
-    vids_set = ()
+    vids_set = set()
     with torch.no_grad():
         for batch in tqdm(iter(data_iter), desc='get_predicted_captions'):
             vids, video_masks = batch[:2]
