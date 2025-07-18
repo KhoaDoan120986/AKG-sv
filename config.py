@@ -79,6 +79,7 @@ class TransformerConfig(object):
     node_feat_dim = 512
     edge_dim = 1024
     visual_model = "visual-base"
+    init_model = "./model/weight/univl.pretrained.bin"
     gnn_model_type = "transformer"
     cache_dir = ""
     local_rank = 0
