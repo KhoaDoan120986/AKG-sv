@@ -210,8 +210,6 @@ def main():
         if args.local_rank == 0:
             parameter_number = get_parameter_number(model)
             logger.info(parameter_number)
-
-            # val_onlyonce_iter = build_onlyonce_iter(val_iter, C.feat.feature_mode)
             r2l_val_vid2GTs, l2r_val_vid2GTs = get_groundtruth_captions(val_iter, vocab,
                                                                  C.feat.feature_mode)
         else: 
@@ -296,8 +294,7 @@ def main():
         logger.info(ckpt_list)
         logger.info('Build data_loader according to ' + ckpt_list[0])
         test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], False)
-        # onlyonce_iter = build_onlyonce_iter(test_iter, C.feat.feature_mode)
-        
+
         folder_path = "./result"
         os.makedirs(folder_path, exist_ok=True)
         f = open(os.path.join(folder_path, "{}.txt".format(C.model_id)), 'w')
