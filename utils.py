@@ -445,34 +445,47 @@ def get_predicted_captions(onlyonce_iter, model, beam_size, max_len, feature_mod
     model.eval()
     r2l_vid2pred = {}
     l2r_vid2pred = {}
-
-    # BOS_idx = vocab.word2idx['<BOS>']
     with torch.no_grad():
-        for vids, feats in tqdm(onlyonce_iter, desc='get_predicted_captions'):
-            if feature_mode == 'grid-obj-rel':
-                geo_x, geo_edge, geo_edge_attr, object_feat, rel_feat, video_mask = feats
-                data_geo_graph = Data(x=geo_x[0].to(device), edge_index=geo_edge[0].to(device), edge_attr=geo_edge_attr[0].to(device))
-                feats = (data_geo_graph, object_feat.to(device), rel_feat.to(device))
-                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask.to(device))
-            if feature_mode == 'grid-rel':
-                geo_x, geo_edge, geo_edge_attr, rel_feat, video_mask = feats
-                data_geo_graph = Data(x=geo_x[0].to(device), edge_index=geo_edge[0].to(device), edge_attr=geo_edge_attr[0].to(device))
-                feats = (data_geo_graph, rel_feat.to(device))
-                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask.to(device))
-            if feature_mode == 'grid':
-                geo_x, geo_edge, geo_edge_attr, video_mask = feats
-                data_geo_graph = Data(x=geo_x[0].to(device), edge_index=geo_edge[0].to(device), edge_attr=geo_edge_attr[0].to(device))
-                feats = data_geo_graph
-                r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_mask.to(device))
-            # r2l_captions = [idxs_to_sentence(caption, vocab.idx2word, BOS_idx) for caption in r2l_captions]
-            l2r_captions = [" ".join(caption[0].value) for caption in l2r_captions]
-            r2l_captions = [" ".join(caption[0].value) for caption in r2l_captions]
-            r2l_vid2pred.update({v: p for v, p in zip(vids, r2l_captions)})
-            l2r_vid2pred.update({v: p for v, p in zip(vids, l2r_captions)})
+        for batch in tqdm(iter(data_iter), desc='get_predicted_captions'):
+            vids, video_masks = batch[:2]
+            video_masks = video_masks[0]
 
-            # del feats, data_geo_graph, r2l_captions, l2r_captions
-            torch.cuda.empty_cache()
-            gc.collect()
+            if feature_mode == 'grid-obj-rel':
+                geo_x_list, edge_index_list, edge_attr_list, object_feats, rel_feats, r2l_captions, l2r_captions = batch[2:]
+            elif feature_mode == 'grid-rel':
+                geo_x_list, edge_index_list, edge_attr_list, rel_feats, r2l_captions, l2r_captions = batch[2:]
+                object_feats = None
+            elif feature_mode == 'grid':
+                geo_x_list, edge_index_list, edge_attr_list, r2l_captions, l2r_captions = batch[2:]
+                object_feats = None
+                rel_feats = None
+            else:
+                raise NotImplementedError
+            
+            for i, vid in enumerate(vids):
+                if vid not in vids_set:
+                    cnt += 1
+                    vids_set.add(vid)
+                    data_geo_graph = Data(x=geo_x_list[i].to(device), edge_index=edge_index_list[i].to(device), edge_attr=edge_attr_list[i].to(device))
+                    if object_feats is not None and rel_feats is not None:
+                        object_feat = object_feats[i].unqueeze(0)
+                        rel_feat = rel_feats[i].unsqueeze(0)
+                        feats = (data_geo_graph, object_feat.to(device), rel_feat.to(device))
+                    elif rel_feats is not None:
+                        rel_feat = rel_feats[i].unsqueeze(0)
+                        feats = (data_geo_graph, rel_feat.to(device))
+                    else:
+                        feats = (data_geo_graph)
+
+                    r2l_captions, l2r_captions = model.beam_search_decode(feats, beam_size, max_len, video_masks[i].unsqueeze(0).to(device))
+                    l2r_captions = [" ".join(caption[0].value) for caption in l2r_captions]
+                    r2l_captions = [" ".join(caption[0].value) for caption in r2l_captions]
+                    r2l_vid2pred.update({v: p for v, p in zip(vids, r2l_captions)})
+                    l2r_vid2pred.update({v: p for v, p in zip(vids, l2r_captions)})
+                else: 
+                    continue
+                torch.cuda.empty_cache()
+                gc.collect()
 
     return r2l_vid2pred, l2r_vid2pred
 

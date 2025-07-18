@@ -211,7 +211,7 @@ def main():
             parameter_number = get_parameter_number(model)
             logger.info(parameter_number)
 
-            val_onlyonce_iter = build_onlyonce_iter(val_iter, C.feat.feature_mode)
+            # val_onlyonce_iter = build_onlyonce_iter(val_iter, C.feat.feature_mode)
             r2l_val_vid2GTs, l2r_val_vid2GTs = get_groundtruth_captions(val_iter, vocab,
                                                                  C.feat.feature_mode)
         else: 
@@ -238,7 +238,7 @@ def main():
                 """ Validation """
                 val_loss = test(model, val_iter, vocab, C.reg_lambda, C.feat.feature_mode, C, device)
 
-                r2l_val_vid2pred, l2r_val_vid2pred = get_predicted_captions(val_onlyonce_iter, model, C.beam_size, C.loader.max_caption_len, C.feat.feature_mode, device)
+                r2l_val_vid2pred, l2r_val_vid2pred = get_predicted_captions(val_iter, model, C.beam_size, C.loader.max_caption_len, C.feat.feature_mode, device)
                 r2l_val_scores = score(r2l_val_vid2pred, r2l_val_vid2GTs)
                 l2r_val_scores = score(l2r_val_vid2pred, l2r_val_vid2GTs)
 
@@ -296,7 +296,7 @@ def main():
         logger.info(ckpt_list)
         logger.info('Build data_loader according to ' + ckpt_list[0])
         test_iter, vocab, l2r_test_vid2GTs = build_loader(file + '/' + ckpt_list[0], False)
-        onlyonce_iter = build_onlyonce_iter(test_iter, C.feat.feature_mode)
+        # onlyonce_iter = build_onlyonce_iter(test_iter, C.feat.feature_mode)
         
         folder_path = "./result"
         os.makedirs(folder_path, exist_ok=True)
@@ -321,7 +321,7 @@ def main():
             ckpt_fpath = file + '/' + str(i + 1) + '.ckpt'
             logger.info("Now is test in the " + ckpt_fpath)
             captioning_fpath = C.captioning_fpath_tpl.format(str(i + 1))
-            run(ckpt_fpath, onlyonce_iter, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath, C, device)
+            run(ckpt_fpath, test_iter, vocab, str(i + 1) + '.ckpt', l2r_test_vid2GTs, f, captioning_fpath, C, device)
 
             logger.info("Memory usage after testing checkpoint {}:".format(ckpt_fpath))
             logger.info("  VRAM used     : {:.2f} MB".format(torch.cuda.memory_allocated() / 1024**2))
@@ -329,7 +329,7 @@ def main():
             logger.info("  RAM used      : {:.2f} MB".format(psutil.Process(os.getpid()).memory_info().rss / 1024**2))
     
         f.close()
-        del test_iter, onlyonce_iter
+        del test_iter
         gc.collect()
         torch.cuda.empty_cache()
     torch.distributed.destroy_process_group()

@@ -1,8 +1,5 @@
 import os
 import time
-import pickle
-
-GRAPH_DATA_DICT = {}
 
 class FeatureConfig(object):
     def __init__(self, model):
@@ -22,13 +19,9 @@ class FeatureConfig(object):
         else:
             raise NotImplementedError(f"Unknown model: {model}")
 
-        # if model.split('_')[0] == "MSR-VTT":
-        #     self.size = [s + 300 for s in self.size]
-
 class VocabConfig(object):
     init_word2idx = {'<PAD>': 0, '<S>': 1}
     embedding_size = 512
-
 
 class MSVDLoaderConfig(object):
     n_train = 1200
@@ -44,9 +37,7 @@ class MSVDLoaderConfig(object):
 
     total_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}.{}"
     phase_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}_{}.{}"
-
     frame_sampling_method = 'uniform'
-    assert frame_sampling_method in ['uniform', 'random']
     frame_sample_len = 20
     num_workers = 4
 
@@ -66,7 +57,6 @@ class MSRVTTLoaderConfig(object):
     total_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}.{}"
     phase_video_feat_fpath_tpl = "/workspace/AKG-sv/data/{}/features/{}_{}.{}"
     frame_sampling_method = 'uniform'
-    assert frame_sampling_method in ['uniform', 'random']
     frame_sample_len = 30
     num_workers = 4
 
@@ -89,7 +79,6 @@ class TransformerConfig(object):
     node_feat_dim = 512
     edge_dim = 1024
     visual_model = "visual-base"
-    init_model = "./model/weight/univl.pretrained.bin"
     gnn_model_type = "transformer"
     cache_dir = ""
     local_rank = 0
@@ -97,7 +86,6 @@ class TransformerConfig(object):
     no_skip = False
     last_average = False
     no_beta_transformer = False
-    select_num = 0  # if sn==0, automatic select num
 
 class TrainConfig(object):
     def __init__(self, model_name, n_gpus):
@@ -118,7 +106,6 @@ class TrainConfig(object):
 
         """ Optimization """
         self.epochs = 30
-        
         self.batch_size = 32
         self.optimizer = "AdamW"
         self.gradient_clip = 5.0
