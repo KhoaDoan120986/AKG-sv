@@ -114,8 +114,8 @@ class TrainConfig(object):
         self.lr = 1e-4
 
         self.gradient_accumulation_steps = {
-            'MSVD': 2,
-            'MSR-VTT':  4,
+            'MSVD': 1,
+            'MSR-VTT':  2,
         }[self.corpus]
         
         self.weight_decay = 0.5e-5
