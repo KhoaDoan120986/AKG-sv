@@ -114,8 +114,8 @@ class TrainConfig(object):
         self.lr = 1e-4
 
         self.gradient_accumulation_steps = {
-            'MSVD': 1,
-            'MSR-VTT':  2,
+            'MSVD': 2, # if run on 1 gpu, effective batch size = 64
+            'MSR-VTT':  4, # if run on 1 gpu, effective batch size = 128
         }[self.corpus]
         
         self.weight_decay = 0.5e-5
