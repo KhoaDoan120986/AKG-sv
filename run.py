@@ -7,6 +7,7 @@ from loader.MSRVTT import MSRVTT
 from model.model import VCModel
 from utils import dict_to_cls, get_predicted_captions, get_groundtruth_captions, save_result, score
 import  logging 
+from collections import OrderedDict
 
 logger = logging.getLogger(__name__)
 
