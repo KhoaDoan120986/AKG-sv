@@ -91,7 +91,6 @@ class FeatEmbedding(nn.Module):
         super(FeatEmbedding, self).__init__()
         self.video_embeddings = nn.Sequential(
             LayerNorm(d_feat),
-            # nn.Dropout(dropout),
             nn.Linear(d_feat, d_model))
 
     def forward(self, x):

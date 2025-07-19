@@ -9,7 +9,7 @@ from loader.MSRVTT import MSRVTT
 from config import TrainConfig
 from model.model import VCModel
 from model.modules.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
-from utils import get_lr, load_checkpoint, save_checkpoint, test, train, score, get_groundtruth_captions, get_predicted_captions
+from utils import get_lr, save_checkpoint, test, train, score, get_groundtruth_captions, get_predicted_captions
 from transformers import get_linear_schedule_with_warmup
 from run import build_loader, run
 import psutil

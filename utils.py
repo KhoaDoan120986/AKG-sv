@@ -438,8 +438,6 @@ def score(vid2pred, vid2GTs):
     scores = calc_scores(refs, hypos)
     return scores
 
-
-# refers: https://github.com/zhegan27/SCN_for_video_captioning/blob/master/SCN_evaluation.py
 def calc_scores(ref, hypo):
     """
     ref, dictionary of reference sentences (id, sentence)
@@ -504,13 +502,6 @@ def dict_to_cls(d):
             v = dict_to_cls(v)
         setattr(cls, p, v)
     return cls
-
-
-def load_checkpoint(model, ckpt_fpath):
-    checkpoint = torch.load(ckpt_fpath)
-    model.load_state_dict(checkpoint['vc_model'])
-    return model
-
 
 def save_checkpoint(e, model, ckpt_fpath, config):
     ckpt_dpath = os.path.dirname(ckpt_fpath)
