@@ -121,7 +121,7 @@ class TrainConfig(object):
         self.weight_decay = 0.5e-5
         self.reg_lambda = 0.6
         self.beam_size = 5
-        self.label_smoothing = 0.15
+        self.label_smoothing = 0.1#5
 
         """ Pretrained Model """
         self.pretrained_decoder_fpath = None
