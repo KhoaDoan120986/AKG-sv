@@ -91,10 +91,8 @@ def train(e, model, optimizer, train_iter, vocab, reg_lambda, gradient_clip, fea
 
         r2l_trg = r2l_captions[:, :-1]
         r2l_trg_y = r2l_captions[:, 1:]
-        r2l_norm = (r2l_trg_y != pad_idx).data.sum()
         l2r_trg = l2r_captions[:, :-1]
         l2r_trg_y = l2r_captions[:, 1:]
-        l2r_norm = (l2r_trg_y != pad_idx).data.sum()
 
         if feature_mode == 'grid-obj-rel':
             geo_x, geo_edge_index, geo_edge_attr, object_feats, rel_feats, video_mask = feats
@@ -187,9 +185,9 @@ def train(e, model, optimizer, train_iter, vocab, reg_lambda, gradient_clip, fea
         r2l_pred, l2r_pred = model(feats, r2l_trg, l2r_trg, mask)
 
         r2l_loss = criterion(r2l_pred.view(-1, vocab.n_vocabs),
-                             r2l_trg_y.contiguous().view(-1)) / r2l_norm
+                             r2l_trg_y.contiguous().view(-1)) 
         l2r_loss = criterion(l2r_pred.view(-1, vocab.n_vocabs),
-                             l2r_trg_y.contiguous().view(-1)) / l2r_norm
+                             l2r_trg_y.contiguous().view(-1))
 
         r2l_loss = r2l_loss /C.gradient_accumulation_steps
         l2r_loss = l2r_loss/C.gradient_accumulation_steps
@@ -239,10 +237,8 @@ def test(model, val_iter, vocab, reg_lambda, feature_mode, C, device):
             
             r2l_trg = r2l_captions[:, :-1]
             r2l_trg_y = r2l_captions[:, 1:]
-            r2l_norm = (r2l_trg_y != pad_idx).data.sum()
             l2r_trg = l2r_captions[:, :-1]
             l2r_trg_y = l2r_captions[:, 1:]
-            l2r_norm = (l2r_trg_y != pad_idx).data.sum()
 
             if feature_mode == 'grid-obj-rel':
                 geo_x, geo_edge_index, geo_edge_attr, object_feats, rel_feats, video_mask = feats
@@ -336,9 +332,9 @@ def test(model, val_iter, vocab, reg_lambda, feature_mode, C, device):
             r2l_pred, l2r_pred = model(feats, r2l_trg, l2r_trg, mask)
 
             r2l_loss = criterion(r2l_pred.view(-1, vocab.n_vocabs),
-                                r2l_trg_y.contiguous().view(-1)) / r2l_norm
+                                r2l_trg_y.contiguous().view(-1))
             l2r_loss = criterion(l2r_pred.view(-1, vocab.n_vocabs),
-                                l2r_trg_y.contiguous().view(-1)) / l2r_norm
+                                l2r_trg_y.contiguous().view(-1))
             loss = reg_lambda * l2r_loss + (1 - reg_lambda) * r2l_loss
             loss_checker.update(loss.item(), r2l_loss.item(), l2r_loss.item())
 
