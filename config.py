@@ -107,21 +107,24 @@ class TrainConfig(object):
         self.transformer.max_frames = self.loader.frame_sample_len
 
         """ Optimization """
-        self.epochs = 30
+        self.epochs = {
+            'MSVD': 30, 
+            'MSR-VTT':  25,
+        }[self.corpus]
         self.batch_size = 32
         self.optimizer = "AdamW"
         self.gradient_clip = 5.0
         self.lr = 1e-4
 
         self.gradient_accumulation_steps = {
-            'MSVD': 2, # if run on 1 gpu, effective batch size = 64
-            'MSR-VTT':  4, # if run on 1 gpu, effective batch size = 128
+            'MSVD': int(2 / self.n_gpus) , # if run on 1 gpu, effective batch size = 64
+            'MSR-VTT':  int(4 / self.n_gpus), # if run on 1 gpu, effective batch size = 128
         }[self.corpus]
         
         self.weight_decay = 0.5e-5
         self.reg_lambda = 0.6
         self.beam_size = 5
-        self.label_smoothing = 0.1#5
+        self.label_smoothing = 0.15
 
         """ Pretrained Model """
         self.pretrained_decoder_fpath = None
