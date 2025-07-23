@@ -6,16 +6,14 @@ from tqdm import tqdm
 import h5py
 import numpy as np
 import torch
-from torch.utils.data import Dataset, DataLoader, RandomSampler, SequentialSampler
+from torch.utils.data import Dataset, DataLoader, SequentialSampler
 from torchvision import transforms
 import pickle
-import sparse
 import gc
 
 from loader.transform import UniformSample, RandomSample, ToTensor, TrimExceptAscii, Lowercase, \
     RemovePunctuation, SplitWithWhiteSpace, Truncate, PadFirst, PadLast, PadToLength, \
     ToIndex
-from torch_geometric.data import Data
 
 class CustomVocab(object):
     def __init__(self, caption_fpath, init_word2idx, min_count=1, transform=str.split):
@@ -34,11 +32,6 @@ class CustomVocab(object):
 
     def load_captions(self):
         raise NotImplementedError("You should implement this function.")
-        # df = pd.read_csv(self.caption_fpath)
-        # df = df[df['Language'] == 'English']
-        # df = df[pd.notnull(df['Description'])]
-        # captions = df['Description'].values
-        # return captions
 
     def build(self):
         captions = self.load_captions()

@@ -7,37 +7,6 @@ import numpy as np
 import torch
 
 
-# class UniformSample:
-#     def __init__(self, n_sample):
-#         self.n_sample = n_sample
-
-#     def __call__(self, frames):
-#         n_frames = len(frames)
-#         if n_frames < self.n_sample:
-#             return frames
-
-#         sample_indices = np.linspace(0, n_frames-1, self.n_sample, dtype=int)
-#         samples = [ frames[i] for i in sample_indices ]
-#         return samples
-
-
-# class RandomSample:
-#     def __init__(self, n_sample):
-#         self.n_sample = n_sample
-
-#     def __call__(self, frames):
-#         n_frames = len(frames)
-#         if n_frames < self.n_sample:
-#             return frames
-
-#         block_len = int(n_frames / self.n_sample)
-#         start_of_final_clip = n_frames - block_len - 1
-#         uniformly_sampled_indices = np.linspace(0, start_of_final_clip, self.n_sample, dtype=int)
-#         random_noise = np.random.choice(block_len, self.n_sample, replace=True)
-#         randomly_sampled_indices = uniformly_sampled_indices + random_noise
-#         samples = [ frames[i] for i in randomly_sampled_indices ]
-#         return samples
-
 class UniformSample:
     def __init__(self, n_sample):
         self.n_sample = n_sample
