@@ -1,5 +1,15 @@
-# Tiltle
+# Integrating Action Graph and Knowledge Graph into Bidirectional Transformer for Video Captioning
+
 ## Description
+
+This project implements a video captioning system that integrates both **Action Graphs** and **Knowledge Graphs** into a **Bidirectional Transformer-based architecture** to generate rich and context-aware descriptions of videos.
+
+- 🔍 **Action Graphs** are constructed from visual features to model spatial-temporal object interactions across video frames, enabling the model to capture fine-grained action dynamics.
+- 🧠 **Knowledge Graphs** are derived from external textual resources (or captions) to provide additional semantic context, supporting the generation of more accurate and informative descriptions.
+- 🔁 A **Bidirectional Transformer Decoder** is employed to generate captions in both **left-to-right (L2R)** and **right-to-left (R2L)** directions, allowing the model to fully utilize contextual information in both temporal directions.
+- 📊 The system is trained and evaluated on standard video captioning benchmarks such as **MSVD** and **MSR-VTT**, using metrics including BLEU-4, CIDEr, METEOR, and ROUGE-L.
+
+
 ![alt_text](assets/MODEL.drawio.svg)
 ## Prepare the Environment 
 Install and create conda environment, which was tested with NVIDIA RTX 3090.
