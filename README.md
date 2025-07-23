@@ -55,17 +55,8 @@ Steps:
    - run **action_spatio_temporal_graph_feature_extractor.py** then ,
    - run **transform-graph-to-geometric.py**
 
-### Object Based Action Graph
-Steps: 
-1. Extract object node by using **object_node_theta_1_feature_extractor.py**.
-2. Extract spatial action graph by using **object_based_spatial_action_graph.py**.
-3. Extract temporal action graph by using **temporal_similarity_graph.py**.
-4. Create the object based action graph: 
-   - Run **action_spatio_temporal_graph_feature_extractor.py** then,
-   - Run **transform-graph-to-geometric.py**.
-
 ### Knowledge Graph
-![alt_text](assets/KG.drawio.svg)
+![alt_text](assets/KG.drawio.png)
 ## Training
 ```
 N_GPU=[Total GPU to use]
