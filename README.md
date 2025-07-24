@@ -10,7 +10,7 @@ This project implements a video captioning system that integrates both **Action 
 - 📊 The system is trained and evaluated on standard video captioning benchmarks such as **MSVD** and **MSR-VTT**, using metrics including BLEU-4, CIDEr, METEOR, and ROUGE-L.
 
 
-![alt_text](assets/MODEL.drawio.svg)
+![alt_text](assets/MODEL.drawio.png)
 ## Prepare the Environment 
 Install and create conda environment, which was tested with NVIDIA RTX 3090.
 ```
