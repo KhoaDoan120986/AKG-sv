@@ -79,9 +79,9 @@ Steps:
 ![alt_text](assets/KG.drawio.png)
 ## Training
 Control how relation features are processed using the `--attention` flag:
-   - `--attention 1`: **Multi-Head Attention (MHA)**  
-   - `--attention 2`: **MHA with Positional Encoding**  
-   - `--attention 3`: **Feed-Forward Network (FFN)**
+   - `--attention 1`: **MHA**  
+   - `--attention 2`: **MHA + PE**  
+   - `--attention 3`: **Baseline**
 
 **Example usage:**
 ```
