@@ -2,10 +2,10 @@
 
 ## Description
 
-This project implements a video captioning system that integrates both **Action Graphs** and **Knowledge Graphs** into a **Bidirectional Transformer-based architecture** to generate rich and context-aware descriptions of videos.
+This project implements a video captioning system that integrates both **Action Graph** and **Knowledge Graph** into a **Bidirectional Transformer-based architecture** to generate rich and context-aware descriptions of videos.
 
-- 🔍 **Action Graphs** are constructed from visual features to model spatial-temporal object interactions across video frames, enabling the model to capture fine-grained action dynamics.
-- 🧠 **Knowledge Graphs** are derived from external textual resources (or captions) to provide additional semantic context, supporting the generation of more accurate and informative descriptions.
+- 🔍 **Action Graph** are constructed from visual features to model spatial-temporal object interactions across video frames, enabling the model to capture fine-grained action dynamics.
+- 🧠 **Knowledge Graph** are derived from external textual resources (or captions) to provide additional semantic context, supporting the generation of more accurate and informative descriptions.
 - 🔁 A **Bidirectional Transformer Decoder** is employed to generate captions in both **left-to-right (L2R)** and **right-to-left (R2L)** directions, allowing the model to fully utilize contextual information in both temporal directions.
 - 📊 The system is trained and evaluated on standard video captioning benchmarks such as **MSVD** and **MSR-VTT**, using metrics including BLEU-4, CIDEr, METEOR, and ROUGE-L.
 
@@ -58,7 +58,7 @@ Train CLIP4Clip based on https://github.com/ArrowLuo/CLIP4Clip and put the best 
 ### Grid Based Action Graph
 ![alt_text](assets/STG.drawio.svg)
 Steps:
-1. Extract grid node by using **grid_node_theta_1_feature_extractor.py**.
+1. Extract grid node by using **grid_node_feature_extractor.py**.
 2. Extract spatial action graph by using **grid_based_spatial_action_graph.py**.
 3. Extract temporal action graph by using **temporal_similarity_graph.py**.
 4. Create the grid based action graph: 
