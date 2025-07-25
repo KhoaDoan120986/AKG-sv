@@ -30,7 +30,17 @@ pip install pycocoevalcap h5py tensorboardX boto3 requests pandas tqdm nltk ftfy
 │   ├── MSRVTT
 │   │   ├── features
 │   │   ├── metadata
+
 ```
+**All feature filenames follow the rule:**
+```
+/dataset/{DATASET}/features/{DATASET}_{FEATURE_TYPE}_{PHASE}.hdf5
+```
+   - {DATASET}: MSVD, MSRVTT
+   - {FEATURE_TYPE}: GBased, rel, videomask
+   - {PHASE}: train, val, test
+
+e.g., MSVD_GBased_train.hdf5
 
 ## Extract the Features
 ### Feature Extractor Folder Structure
@@ -68,6 +78,12 @@ Steps:
 ### Knowledge Graph
 ![alt_text](assets/KG.drawio.png)
 ## Training
+Control how relation features are processed using the `--attention` flag:
+   - `--attention 1`: **Multi-Head Attention (MHA)**  
+   - `--attention 2`: **MHA with Positional Encoding**  
+   - `--attention 3`: **Feed-Forward Network (FFN)**
+
+**Example usage:**
 ```
 N_GPU=[Total GPU to use]
 N_THREAD=[Total thread to use]
