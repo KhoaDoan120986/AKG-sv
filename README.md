@@ -14,7 +14,7 @@ This project implements a video captioning system that integrates both **Action 
 ## Prepare the Environment 
 Install and create conda environment, which was tested with NVIDIA RTX 3090.
 ```
-conda create --name v2t_env python=3.12 -y
+conda create --name akg_env python=3.12 -y
 pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu126
 pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-2.6.0+cu126.html
 pip install torch_geometric sparse
