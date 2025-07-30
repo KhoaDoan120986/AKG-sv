@@ -465,22 +465,29 @@ class VCModel(nn.Module):
         self.generator = Generator(C_tran.d_model, vocab.n_vocabs)
         
     def encode(self, src, src_mask, feature_mode_two=False):
-        batch = src_mask[0].shape[0]
-        n_nodes = src[0].x.shape[0] // batch
+        if isinstance(src, (list, tuple)):
+            batch = src_mask[0].shape[0]
+            n_nodes = src[0].x.shape[0] // batch
+        else:
+            batch = src_mask.shape[0]
+            n_nodes = src.x.shape[0] // batch
+    
         if feature_mode_two:
-            return self.stg_encoder_big(src[0], src_mask[0], batch, n_nodes)
+            return self.stg_encoder_big(src, src_mask, batch, n_nodes)
+    
         if self.feature_mode == 'grid-obj-rel':
             x1 = self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
-            
+    
             x2 = self.object_src_embed(src[1])
             x2 = self.encoder(x2, src_mask[1])
-
+    
             x3 = self.rel_src_embed(src[2])
             x3 = self.encoder_no_attention(x3, src_mask[2])
             return x1 + x2 + x3
+    
         elif self.feature_mode == 'grid-rel':
             x1 = self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
-            
+    
             x2 = self.rel_src_embed(src[1])
             if self.attention_mode == 1:
                 x2 = self.encoder(x2, src_mask[1])
@@ -489,10 +496,11 @@ class VCModel(nn.Module):
                 x2 = self.encoder(x2, src_mask[1])
             elif self.attention_mode == 3:
                 x2 = self.encoder_no_attention(x2, src_mask[1])
-
             return x1 + x2
+    
         elif self.feature_mode == 'grid':
-            return self.stg_encoder(src[0], src_mask[0], batch, n_nodes)
+            x1 = self.stg_encoder(src, src_mask, batch, n_nodes)
+            return x1
     
     def r2l_decode(self, r2l_trg, memory, src_mask, r2l_trg_mask):
         x = self.trg_embed(r2l_trg)
