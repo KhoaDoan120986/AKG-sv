@@ -499,8 +499,7 @@ class VCModel(nn.Module):
             return x1 + x2
     
         elif self.feature_mode == 'grid':
-            x1 = self.stg_encoder(src, src_mask, batch, n_nodes)
-            return x1
+            return self.stg_encoder(src, src_mask, batch, n_nodes)
     
     def r2l_decode(self, r2l_trg, memory, src_mask, r2l_trg_mask):
         x = self.trg_embed(r2l_trg)
@@ -593,9 +592,9 @@ class VCModel(nn.Module):
             src_mask_cur = torch.cat(src_mask_l, dim=0)
             y_tm1 = torch.cat(last_tokens, dim=0)
             "shape (sum(4 bt * cur_beam_sz_i), 1 dec_sent_len, 128 d_model)"
-            if self.feature_mode == 'one':
+            if self.feature_mode == 'grid':
                 out = self.r2l_decode(Variable(y_tm1).to(self.device), model_encodings_cur, src_mask_cur,
-                                      Variable(subsequent_mask(y_tm1.size(-1)).type_as(src.data)).to(self.device))
+                                      Variable(subsequent_mask(y_tm1.size(-1)).type_as(src.x)).to(self.device))
             # elif self.feature_mode == 'two' or 'three' or 'four' or 'grid':
             else:
                 out = self.r2l_decode(Variable(y_tm1).to(self.device), model_encodings_cur, src_mask_cur,
@@ -713,11 +712,14 @@ class VCModel(nn.Module):
         # src_mask = (src[:, :, 0] != self.vocab.word2idx['<PAD>']).unsqueeze(-2)  # TODO Untested
         src_mask = pad_mask(src, r2l_trg=None, trg=None, pad_idx=self.vocab.word2idx['<PAD>'], video_mask=video_mask)
         "model_encodings has shape (batch_size, sentence_len, d_model)"
-        if self.feature_mode == 'one':
-            batch_size = src.shape[0]
-            model_encodings = self.encode(src, src_mask)
-            r2l_memory, r2l_completed_hypotheses = self.r2l_beam_search_decode(batch_size, src, src_mask,
-                                                                               model_encodings=model_encodings,
+        if self.feature_mode == 'grid':
+            batch_size = video_mask.shape[0]
+            enc_src_mask = src_mask[0]
+            dec_src_mask = src_mask[1]
+            r2l_model_encodings = self.encode(src, enc_src_mask, feature_mode_two=True)
+            model_encodings = self.encode(src, enc_src_mask)
+            r2l_memory, r2l_completed_hypotheses = self.r2l_beam_search_decode(batch_size, src, dec_src_mask,
+                                                                               model_encodings=r2l_model_encodings,
                                                                                beam_size=beam_size, max_len=max_len)
         # elif self.feature_mode == 'two' or 'three' or 'four' or 'grid':
         else:
@@ -770,8 +772,8 @@ class VCModel(nn.Module):
                 cur_beam_sizes += [cur_beam_size]
                 last_tokens += [hypotheses[i]]
                 model_encodings_l += [model_encodings[i:i + 1]] * cur_beam_size
-                if self.feature_mode == 'one':
-                    src_mask_l += [src_mask[i:i + 1]] * cur_beam_size
+                if self.feature_mode == 'grid':
+                    src_mask_l += [dec_src_mask[i:i + 1]] * cur_beam_size
                 # elif self.feature_mode == 'two' or 'three' or 'four' or 'grid':
                 else:     
                     src_mask_l += [dec_src_mask[i:i + 1]] * cur_beam_size
@@ -782,9 +784,9 @@ class VCModel(nn.Module):
             y_tm1 = torch.cat(last_tokens, dim=0)
             r2l_memory_cur = torch.cat(r2l_memory_l, dim=0)
             "shape (sum(4 bt * cur_beam_sz_i), 1 dec_sent_len, 128 d_model)"
-            if self.feature_mode == 'one':
+            if self.feature_mode == 'grid':
                 out = self.l2r_decode(Variable(y_tm1).to(self.device), model_encodings_cur, src_mask_cur,
-                                      Variable(subsequent_mask(y_tm1.size(-1)).type_as(src.data)).to(self.device),
+                                      Variable(subsequent_mask(y_tm1.size(-1)).type_as(src.x)).to(self.device),
                                       r2l_memory_cur, r2l_trg_mask=None)
             # elif self.feature_mode == 'two' or 'three' or 'four' or 'grid':
             else:
